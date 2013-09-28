@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +20,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-public class EntityBulletBase extends Entity
+public class EntityBulletBase extends Entity implements IProjectile
 {
 	public float speed;
 	/** multiplied slowdown each flying tick */
@@ -76,7 +78,7 @@ public class EntityBulletBase extends Entity
 	 * @param attacker attacking entity
 	 * @param target target entity
 	 */
-	public EntityBulletBase(World world, EntityLiving attacker, EntityLiving target)
+	public EntityBulletBase(World world, EntityLivingBase attacker, EntityLiving target)
 	{
 		super(world);
 		this.shootingEntity = attacker;
@@ -99,11 +101,11 @@ public class EntityBulletBase extends Entity
 			double var18 = zDis / distance;
 			this.setLocationAndAngles(attacker.posX + var16, this.posY, attacker.posZ + var18, var14, var15);
 			float var20 = (float)distance * 0.2F;
-			this.setBulletHeading(xDis, yDis/* + (double)var20*/, zDis, speed);
+			this.setThrowableHeading(xDis, yDis/* + (double)var20*/, zDis, speed, 0);
 		}
 	}
 
-	public EntityBulletBase(World par1World, EntityLiving par2EntityLiving)
+	public EntityBulletBase(World par1World, EntityLivingBase par2EntityLiving)
 	{
 		super(par1World);
 		this.shootingEntity = par2EntityLiving;
@@ -121,7 +123,7 @@ public class EntityBulletBase extends Entity
 		this.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
 		this.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI));
 		this.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI));
-		this.setBulletHeading(this.motionX, this.motionY, this.motionZ, speed * 1.5F);
+		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed * 1.5F, 0);
 	}
 
 	protected void entityInit()
@@ -138,12 +140,12 @@ public class EntityBulletBase extends Entity
 		ttlInGround = 1200;
 		item = null;
 	}
-
+	@Override
 	/**
 	 * Uses the provided coordinates as a heading and determines the velocity from it with the set speed and random
 	 * variance. Args: x, y, z, speed
 	 */
-	public void setBulletHeading(double x, double y, double z, float speed)
+	public void setThrowableHeading(double x, double y, double z, float speed, float f1)
 	{
 		float dis = MathHelper.sqrt_double(x * x + y * y + z * z);
 		x /= (double)dis;

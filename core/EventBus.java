@@ -38,7 +38,7 @@ public class EventBus
 		 * You can then proceed to read and change the Event's fields where possible
 		 */
 		if(event.entityLiving == null || event.item == null) return;
-		EntityLiving playerEnt = event.entityLiving;
+		EntityLiving playerEnt = (EntityLiving) event.entityLiving;
 		EntityItem item = event.item;
 		/*
 		 * Note this possibility to interrupt certain (not all) events

@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 
 public class RenderFloatingPlatform extends Render {
@@ -51,10 +52,15 @@ public class RenderFloatingPlatform extends Render {
 
 		GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);
-		this.loadTexture("/mods/ReploidCraft/textures/models/FloatingPlatform.png");
+		//this.loadTexture("/mods/ReploidCraft/textures/models/FloatingPlatform.png");
 		this.modelPlatform.render(entity, 0.0F, var10 * 3.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 
 		GL11.glPopMatrix();
+	}
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

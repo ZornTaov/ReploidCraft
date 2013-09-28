@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -50,10 +51,12 @@ public class EntityMet extends EntityTameable {
 	/** The eat grass AI task for this mob. */
 	private EntityAIMetHide aiMetHide = new EntityAIMetHide(this);
 
+	private float moveSpeed;
+
 	public EntityMet(World par1World)
 	{
 		super(par1World);
-		this.texture = "/mods/ReploidCraft/textures/models/MetHat.png";
+		//this.texture = "/mods/ReploidCraft/textures/models/MetHat.png";
 		this.setSize(0.75F, 0.75F);
 		float var2 = 0.23F;
 		this.moveSpeed = 0.3F;
@@ -74,7 +77,7 @@ public class EntityMet extends EntityTameable {
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
 		//this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityAnimal.class, 16.0F, 200, false));
-		this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 16.0F, 0, true));
+		this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 
 	}
 
@@ -88,7 +91,7 @@ public class EntityMet extends EntityTameable {
 	/**
 	 * Sets the active target the Task system uses for tracking
 	 */
-	public void setAttackTarget(EntityLiving par1EntityLiving)
+	public void setAttackTarget(EntityLivingBase par1EntityLiving)
 	{
 		super.setAttackTarget(par1EntityLiving);
 
@@ -266,7 +269,7 @@ public class EntityMet extends EntityTameable {
 					this.aiMetHide.enable(false);
 					this.aiMetHide.setHiding(false);
 					this.aiSit.setSitting(true);
-					this.setEntityHealth(20);
+					this.setHealth(20);
 					this.setOwner(par1EntityPlayer.username);
 					this.playTameEffect(true);
 					this.worldObj.setEntityState(this, (byte)7);
@@ -408,7 +411,7 @@ public class EntityMet extends EntityTameable {
 
 		boolean hat = getIsHatNotWorn();
 		int halfhp = (getMaxHealth()/2)+1;
-		if(health < halfhp)
+		if(this. < halfhp)
 			this.setIsHatWorn(true);
 		else if (health >= halfhp)
 			this.setIsHatWorn(false);

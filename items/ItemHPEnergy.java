@@ -2,6 +2,7 @@ package zornco.reploidcraftenv.items;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
@@ -64,7 +65,7 @@ public class ItemHPEnergy extends ItemFood {
 		if (!par2World.isRemote)
 		{
 
-			this.applyEffect(par3EntityPlayer, 1);
+			this.applyEffect((EntityLivingBase)par3EntityPlayer, 1);
 			switch(type)
 			{
 			case 0:
@@ -79,7 +80,7 @@ public class ItemHPEnergy extends ItemFood {
 
 		return par1ItemStack;
 	}
-	public void applyEffect(EntityLiving playerEnt, int stackSize)
+	public void applyEffect(EntityLivingBase playerEnt, int stackSize)
 	{
 		if (this.potionId > 0)
 		{

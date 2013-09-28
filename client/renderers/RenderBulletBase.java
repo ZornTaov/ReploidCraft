@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -51,7 +52,7 @@ public class RenderBulletBase extends Render
 		this.setup = par1EntityBulletBase.getTexturePlacement();
 		this.texture = par1EntityBulletBase.getTexture();
 		this.setup(texture, setup[0], setup[1], setup[2], setup[3], setup[4], setup[5], setup[6]);
-		this.loadTexture(texture);
+		//this.loadTexture(texture);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		GL11.glRotatef(par1EntityBulletBase.prevRotationYaw + (par1EntityBulletBase.rotationYaw - par1EntityBulletBase.prevRotationYaw) * par9 - 90.0F, 0.0F, 1.0F, 0.0F);
@@ -116,5 +117,9 @@ public class RenderBulletBase extends Render
 	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
 	{
 		this.renderBulletBase((EntityBulletBase)par1Entity, par2, par4, par6, par8, par9);
+	}
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return null;
 	}
 }
