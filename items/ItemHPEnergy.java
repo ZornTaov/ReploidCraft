@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import zornco.reploidcraftenv.lib.Reference;
 import zornco.reploidcraftenv.sounds.Sounds;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import cpw.mods.fml.relauncher.Side;
@@ -110,6 +111,6 @@ public class ItemHPEnergy extends ItemFood {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.healthIcons = par1IconRegister.registerIcon("ReploidCraft:"+this.getUnlocalizedName().substring(5));
+		this.healthIcons = par1IconRegister.registerIcon(Reference.MOD_ID+":"+this.getUnlocalizedName().substring(5));
 	}
 }

@@ -1,6 +1,7 @@
 package zornco.reploidcraftenv.core;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
@@ -38,7 +39,7 @@ public class EventBus
 		 * You can then proceed to read and change the Event's fields where possible
 		 */
 		if(event.entityLiving == null || event.item == null) return;
-		EntityLiving playerEnt = (EntityLiving) event.entityLiving;
+		EntityLivingBase playerEnt =  event.entityLiving;
 		EntityItem item = event.item;
 		/*
 		 * Note this possibility to interrupt certain (not all) events

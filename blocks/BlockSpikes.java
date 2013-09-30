@@ -26,7 +26,7 @@ public class BlockSpikes extends Block {
 	/**
 	 * checks to see if you can place this block can be placed on that side of a block: BlockLever overrides
 	 */
-	public boolean canPlaceBlockOnSide(World par1World, int x, int y, int z, int par5)
+	/*public boolean canPlaceBlockOnSide(World par1World, int x, int y, int z, int par5)
 	{
 		ForgeDirection dir = ForgeDirection.getOrientation(par5);
 		return (dir == DOWN  && (par1World.isBlockSolidOnSide(x, y + 1, z, DOWN ) || par1World.getBlockMaterial(x, y + 1, z) == Material.piston)) ||
@@ -35,11 +35,11 @@ public class BlockSpikes extends Block {
 				(dir == SOUTH && (par1World.isBlockSolidOnSide(x, y, z - 1, SOUTH) || par1World.getBlockMaterial(x, y, z - 1) == Material.piston)) ||
 				(dir == WEST  && (par1World.isBlockSolidOnSide(x + 1, y, z, WEST ) || par1World.getBlockMaterial(x + 1, y, z) == Material.piston)) ||
 				(dir == EAST  && (par1World.isBlockSolidOnSide(x - 1, y, z, EAST ) || par1World.getBlockMaterial(x - 1, y, z) == Material.piston));
-	}
+	}*/
 	/**
 	 * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
 	 */
-	public boolean canPlaceBlockAt(World par1World, int x, int y, int z)
+	/*public boolean canPlaceBlockAt(World par1World, int x, int y, int z)
 	{
 		return (par1World.isBlockSolidOnSide(x - 1, y, z, EAST ) || par1World.getBlockMaterial(x - 1, y, z) == Material.piston) ||
 				(par1World.isBlockSolidOnSide(x + 1, y, z, WEST ) || par1World.getBlockMaterial(x + 1, y, z) == Material.piston) ||
@@ -47,7 +47,7 @@ public class BlockSpikes extends Block {
 				(par1World.isBlockSolidOnSide(x, y, z + 1, NORTH) || par1World.getBlockMaterial(x, y, z + 1) == Material.piston) ||
 				(par1World.isBlockSolidOnSide(x, y - 1, z, UP   ) || par1World.getBlockMaterial(x, y - 1, z) == Material.piston) ||
 				(par1World.isBlockSolidOnSide(x, y + 1, z, DOWN ) || par1World.getBlockMaterial(x, y + 1, z) == Material.piston);
-	}
+	}*/
 
 	/**
 	 * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
@@ -88,11 +88,11 @@ public class BlockSpikes extends Block {
 			valid++;
 		}
 
-		if (valid == 0)
+		/*if (valid == 0)
 		{
 			this.dropBlockAsItem(par1World, x, y, z, par1World.getBlockMetadata(x, y, z), 0);
 			par1World.setBlockToAir(x, y, z);
-		}
+		}*/
 
 	}
 	/**
@@ -101,7 +101,7 @@ public class BlockSpikes extends Block {
 	 */
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
 	{
-		int var1 = 0;
+		/*int var1 = 0;
 		boolean var3 = (canConnectSpikesTo(world, x - 1, y, z));
 		boolean var4 = (canConnectSpikesTo(world, x + 1, y, z));
 		boolean var5 = (canConnectSpikesTo(world, x, y - 1, z));
@@ -137,11 +137,22 @@ public class BlockSpikes extends Block {
 			var12 = 1F;
 			var13 = 0F;
 			var14 = 1F;
-		}
-		return AxisAlignedBB.getAABBPool().getAABB((double)((float)x + var9), (double)((float)y + var11), (double)((float)z + var13),(double)((float)x + var10), (double)((float)y + var12), (double)((float)z + var14));
+		}*/
+		//return AxisAlignedBB.getAABBPool().getAABB((double)((float)x + var9), (double)((float)y + var11), (double)((float)z + var13),(double)((float)x + var10), (double)((float)y + var12), (double)((float)z + var14));
+	    float f = 0.0625F;
+        return AxisAlignedBB.getAABBPool().getAABB(x + f, y + f, z + f, x + 1 - f, y + 1 - f, z + 1 - f);
+    
+	}@SideOnly(Side.CLIENT)
 
-	}
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
+    /**
+     * Returns the bounding box of the wired rectangular prism to render.
+     */
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    {
+        float f = 0.0625F;
+        return AxisAlignedBB.getAABBPool().getAABB(par2 + f, par3 + f, par4 + f, par2 + 1 - f, par3 + 1 - f, par4 + 1 - f);
+    }
+	/*public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
 	{
 		int var1 = 0;
 		boolean var3 = (canConnectSpikesTo(world, x - 1, y, z));
@@ -180,10 +191,10 @@ public class BlockSpikes extends Block {
 			var13 = 0F;
 			var14 = 1F;
 		}
+		float f = 0.0625F;
+		this.setBlockBounds(f, f, f, 1 - f, 1 - f, 1 - f);
 
-		this.setBlockBounds(var9, var11, var13, var10, var12, var14);
-
-	}
+	}*/
 
 	/**
 	 * Return whether an adjacent block can connect to a wall.
@@ -208,7 +219,7 @@ public class BlockSpikes extends Block {
 	 */
 	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
 	{
-		par5Entity.attackEntityFrom(DamageSource.cactus, 1);
+		par5Entity.attackEntityFrom(DamageSource.cactus, 6);
 	}
 
 	/**
@@ -246,7 +257,7 @@ public class BlockSpikes extends Block {
      */
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon("blockIron");
+        this.blockIcon = Block.blockIron.getBlockTextureFromSide(0);
     }
 
 	/**

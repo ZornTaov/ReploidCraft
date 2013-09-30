@@ -3,6 +3,7 @@ package zornco.reploidcraftenv.bullets;
 import java.util.Iterator;
 import java.util.List;
 
+import zornco.reploidcraftenv.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -16,6 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -76,9 +78,9 @@ public class EntityBulletBase extends Entity implements IProjectile
 	 * Method to shoot between one entity to another
 	 * @param world
 	 * @param attacker attacking entity
-	 * @param target target entity
+	 * @param attackTarget target entity
 	 */
-	public EntityBulletBase(World world, EntityLivingBase attacker, EntityLiving target)
+	public EntityBulletBase(World world, EntityLivingBase attacker, EntityLivingBase attackTarget)
 	{
 		super(world);
 		this.shootingEntity = attacker;
@@ -88,9 +90,9 @@ public class EntityBulletBase extends Entity implements IProjectile
 			this.canBePickedUp = 1;
 		}
 		this.posY = attacker.posY + (double)attacker.getEyeHeight() - 0.10000000149011612D;
-		double xDis = target.posX - attacker.posX;
-		double yDis = target.posY + (double)target.getEyeHeight() - 0.699999988079071D - this.posY;
-		double zDis = target.posZ - attacker.posZ;
+		double xDis = attackTarget.posX - attacker.posX;
+		double yDis = attackTarget.posY + (double)attackTarget.getEyeHeight() - 0.699999988079071D - this.posY;
+		double zDis = attackTarget.posZ - attacker.posZ;
 		double distance = (double)MathHelper.sqrt_double(xDis * xDis + zDis * zDis);
 
 		if (distance >= 1.0E-7D)
@@ -652,8 +654,8 @@ public class EntityBulletBase extends Entity implements IProjectile
 	public float[] getTexturePlacement() {
 		return new float[]{0F,0F,0F,0F,0F,0F,0F};
 	}
-	public String getTexture()
+	public ResourceLocation getTexture()
 	{
-		return "";
+		return new ResourceLocation(Reference.MOD_ID + ":textures/entity/MetHat.png");
 	}
 }

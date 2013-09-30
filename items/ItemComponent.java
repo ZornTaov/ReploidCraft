@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -89,7 +90,7 @@ public class ItemComponent extends Item {
 
         for (int i = 0; i < componentIconName.length; ++i)
         {
-            this.componentIcon[i] = par1IconRegister.registerIcon("ReploidCraft:"+componentIconName[i]);
+            this.componentIcon[i] = par1IconRegister.registerIcon(Reference.MOD_ID+":"+componentIconName[i]);
         }
     }
 

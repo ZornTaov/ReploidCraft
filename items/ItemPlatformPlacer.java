@@ -10,6 +10,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
+import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -83,6 +84,6 @@ public class ItemPlatformPlacer extends Item {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.platformSpawnerIcon = par1IconRegister.registerIcon("ReploidCraft:"+this.getUnlocalizedName().substring(5));
+        this.platformSpawnerIcon = par1IconRegister.registerIcon(Reference.MOD_ID+":"+this.getUnlocalizedName().substring(5));
     }
 }

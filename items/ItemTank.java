@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import zornco.reploidcraftenv.lib.Reference;
 import zornco.reploidcraftenv.sounds.Sounds;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import cpw.mods.fml.relauncher.Side;
@@ -73,7 +74,7 @@ public class ItemTank extends Item {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-            this.iconTank = par1IconRegister.registerIcon("ReploidCraft:"+this.getUnlocalizedName().substring(5));
+            this.iconTank = par1IconRegister.registerIcon(Reference.MOD_ID+":"+this.getUnlocalizedName().substring(5));
     }
 
     @SideOnly(Side.CLIENT)

@@ -11,12 +11,15 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import zornco.reploidcraftenv.entities.EntityMet;
+import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderMet extends RenderLiving
 {
+	private static final ResourceLocation met = new ResourceLocation(Reference.MOD_ID + ":textures/entity/MetHat.png");
+
 	public RenderMet(ModelBase par1ModelBase, ModelBase par2ModelBase, float shadowSize)
     {
         super(par1ModelBase, shadowSize);
@@ -28,7 +31,7 @@ public class RenderMet extends RenderLiving
         if (pass == 0 && !par1EntityMet.getIsHatNotWorn())
         {
         	//ForgeHooksClient.bindTexture("/zornco/megax/textures/MetHat.png", 0);
-
+        	this.bindTexture(met);
             float white = 1.0F;
             int type = par1EntityMet.getMetHatType();
             GL11.glColor3f(white * EntityMet.fleeceColorTable[type][0], white * EntityMet.fleeceColorTable[type][1], white * EntityMet.fleeceColorTable[type][2]);
@@ -72,7 +75,6 @@ public class RenderMet extends RenderLiving
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		return met;
 	}
 }

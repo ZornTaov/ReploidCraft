@@ -303,7 +303,7 @@ implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-		return ReploidCraftEnv.config.spikesRI;
+		return ReploidCraftEnv.config.bossDoorRI;
 	}
 
 	public static void renderDo(RenderBlocks renderblocks, Block block, int meta)

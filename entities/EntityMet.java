@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -100,13 +101,6 @@ public class EntityMet extends EntityTameable {
 			//this.setAngry(true);
 		}
 	}
-	/**
-	 * main AI tick function, replaces updateEntityActionState
-	 */
-	protected void updateAITick()
-	{
-		this.dataWatcher.updateObject(21, Integer.valueOf(this.getHealth()));
-	}
 	protected void updateAITasks()
 	{
 		this.hideTimer = this.aiMetHide.getHide();
@@ -115,7 +109,7 @@ public class EntityMet extends EntityTameable {
 	/**
 	 * Called when the entity is attacked.
 	 */
-	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
 	{
 		Entity var3 = par1DamageSource.getEntity();
 		if(isSitting()||isHiding())
@@ -147,16 +141,18 @@ public class EntityMet extends EntityTameable {
 		super.onLivingUpdate();
 	}
 
-	public int getMaxHealth()
-	{
-		return this.isTamed() ? 20 : 8;
-	}
 
+    protected void applyEntityAttributes()
+    {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(this.isTamed() ? 20 : 8);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.30000001192092896D);
+    }
+	
 	protected void entityInit()
 	{
 		super.entityInit();
 		this.dataWatcher.addObject(20, new Byte((byte)0));
-		this.dataWatcher.addObject(21, new Integer(this.getHealth()));
 	}
 
 	/**
@@ -222,7 +218,7 @@ public class EntityMet extends EntityTameable {
 		{
 			if (isWheat(var2))
 			{
-				if (this.dataWatcher.getWatchableObjectInt(21) < 20)
+				if (this.getHealth() < 20)
 				{
 					if (!par1EntityPlayer.capabilities.isCreativeMode)
 					{
@@ -410,10 +406,10 @@ public class EntityMet extends EntityTameable {
 	{
 
 		boolean hat = getIsHatNotWorn();
-		int halfhp = (getMaxHealth()/2)+1;
-		if(this. < halfhp)
+		float halfhp = (getMaxHealth()/2)+1;
+		if(this.getHealth() < halfhp)
 			this.setIsHatWorn(true);
-		else if (health >= halfhp)
+		else if (this.getHealth() >= halfhp)
 			this.setIsHatWorn(false);
 		super.onUpdate();
 	}

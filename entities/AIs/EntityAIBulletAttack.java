@@ -1,6 +1,7 @@
 package zornco.reploidcraftenv.entities.AIs;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.bullets.EntityMetBullet;
@@ -11,7 +12,7 @@ public class EntityAIBulletAttack extends EntityAIBase
 
     /** The entity the AI instance has been applied to */
     EntityLiving entityHost;
-    EntityLiving attackTarget;
+    EntityLivingBase attackTarget;
 
     /**
      * A decrementing tick that spawns a ranged attack once this value reaches 0. It is then set back to the
@@ -46,7 +47,7 @@ public class EntityAIBulletAttack extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        EntityLiving var1 = (EntityLiving) this.entityHost.getAttackTarget();
+        EntityLivingBase var1 = this.entityHost.getAttackTarget();
 
         if (var1 == null||(var1 != null && var1.isDead))
         {

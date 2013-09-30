@@ -210,10 +210,11 @@ public class EntityFloatingPlatform extends Entity
 		return true;
 
 	}
+	@Override
 	/**
 	 * Called when the entity is attacked.
 	 */
-	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
 	{
 		if (this.isEntityInvulnerable())
 		{

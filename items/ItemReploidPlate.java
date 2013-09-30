@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -42,7 +43,7 @@ public class ItemReploidPlate extends Item {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-            this.iconPlate = par1IconRegister.registerIcon("ReploidCraft:reploidPlate");
+            this.iconPlate = par1IconRegister.registerIcon(Reference.MOD_ID+":reploidPlate");
     }
 
     @SideOnly(Side.CLIENT)

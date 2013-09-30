@@ -7,19 +7,16 @@ import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.EnumHelper;
 import zornco.reploidcraftenv.core.CommonProxy;
 import zornco.reploidcraftenv.core.Config;
 import zornco.reploidcraftenv.core.EventBus;
 import zornco.reploidcraftenv.core.TabReploid;
+import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -27,21 +24,21 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid="ReploidEnv", name="ReploidEnv", version="0.0.1", acceptedMinecraftVersions = "[1.5,)")
+@Mod(modid=Reference.MOD_ID, name="ReploidEnv", version="0.0.1", acceptedMinecraftVersions = "[1.6,)")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
 public class ReploidCraftEnv {
 
 	// The instance of your mod that Forge uses.
-	@Instance("ReploidEnv")
+	@Instance(Reference.MOD_ID)
 	public static ReploidCraftEnv instance;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide="zornco.reploidcraftenv.client.ClientProxy", serverSide="zornco.reploidcraftenv.core.CommonProxy")
 	public static CommonProxy proxy;
 
-	public static CreativeTabs reploidTab = new TabReploid("ReploidEnv");
+	public static CreativeTabs reploidTab = new TabReploid(Reference.MOD_ID);
 
-	public static Logger logger = Logger.getLogger("ReploidEnv");
+	public static Logger logger = Logger.getLogger(Reference.MOD_ID);
 
 	public static Random rand = new Random();
 
@@ -65,7 +62,7 @@ public class ReploidCraftEnv {
 	public static Block spikes;
 	public static Block doorBossBlock;
 
-	@PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger.setParent(FMLLog.getLogger());
 		config.loadConfig(event);
@@ -73,7 +70,7 @@ public class ReploidCraftEnv {
 		proxy.registerSounds();
 	}
 
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		config.addItems();
 		config.addBlocks();
@@ -86,7 +83,7 @@ public class ReploidCraftEnv {
 		config.registerEntities();
 	}
 
-	@PostInit
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 	}
 }

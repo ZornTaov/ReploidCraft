@@ -1,10 +1,13 @@
 package zornco.reploidcraftenv.bullets;
 
+import zornco.reploidcraftenv.lib.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 
@@ -24,8 +27,8 @@ public class EntityMetBullet extends EntityBulletBase {
 	public EntityMetBullet(World par1World, double xPos, double yPos, double zPos) {
 		super(par1World, xPos, yPos, zPos);
 	}
-	public EntityMetBullet(World world, EntityLiving attacker, EntityLiving target) {
-		super(world, attacker, target);
+	public EntityMetBullet(World world, EntityLiving attacker, EntityLivingBase attackTarget) {
+		super(world, attacker, attackTarget);
 	}
 	public EntityMetBullet(World par1World, EntityLiving ent) {
 		super(par1World, ent);
@@ -47,9 +50,9 @@ public class EntityMetBullet extends EntityBulletBase {
 		return new float[]{6F, 8F, 0F, 44F, 44F, 64F, 64F};
 	}
 	@Override
-	public String getTexture()
+	public ResourceLocation getTexture()
 	{
-		return "buster_0";
+		return new ResourceLocation(Reference.MOD_ID + ":textures/fx/bullet_buster_0.png");
 	}
 
 	@Override

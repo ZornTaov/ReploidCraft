@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderBulletBase extends Render
 {
-	private String texture = "";
+	private ResourceLocation texture;
 
 	private float backSide = 0;
 	private float frontSide = 16.0F/32.0F;
@@ -32,9 +32,9 @@ public class RenderBulletBase extends Render
 
 	private float[] setup = new float[7];
 	
-	public void setup(String tex, float wid, float len, float mid, float u, float v, float texWidth, float texHeight)
+	public void setup(float wid, float len, float mid, float u, float v, float texWidth, float texHeight)
 	{
-		this.texture = "/mods/ReploidCraft/textures/fx/bullet_" + tex + ".png";
+		//this.texture = "/mods/ReploidCraft/textures/fx/bullet_" + tex + ".png";
 		this.backSide = u/texWidth;
 		this.frontSide = (u+len)/ texWidth;
 		this.leftSide = v / texHeight;
@@ -51,7 +51,8 @@ public class RenderBulletBase extends Render
 	{
 		this.setup = par1EntityBulletBase.getTexturePlacement();
 		this.texture = par1EntityBulletBase.getTexture();
-		this.setup(texture, setup[0], setup[1], setup[2], setup[3], setup[4], setup[5], setup[6]);
+        this.bindEntityTexture(par1EntityBulletBase);
+		this.setup(setup[0], setup[1], setup[2], setup[3], setup[4], setup[5], setup[6]);
 		//this.loadTexture(texture);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
@@ -120,6 +121,6 @@ public class RenderBulletBase extends Render
 	}
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return null;
+		return texture;
 	}
 }

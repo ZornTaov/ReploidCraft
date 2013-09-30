@@ -50,7 +50,7 @@ implements ISimpleBlockRenderingHandler {
 			drawY1(tess, x, y, z, uLeft, uRight, vTop, vBottom, light);
 
 		}
-		if (renderer.blockAccess.isBlockNormalCube(x, y - 1, z) || (renderer.blockAccess.getBlockMaterial(x, y - 1, z) ==  Material.piston && renderer.blockAccess.getBlockId(x, y - 1, z) != Block.pistonMoving.blockID))
+		if (renderer.blockAccess.isBlockNormalCube(x, y - 1, z) || (renderer.blockAccess.getBlockMaterial(x, y - 1, z) ==  Material.piston /*&& renderer.blockAccess.getBlockId(x, y - 1, z) != Block.pistonMoving.blockID*/))
 		{
 			renderer.setRenderBounds(0.0, 0.0, 0.0, 1.0, offset, 1.0);
 			renderer.renderStandardBlock(block, x, y, z);
@@ -113,25 +113,26 @@ implements ISimpleBlockRenderingHandler {
 		//tess.startDrawing(4);
 		tess.setBrightness(light);
 		tess.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.1 ), (double)(z + 0.9 ), uLeft, vTop);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.1 ), (double)(z + 0.9 ), uLeft, vBottom);
-		tess.addVertexWithUV((double)(x + 0.6), (double)(y + 0.5 ), (double)(z + 0.5 ), uRight, vBottom);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.1 ),	(double)(z + 0.1 ), uRight, vTop);
-
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.1 ), (double)(z + 0.1 ), uLeft, vTop);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.1 ), (double)(z + 0.1 ), uLeft, vBottom);
-		tess.addVertexWithUV((double)(x + 0.6), (double)(y + 0.5 ), (double)(z + 0.5 ), uRight, vBottom);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.9 ),	(double)(z + 0.1 ), uRight, vTop);
-
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.9 ), (double)(z + 0.1 ), uLeft, vTop);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.9 ), (double)(z + 0.1 ), uLeft, vBottom);
-		tess.addVertexWithUV((double)(x + 0.6), (double)(y + 0.5 ), (double)(z + 0.5 ), uRight, vBottom);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.9 ),	(double)(z + 0.9 ), uRight, vTop);
-
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.9 ), (double)(z + 0.9 ), uLeft, vTop);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.9 ), (double)(z + 0.9 ), uLeft, vBottom);
-		tess.addVertexWithUV((double)(x + 0.6), (double)(y + 0.5 ), (double)(z + 0.5 ), uRight, vBottom);
-		tess.addVertexWithUV((double)(x + 1.0), (double)(y + 0.1 ),	(double)(z + 0.9 ), uRight, vTop);
+		double side = 1.0, point = 0.5, topleft = 0.2, bottomright = 0.8;
+		tess.addVertexWithUV(x + 1.0, y + topleft, z + bottomright, uLeft, vTop);
+		tess.addVertexWithUV(x + 1.0, y + topleft, z + bottomright, uLeft, vBottom);
+		tess.addVertexWithUV(x + 0.6, y + 0.5, z + 0.5, uRight, vBottom);
+		tess.addVertexWithUV(x + 1.0, y + topleft, z + topleft, uRight, vTop);
+                                               
+		tess.addVertexWithUV(x + 1.0, y + topleft, z + topleft, uLeft, vTop);
+		tess.addVertexWithUV(x + 1.0, y + topleft, z + topleft, uLeft, vBottom);
+		tess.addVertexWithUV(x + 0.6, y + 0.5, z + 0.5, uRight, vBottom);
+		tess.addVertexWithUV(x + 1.0, y + bottomright, z + topleft, uRight, vTop);
+                                               
+		tess.addVertexWithUV(x + 1.0, y + bottomright, z + topleft, uLeft, vTop);
+		tess.addVertexWithUV(x + 1.0, y + bottomright, z + topleft, uLeft, vBottom);
+		tess.addVertexWithUV(x + 0.6, y + 0.5, z + 0.5, uRight, vBottom);
+		tess.addVertexWithUV(x + 1.0, y + bottomright, z + bottomright, uRight, vTop);
+                                               
+		tess.addVertexWithUV(x + 1.0, y + bottomright, z + bottomright, uLeft, vTop);
+		tess.addVertexWithUV(x + 1.0, y + bottomright, z + bottomright, uLeft, vBottom);
+		tess.addVertexWithUV(x + 0.6, y + 0.5, z + 0.5, uRight, vBottom);
+		tess.addVertexWithUV(x + 1.0, y + topleft, z + bottomright, uRight, vTop);
 
 		//tess.draw();
 		//tess.startDrawing(mode);

@@ -17,6 +17,7 @@ import zornco.reploidcraftenv.items.ItemHPEnergy;
 import zornco.reploidcraftenv.items.ItemPlatformPlacer;
 import zornco.reploidcraftenv.items.ItemReploidPlate;
 import zornco.reploidcraftenv.items.ItemTank;
+import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -97,7 +98,7 @@ public class Config {
 		//LanguageRegistry.addName(Reploid.doorBossBlock, "Boss Door");
 
 		LanguageRegistry.instance().addStringLocalization("entity.FloatingPlatform.name", "en_US", "Floating Platform");
-		LanguageRegistry.instance().addStringLocalization("itemGroup.ReploidEnv", "en_US", "Reploid Enviroment");
+		LanguageRegistry.instance().addStringLocalization("itemGroup." + Reference.MOD_ID, "en_US", "Reploid Enviroment");
 	}
 
 	public void registerEntities() {
@@ -136,19 +137,5 @@ public class Config {
 
 		ReploidCraftEnv.platformPlacer = new ItemPlatformPlacer(platformPlacerID).setUnlocalizedName("platformPlacer");
 		//doorBossItem = (new ItemBossDoor(doorBossItemID, Material.iron)).setIconCoord(12, 2).setItemName("doorBoss");
-	}
-	/**
-	 * Helper function for making recipes. Returns a copy of the itemstack with the specified stacksize.
-	 * 
-	 * @param stack
-	 *            Itemstack to copy
-	 * @param number
-	 *            New Stacksize
-	 * @return A new itemstack with the specified properties
-	 */
-	public static ItemStack copyAndResize(ItemStack stack, int number) {
-		ItemStack copy = stack.copy();
-		copy.stackSize = number;
-		return copy;
 	}
 }
