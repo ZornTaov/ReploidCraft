@@ -13,6 +13,7 @@ import zornco.reploidcraftenv.core.Config;
 import zornco.reploidcraftenv.core.EventBus;
 import zornco.reploidcraftenv.core.TabReploid;
 import zornco.reploidcraftenv.lib.Reference;
+import zornco.reploidcraftenv.network.PacketHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -25,7 +26,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 @Mod(modid=Reference.MOD_ID, name="ReploidEnv", version="0.0.1", acceptedMinecraftVersions = "[1.6,)")
-@NetworkMod(clientSideRequired=true, serverSideRequired=false)
+@NetworkMod(channels = { "ReploidEnv" }, clientSideRequired=true, serverSideRequired=false, packetHandler=PacketHandler.class)
 public class ReploidCraftEnv {
 
 	// The instance of your mod that Forge uses.
@@ -55,12 +56,14 @@ public class ReploidCraftEnv {
 	public static Item extraMan;
 	public static Item component;
 	public static Item reploidPlate;
+	public static Item itemHolder;
 
 	public static Item platformPlacer;
 	public static Item doorBossItem;
 
 	public static Block spikes;
 	public static Block doorBossBlock;
+	public static Block blockItemHolder;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

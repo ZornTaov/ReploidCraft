@@ -2,18 +2,20 @@ package zornco.reploidcraftenv.core;
 
 import net.minecraft.block.StepSound;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.Configuration;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.blocks.BlockItemHolder;
 import zornco.reploidcraftenv.blocks.BlockSpikes;
+import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
 import zornco.reploidcraftenv.bullets.EntityMetBullet;
 import zornco.reploidcraftenv.crafting.RecipeHandler;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityMet;
 import zornco.reploidcraftenv.items.ItemComponent;
 import zornco.reploidcraftenv.items.ItemHPEnergy;
+import zornco.reploidcraftenv.items.ItemItemHolder;
 import zornco.reploidcraftenv.items.ItemPlatformPlacer;
 import zornco.reploidcraftenv.items.ItemReploidPlate;
 import zornco.reploidcraftenv.items.ItemTank;
@@ -37,12 +39,14 @@ public class Config {
 	//private int extraManID;
 	private int reploidPlateID;
 	private int componentID;
+	private int itemHolderID;
 
 	private int platformPlacerID;
 	private int doorBossItemID;
 
 	private int spikesID;
 	private int doorBossBlockID;
+	private int itemHolderBlockID;
 
 	public static RecipeHandler recipes = new RecipeHandler();
 
@@ -60,6 +64,7 @@ public class Config {
 		//extraManID = config.getItem(config.CATEGORY_ITEM,"Extra Man", itemID++).getInt();
 		reploidPlateID = config.getItem(config.CATEGORY_ITEM,"Reploid Plates", itemID++).getInt();
 		componentID = config.getItem(config.CATEGORY_ITEM,"Components", itemID++).getInt();
+		itemHolderID = config.getItem(config.CATEGORY_ITEM, "Item Holder", itemID++).getInt();
 		doorBossItemID = config.getItem(config.CATEGORY_ITEM,"Boss Door Item", itemID++).getInt();
 		platformPlacerID = config.getItem(config.CATEGORY_ITEM,"Platform Placer", itemID++).getInt();
 
@@ -67,6 +72,7 @@ public class Config {
 		int blockID = 2500;
 		spikesID = config.get(config.CATEGORY_BLOCK,"Metal Spikes", blockID++).getInt();
 		doorBossBlockID = config.get(config.CATEGORY_BLOCK,"Boss Door Block", blockID++).getInt();
+		itemHolderBlockID = config.get(config.CATEGORY_BLOCK,"Item Holder Block", blockID++).getInt();
 
 		config.save();
 	}
@@ -89,12 +95,14 @@ public class Config {
 		{
 			LanguageRegistry.instance().addStringLocalization("item.component."+a+".name", "en_US", a );
 		}
+		//LanguageRegistry.addName(ReploidCraftEnv.itemHolder, "Item Holder");
 
 		LanguageRegistry.addName(ReploidCraftEnv.platformPlacer, "Platform Placer");
 		//LanguageRegistry.addName(Reploid.doorBossItem, "Boss Door");
 
 		//LanguageRegistry.addName(Reploid.upgradeStation, "Upgrade Station");
 		LanguageRegistry.addName(ReploidCraftEnv.spikes, "Metal Spikes");
+		LanguageRegistry.addName(ReploidCraftEnv.blockItemHolder, "Item Holder");
 		//LanguageRegistry.addName(Reploid.doorBossBlock, "Boss Door");
 
 		LanguageRegistry.instance().addStringLocalization("entity.FloatingPlatform.name", "en_US", "Floating Platform");
@@ -106,7 +114,7 @@ public class Config {
 		
 		EntityRegistry.registerGlobalEntityID(EntityMet.class, "Met", EntityRegistry.findGlobalUniqueEntityId(), 0xFFFF00, 0x0F0000);
 		EntityRegistry.registerModEntity(EntityMet.class, "Met", 2, ReploidCraftEnv.instance, 80, 3, true);
-		EntityRegistry.addSpawn("Met", 3, 2, 4, EnumCreatureType.monster, BiomeGenBase.beach);
+		EntityRegistry.addSpawn("Met", 30, 2, 40, EnumCreatureType.monster, BiomeGenBase.beach, BiomeGenBase.swampland);
 		EntityRegistry.registerGlobalEntityID(EntityFloatingPlatform.class, "FloatingPlatform", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFloatingPlatform.class, "FloatingPlatform", 3, ReploidCraftEnv.instance, 80, 1, true);
 		EntityRegistry.registerGlobalEntityID(EntityMetBullet.class, "metBullet", EntityRegistry.findGlobalUniqueEntityId());
@@ -117,9 +125,12 @@ public class Config {
 		/** Blocks **/
 		ReploidCraftEnv.spikes = new BlockSpikes(spikesID).setStepSound(new StepSound("stone", 1.0F, 1.5F)).setUnlocalizedName("spikes").setHardness(3.5F);
 		//doorBossBlock = (new BlockBossDoor(doorBossBlockID, Material.iron)).setHardness(5.0F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("doorBoss").setRequiresSelfNotify();
+		ReploidCraftEnv.blockItemHolder = new BlockItemHolder(itemHolderBlockID).setStepSound(new StepSound("stone", 1.0F, 1.5F)).setUnlocalizedName("itemHolder").setHardness(3.5F);
 
 		GameRegistry.registerBlock(ReploidCraftEnv.spikes, "spikes");
 		//GameRegistry.registerBlock(doorBossBlock, "doorBoss");
+		GameRegistry.registerBlock(ReploidCraftEnv.blockItemHolder, "itemHolder");
+		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
 	}
 	public void addItems() {
 		/** Items **/
@@ -134,7 +145,8 @@ public class Config {
 
 		ReploidCraftEnv.reploidPlate = new ItemReploidPlate(reploidPlateID).setUnlocalizedName("reploidPlate");
 		ReploidCraftEnv.component = new ItemComponent(componentID).setUnlocalizedName("component");
-
+		//ReploidCraftEnv.itemHolder = (new ItemItemHolder(itemHolderID)).setUnlocalizedName("holder").setTextureName("item_holder");
+		
 		ReploidCraftEnv.platformPlacer = new ItemPlatformPlacer(platformPlacerID).setUnlocalizedName("platformPlacer");
 		//doorBossItem = (new ItemBossDoor(doorBossItemID, Material.iron)).setIconCoord(12, 2).setItemName("doorBoss");
 	}
