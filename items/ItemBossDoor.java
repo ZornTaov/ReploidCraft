@@ -3,6 +3,7 @@ package zornco.reploidcraftenv.items;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -13,9 +14,9 @@ public class ItemBossDoor extends Item
 {
     private Material doorMaterial;
 
-    public ItemBossDoor(int par1, Material par2Material)
+    public ItemBossDoor(Material par2Material)
     {
-        super(par1);
+        super();
         this.doorMaterial = par2Material;
         this.maxStackSize = 1;
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
@@ -38,11 +39,11 @@ public class ItemBossDoor extends Item
 
             if (this.doorMaterial == Material.wood)
             {
-                var11 = Block.doorWood;
+                var11 = Blocks.wooden_door;
             }
             else
             {
-                var11 = Block.doorIron;
+                var11 = Blocks.iron_door;
             }
 
             if (par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack) && par2EntityPlayer.canPlayerEdit(par4, par5 + 1, par6, par7, par1ItemStack))
@@ -91,10 +92,10 @@ public class ItemBossDoor extends Item
             var6 = 1;
         }
 
-        int var8 = (par0World.isBlockNormalCube(par1 - var6, par2, par3 - var7) ? 1 : 0) + (par0World.isBlockNormalCube(par1 - var6, par2 + 1, par3 - var7) ? 1 : 0);
-        int var9 = (par0World.isBlockNormalCube(par1 + var6, par2, par3 + var7) ? 1 : 0) + (par0World.isBlockNormalCube(par1 + var6, par2 + 1, par3 + var7) ? 1 : 0);
-        boolean var10 = par0World.getBlockId(par1 - var6, par2, par3 - var7) == par5Block.blockID || par0World.getBlockId(par1 - var6, par2 + 1, par3 - var7) == par5Block.blockID;
-        boolean var11 = par0World.getBlockId(par1 + var6, par2, par3 + var7) == par5Block.blockID || par0World.getBlockId(par1 + var6, par2 + 1, par3 + var7) == par5Block.blockID;
+        int var8 = (par0World.isAirBlock(par1 - var6, par2, par3 - var7) ? 1 : 0) + (par0World.isAirBlock(par1 - var6, par2 + 1, par3 - var7) ? 1 : 0);
+        int var9 = (par0World.isAirBlock(par1 + var6, par2, par3 + var7) ? 1 : 0) + (par0World.isAirBlock(par1 + var6, par2 + 1, par3 + var7) ? 1 : 0);
+        boolean var10 = par0World.getBlock(par1 - var6, par2, par3 - var7) == par5Block || par0World.getBlock(par1 - var6, par2 + 1, par3 - var7) == par5Block;
+        boolean var11 = par0World.getBlock(par1 + var6, par2, par3 + var7) == par5Block || par0World.getBlock(par1 + var6, par2 + 1, par3 + var7) == par5Block;
         boolean var12 = false;
 
         if (var10 && !var11)
@@ -106,9 +107,9 @@ public class ItemBossDoor extends Item
             var12 = true;
         }
 
-        par0World.setBlock(par1, par2, par3, par5Block.blockID, par4, 2);
-        par0World.setBlock(par1, par2 + 1, par3, par5Block.blockID, 8 | (var12 ? 1 : 0), 2);
-        par0World.notifyBlocksOfNeighborChange(par1, par2, par3, par5Block.blockID);
-        par0World.notifyBlocksOfNeighborChange(par1, par2 + 1, par3, par5Block.blockID);
+        par0World.setBlock(par1, par2, par3, par5Block, par4, 2);
+        par0World.setBlock(par1, par2 + 1, par3, par5Block, 8 | (var12 ? 1 : 0), 2);
+        par0World.notifyBlocksOfNeighborChange(par1, par2, par3, par5Block);
+        par0World.notifyBlocksOfNeighborChange(par1, par2 + 1, par3, par5Block);
     }
 }

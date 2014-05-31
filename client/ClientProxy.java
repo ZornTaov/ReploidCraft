@@ -2,6 +2,9 @@ package zornco.reploidcraftenv.client;
 
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -15,14 +18,21 @@ import zornco.reploidcraftenv.client.renderers.ModelMetHat;
 import zornco.reploidcraftenv.client.renderers.RenderBulletBase;
 import zornco.reploidcraftenv.client.renderers.RenderFloatingPlatform;
 import zornco.reploidcraftenv.client.renderers.RenderMet;
+import zornco.reploidcraftenv.client.renderers.RenderRideArmor;
 import zornco.reploidcraftenv.client.renderers.TileEntityItemHolderRenderer;
 import zornco.reploidcraftenv.core.CommonProxy;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityMet;
+import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraftenv.network.PacketPipeline;
+import zornco.reploidcraftenv.network.PacketRideArmor;
 import zornco.reploidcraftenv.sounds.Sounds;
+import zornco.reploidcraftenv.utils.RiderState;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
@@ -49,6 +59,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMet.class, new RenderMet(new ModelMet(), new ModelMetHat(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingPlatform.class, new RenderFloatingPlatform());  
 		RenderingRegistry.registerEntityRenderingHandler(EntityMetBullet.class, new RenderBulletBase()); 
+		RenderingRegistry.registerEntityRenderingHandler(EntityRideArmor.class, new RenderRideArmor()); 
 
 		ReploidCraftEnv.config.spikesRI = RenderingRegistry.getNextAvailableRenderId();
 		ReploidCraftEnv.config.bossDoorRI = RenderingRegistry.getNextAvailableRenderId();
@@ -61,7 +72,7 @@ public class ClientProxy extends CommonProxy {
 	}
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
         if (te != null && te instanceof TileEntityItemHolder)
         {
             return new GUIItemHolder(player.inventory, (TileEntityItemHolder) te);
@@ -75,9 +86,61 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public Object getSoundManager()
 	{
-		return Minecraft.getMinecraft().sndManager;
+		return Minecraft.getMinecraft().getSoundHandler();
 	}
 	public World getClientWorld() {
 		return FMLClientHandler.instance().getClient().theWorld;
+	}
+	@Override
+	public Entity getEntityByID(int entityId, int dimension)
+	{
+		Entity targetEntity = null;
+		if (Side.CLIENT == FMLCommonHandler.instance().getEffectiveSide())
+		{
+			targetEntity = FMLClientHandler.instance().getClient().theWorld.getEntityByID(entityId);
+		}
+
+		if ((null != targetEntity) && ((targetEntity instanceof EntityRideArmor)))
+		{
+			return (EntityRideArmor)targetEntity;
+		}
+
+		return null;
+	}
+	@Override
+	public void updateRiderState(EntityRideArmor rideArmor, Entity entity) {
+		if (rideArmor.worldObj.isRemote)
+		{
+			rideArmor.setRiderState(getRiderState(entity));
+
+			if (rideArmor.riderState.isChanged())
+			{
+				PacketRideArmor packet = new PacketRideArmor(rideArmor, entity);
+				ReploidCraftEnv.packetPipeline.sendToServer(packet);
+			}
+
+			rideArmor.riderState.resetChanged();
+		}
+	}
+	@Override
+	public RiderState getRiderState(Entity rider) {
+		RiderState rs = new RiderState();
+		if (rider instanceof EntityPlayerSP)
+	    {
+	      EntityPlayerSP riderSP = (EntityPlayerSP)rider;
+	      rs.setMoveForward(riderSP.movementInput.moveForward);
+	      rs.setMoveStrafe(riderSP.movementInput.moveStrafe);
+	      rs.setJump(riderSP.movementInput.jump);
+	      rs.setSneak(riderSP.movementInput.sneak);
+	    }
+		else if (rider instanceof EntityMob)
+		{
+			EntityMob riderMob = (EntityMob)rider;
+			rs.setMoveForward(riderMob.moveForward);
+		      rs.setMoveStrafe(0.0F);
+		      rs.setJump(riderMob.motionY > 0.0F);
+		      rs.setSneak(false);
+		}
+		return rs;
 	}
 }

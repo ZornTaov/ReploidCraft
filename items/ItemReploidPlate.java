@@ -2,14 +2,13 @@ package zornco.reploidcraftenv.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,11 +18,11 @@ public class ItemReploidPlate extends Item {
     public static final String[] plateColorNames = new String[] {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "Enhanced", "Basic"};
     public static final int[] chipColors = new int[] {1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320, 2651799};
 
-	private Icon iconPlate;
+	private IIcon iconPlate;
     public static final int typeAmmount = 17;
-    public ItemReploidPlate(int par1)
+    public ItemReploidPlate()
     {
-        super(par1);
+        super();
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
@@ -41,9 +40,9 @@ public class ItemReploidPlate extends Item {
 
 	@Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerIcons(IIconRegister par1IconRegister)
     {
-            this.iconPlate = par1IconRegister.registerIcon(Reference.MOD_ID+":reploidPlate");
+            this.iconPlate = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":reploidPlate");
     }
 
     @SideOnly(Side.CLIENT)
@@ -51,7 +50,7 @@ public class ItemReploidPlate extends Item {
     /**
      * Gets an icon index based on an item's damage value
      */
-    public Icon getIconFromDamage(int par1)
+    public IIcon getIconFromDamage(int par1)
     {
         return this.iconPlate;
     }
@@ -61,7 +60,7 @@ public class ItemReploidPlate extends Item {
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < typeAmmount; ++var4)
         {

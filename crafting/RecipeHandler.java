@@ -2,6 +2,8 @@ package zornco.reploidcraftenv.crafting;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -16,7 +18,7 @@ public class RecipeHandler {
 		//GameRegistry.addRecipe(new ItemStack(Item.monsterPlacer, 1, metID), new Object[] { "   ", " # ", "xxx", Character.valueOf('#'), Block.dirt , Character.valueOf('x'), Block.planks });
 
 		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraftEnv.reploidPlate, 1, 16), // basic plate
-				new Object[]{ Item.ingotIron, Item.redstone } );
+				new Object[]{ Items.iron_ingot, Items.redstone } );
 		String[] dyes = 
 			{
 				"dyeBlack",
@@ -45,28 +47,28 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.component, 4, 0), //diamond dust
 				new Object[] { 
 			"ttt", "tdt", "ttt", 
-			Character.valueOf('t'), Block.tnt, 
-			Character.valueOf('d'), Item.diamond // diamond dust\
+			Character.valueOf('t'), Blocks.tnt, 
+			Character.valueOf('d'), Items.diamond // diamond dust\
 		}
 				);
 
 		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.component, 1, 1), // AEDS
 				new Object[] { 
 			"rdr", "dpd", "rdr", 
-			Character.valueOf('r'), Item.redstone, 
+			Character.valueOf('r'), Items.redstone, 
 			Character.valueOf('d'), new ItemStack(ReploidCraftEnv.component, 1, 0), // diamond dust
-			Character.valueOf('p'), Item.netherQuartz // use quartz block
+			Character.valueOf('p'), Items.quartz // use quartz block
 		}
 				);
 
 		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.healthTank, 1, 30), 
 				new Object[] { 
 			"ihi", "bHb", "bdb", 
-			Character.valueOf('i'), Item.ingotIron, 
+			Character.valueOf('i'), Items.iron_ingot, 
 			Character.valueOf('b'), new ItemStack(ReploidCraftEnv.reploidPlate, 1, 4),
 			Character.valueOf('h'), ReploidCraftEnv.healthBit,
 			Character.valueOf('H'), ReploidCraftEnv.healthByte,
-			Character.valueOf('d'), Item.diamond
+			Character.valueOf('d'), Items.diamond
 		}
 				);
 
@@ -74,7 +76,7 @@ public class RecipeHandler {
 				new Object[] { 
 			" i ", " i ", "bbb", 
 			Character.valueOf('i'), new ItemStack(ReploidCraftEnv.reploidPlate, 1, 7), 
-			Character.valueOf('b'), Block.blockIron
+			Character.valueOf('b'), Blocks.iron_block
 		}
 				);
 

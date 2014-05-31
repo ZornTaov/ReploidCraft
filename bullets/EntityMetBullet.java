@@ -1,6 +1,6 @@
 package zornco.reploidcraftenv.bullets;
 
-import zornco.reploidcraftenv.lib.Reference;
+import zornco.reploidcraftenv.ReploidCraftEnv;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -52,7 +52,7 @@ public class EntityMetBullet extends EntityBulletBase {
 	@Override
 	public ResourceLocation getTexture()
 	{
-		return new ResourceLocation(Reference.MOD_ID + ":textures/fx/bullet_buster_0.png");
+		return new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/fx/bullet_buster_0.png");
 	}
 
 	@Override

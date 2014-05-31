@@ -1,6 +1,6 @@
 package zornco.reploidcraftenv.items;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,9 +8,8 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.lib.Reference;
 import zornco.reploidcraftenv.sounds.Sounds;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import cpw.mods.fml.relauncher.Side;
@@ -31,10 +30,10 @@ public class ItemHPEnergy extends ItemFood {
 	/** probably of the set potion effect occurring */
 	private float potionEffectProbability;
 	public int type;
-    private Icon healthIcons;
+    private IIcon healthIcons;
 
-    public ItemHPEnergy(int id, int type, int ammount, float sat) {
-		super(id, ammount, sat, false);
+    public ItemHPEnergy(int type, int ammount, float sat) {
+		super(ammount, sat, false);
 		this.type = type;
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
 	}
@@ -76,7 +75,7 @@ public class ItemHPEnergy extends ItemFood {
 				par3EntityPlayer.worldObj.playSoundAtEntity(par3EntityPlayer, Sounds.BYTE, 1.0F, 1.0F);
 				break;
 			}
-			par3EntityPlayer.getFoodStats().addStats(this);
+			par3EntityPlayer.getFoodStats().func_151686_a(this, par1ItemStack);
 		}
 
 		return par1ItemStack;
@@ -102,15 +101,15 @@ public class ItemHPEnergy extends ItemFood {
     /**
      * Gets an icon index based on an item's damage value
      */
-    public Icon getIconFromDamage(int par1)
+    public IIcon getIconFromDamage(int par1)
     {
         return this.healthIcons;
     }
 
     @Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister)
+	public void registerIcons(IIconRegister par1IconRegister)
 	{
-		this.healthIcons = par1IconRegister.registerIcon(Reference.MOD_ID+":"+this.getUnlocalizedName().substring(5));
+		this.healthIcons = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+this.getUnlocalizedName().substring(5));
 	}
 }

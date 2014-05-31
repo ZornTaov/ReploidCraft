@@ -2,31 +2,30 @@ package zornco.reploidcraftenv.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemComponent extends Item {
 
 	 /** List of dye color names */
-    public static final String[] componentNames = new String[] {"Diamond Dust", "AEGD", "F"};
-    public static final String[][] componentDesc = new String[][] {{"",""}, {"Accumulative Energy", "Generation Device"}, {"",""}};
-    public static final String[] componentIconName = new String[] {"diamond_dust", "AEGD", "chip_F"};
+    public static final String[] componentNames = new String[] {"Diamond Dust", "AEGD"};
+    public static final String[][] componentDesc = new String[][] {{"",""}, {"Accumulative Energy", "Generation Device"}};
+    public static final String[] componentIconName = new String[] {"diamond_dust", "AEGD"};
 	public static final int[] chipColors = new int[] {1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 2651799, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320};
-    public static final int typeAmmount = 3;
+    public static final int typeAmmount = 2;
 	@SideOnly(Side.CLIENT)
-	private Icon[] componentIcon;
-    public ItemComponent(int par1)
+	private IIcon[] componentIcon;
+    public ItemComponent()
     {
-        super(par1);
+        super();
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
@@ -63,7 +62,7 @@ public class ItemComponent extends Item {
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < typeAmmount; ++var4)
         {
@@ -76,7 +75,7 @@ public class ItemComponent extends Item {
 	/**
 	 * Gets an icon index based on an item's damage value
 	 */
-	public Icon getIconFromDamage(int par1)
+	public IIcon getIconFromDamage(int par1)
 	{
         int var2 = MathHelper.clamp_int(par1, 0, typeAmmount);
 		return this.componentIcon[var2];
@@ -84,13 +83,13 @@ public class ItemComponent extends Item {
 
 	@Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerIcons(IIconRegister par1IconRegister)
     {
-        this.componentIcon = new Icon[componentIconName.length];
+        this.componentIcon = new IIcon[componentIconName.length];
 
         for (int i = 0; i < componentIconName.length; ++i)
         {
-            this.componentIcon[i] = par1IconRegister.registerIcon(Reference.MOD_ID+":"+componentIconName[i]);
+            this.componentIcon[i] = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+componentIconName[i]);
         }
     }
 

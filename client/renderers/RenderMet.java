@@ -10,15 +10,15 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 
+import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityMet;
-import zornco.reploidcraftenv.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderMet extends RenderLiving
 {
-	private static final ResourceLocation met = new ResourceLocation(Reference.MOD_ID + ":textures/entity/MetHat.png");
+	private static final ResourceLocation met = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/MetHat.png");
 
 	public RenderMet(ModelBase par1ModelBase, ModelBase par2ModelBase, float shadowSize)
     {
@@ -46,7 +46,7 @@ public class RenderMet extends RenderLiving
 
     public void doRenderMet(EntityMet par1EntitySheep, double par2, double par4, double par6, float par8, float partialTickTime)
     {
-        super.doRenderLiving(par1EntitySheep, par2, par4, par6, par8, partialTickTime);
+        super.doRender(par1EntitySheep, par2, par4, par6, par8, partialTickTime);
     }
 
     /**

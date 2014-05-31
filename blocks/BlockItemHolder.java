@@ -10,9 +10,10 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,32 +25,32 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import static net.minecraftforge.common.ForgeDirection.DOWN;
-import static net.minecraftforge.common.ForgeDirection.UP;
+import net.minecraftforge.common.util.ForgeDirection;
+import static net.minecraftforge.common.util.ForgeDirection.UP;
+import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 
 public class BlockItemHolder extends BlockContainer {
 
 	private Random random;
 
 	@SideOnly(Side.CLIENT)
-	private Icon icons;
+	private IIcon icons;
 
-	public BlockItemHolder(int id)
+	public BlockItemHolder()
 	{
-		super(id, Material.iron);
-		setUnlocalizedName("IronChest");
+		super(Material.iron);
+		setBlockName("IronChest");
 		setHardness(3.0F);
 		//setBlockBounds(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		random = new Random();
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(ReploidCraftEnv.reploidTab);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World w)
+	public TileEntity createNewTileEntity(World w, int meta)
 	{
 		return null;
 	}
@@ -100,13 +101,13 @@ public class BlockItemHolder extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public Icon getIcon(int i, int j)
+	public IIcon getIcon(int i, int j)
 	{
 		return null;
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
 	{
 		ArrayList<ItemStack> items = Lists.newArrayList();
 		ItemStack stack = new ItemStack(this,1,metadata);
@@ -117,14 +118,14 @@ public class BlockItemHolder extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int i1, float f1, float f2, float f3)
 	{
-		TileEntity te = world.getBlockTileEntity(i, j, k);
+		TileEntity te = world.getTileEntity(i, j, k);
 
 		if (te == null || !(te instanceof TileEntityItemHolder))
 		{
 			return true;
 		}
 
-		if (world.isBlockSolidOnSide(i, j + 1, k, ForgeDirection.DOWN))
+		if (world.isSideSolid(i, j + 1, k, ForgeDirection.DOWN))
 		{
 			return true;
 		}
@@ -144,11 +145,11 @@ public class BlockItemHolder extends BlockContainer {
 	{
 		if(par5Entity instanceof EntityPlayer)
 		{
-			TileEntityItemHolder tileentitychest = (TileEntityItemHolder) world.getBlockTileEntity(par2, par3, par4);
+			TileEntityItemHolder tileentitychest = (TileEntityItemHolder) world.getTileEntity(par2, par3, par4);
 			if (tileentitychest != null && !tileentitychest.isDropped())
 			{
 				dropContent(0, tileentitychest, world, tileentitychest.xCoord, tileentitychest.yCoord, tileentitychest.zCoord, 1);
-				tileentitychest.onInventoryChanged();
+				tileentitychest.markDirty();
 			}
 		}
 	}
@@ -180,7 +181,7 @@ public class BlockItemHolder extends BlockContainer {
 		{
 			chestFacing = 4;
 		}
-		TileEntity te = world.getBlockTileEntity(i, j, k);
+		TileEntity te = world.getTileEntity(i, j, k);
 		if (te != null && te instanceof TileEntityItemHolder)
 		{
 			TileEntityItemHolder teic = (TileEntityItemHolder) te;
@@ -196,9 +197,9 @@ public class BlockItemHolder extends BlockContainer {
 	}
 
 	@Override
-	public void breakBlock(World world, int i, int j, int k, int i1, int i2)
+	public void breakBlock(World world, int i, int j, int k, Block i1, int i2)
 	{
-		TileEntityItemHolder tileentitychest = (TileEntityItemHolder) world.getBlockTileEntity(i, j, k);
+		TileEntityItemHolder tileentitychest = (TileEntityItemHolder) world.getTileEntity(i, j, k);
 		if (tileentitychest != null)
 		{
 			tileentitychest.removeAdornments();
@@ -228,7 +229,7 @@ public class BlockItemHolder extends BlockContainer {
 				}
 				itemstack.stackSize -= i1;
 				EntityItem entityitem = new EntityItem(world, (float) xCoord + f, (float) yCoord + (newSize > 0 ? 1 : 0) + f1, (float) zCoord + f2,
-						new ItemStack(itemstack.itemID, i1, itemstack.getItemDamage()));
+						new ItemStack(itemstack.getItem(), i1, itemstack.getItemDamage()));
 				float f3 = 0.05F;
 				entityitem.motionX = (float) random.nextGaussian() * f3;
 				entityitem.motionY = (float) random.nextGaussian() * f3 + 0.2F;
@@ -247,13 +248,13 @@ public class BlockItemHolder extends BlockContainer {
 	@Override
 	public int getComparatorInputOverride(World par1World, int par2, int par3, int par4, int par5)
 	{
-		return Container.calcRedstoneFromInventory((TileEntityItemHolder) par1World.getBlockTileEntity(par2, par3, par4));
+		return Container.calcRedstoneFromInventory((TileEntityItemHolder) par1World.getTileEntity(par2, par3, par4));
 	}
 
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister)
+	public void registerBlockIcons(IIconRegister par1IconRegister)
 	{
 
 	}
@@ -274,7 +275,7 @@ public class BlockItemHolder extends BlockContainer {
 		}
 		if (axis == UP || axis == DOWN)
 		{
-			TileEntity tileEntity = worldObj.getBlockTileEntity(x, y, z);
+			TileEntity tileEntity = worldObj.getTileEntity(x, y, z);
 			if (tileEntity instanceof TileEntityItemHolder) {
 				TileEntityItemHolder icte = (TileEntityItemHolder) tileEntity;
 				icte.rotateAround(axis);

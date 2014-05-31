@@ -5,13 +5,13 @@ package zornco.reploidcraftenv.blocks;
 import java.util.Random;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -26,11 +26,11 @@ public class BlockBossDoor extends Block
     /** Used for pointing at icon names. */
     private final int doorTypeForIcon;
     @SideOnly(Side.CLIENT)
-    private Icon[] iconArray;
+    private IIcon[] iconArray;
     
-    public BlockBossDoor(int par1, Material par2Material)
+    public BlockBossDoor( Material par2Material)
     {
-        super(par1, par2Material);
+        super(par2Material);
         //this.blockIndexInTexture = 97;
 
         if (par2Material == Material.iron)
@@ -52,7 +52,7 @@ public class BlockBossDoor extends Block
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
+    public IIcon getBlockTextureFromSideAndMetadata(int par1, int par2)
     {
         return this.iconArray[this.doorTypeForIcon];
     }
@@ -62,7 +62,7 @@ public class BlockBossDoor extends Block
     /**
      * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
      */
-    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+    public IIcon getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
     {
         if (par5 != 1 && par5 != 0)
         {
@@ -347,7 +347,8 @@ public class BlockBossDoor extends Block
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
      * their own) Args: x, y, z, neighbor blockID
      */
-    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)
+    @Override
+    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, Block par5)
     {
         int var6 = par1World.getBlockMetadata(par2, par3, par4);
 
@@ -355,18 +356,18 @@ public class BlockBossDoor extends Block
         {
             boolean var7 = false;
 
-            if (par1World.getBlockId(par2, par3 + 1, par4) != this.blockID)
+            if (par1World.getBlock(par2, par3 + 1, par4) != this)
             {
                 par1World.setBlockToAir(par2, par3, par4);
                 var7 = true;
             }
 
-            if (!par1World.doesBlockHaveSolidTopSurface(par2, par3 - 1, par4))
+            if (!par1World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4))
             {
                 par1World.setBlockToAir(par2, par3, par4);
                 var7 = true;
 
-                if (par1World.getBlockId(par2, par3 + 1, par4) == this.blockID)
+                if (par1World.getBlock(par2, par3 + 1, par4) == this)
                 {
                     par1World.setBlockToAir(par2, par3 + 1, par4);
                 }
@@ -383,7 +384,7 @@ public class BlockBossDoor extends Block
             {
                 boolean var8 = par1World.isBlockIndirectlyGettingPowered(par2, par3, par4) || par1World.isBlockIndirectlyGettingPowered(par2, par3 + 1, par4);
 
-                if ((var8 || par5 > 0 && Block.blocksList[par5].canProvidePower()) && par5 != this.blockID)
+                if ((var8 || par5 != null && par5.canProvidePower()) && par5 != this)
                 {
                     this.onPoweredBlockChange(par1World, par2, par3, par4, var8);
                 }
@@ -391,12 +392,12 @@ public class BlockBossDoor extends Block
         }
         else
         {
-            if (par1World.getBlockId(par2, par3 - 1, par4) != this.blockID)
+            if (par1World.getBlock(par2, par3 - 1, par4) != this)
             {
                 par1World.setBlockToAir(par2, par3, par4);
             }
 
-            if (par5 > 0 && par5 != this.blockID)
+            if (par5 != null && par5 != this)
             {
                 this.onNeighborBlockChange(par1World, par2, par3 - 1, par4, par5);
             }
@@ -406,9 +407,10 @@ public class BlockBossDoor extends Block
     /**
      * Returns the ID of the items to drop on destruction.
      */
-    public int idDropped(int par1, Random par2Random, int par3)
+    @Override
+    public Item getItemDropped(int par1, Random par2Random, int par3)
     {
-        return (par1 & 8) != 0 ? 0 : (this.blockMaterial == Material.iron ? Item.doorIron.itemID : Item.doorWood.itemID);
+        return (par1 & 8) != 0 ? null : (this.blockMaterial == Material.iron ? Items.iron_door : Items.wooden_door);
     }
 
     /**
@@ -426,7 +428,7 @@ public class BlockBossDoor extends Block
      */
     public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
-        return par3 >= 255 ? false : par1World.doesBlockHaveSolidTopSurface(par2, par3 - 1, par4) && super.canPlaceBlockAt(par1World, par2, par3, par4) && super.canPlaceBlockAt(par1World, par2, par3 + 1, par4);
+        return par3 >= 255 ? false : par1World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4) && super.canPlaceBlockAt(par1World, par2, par3, par4) && super.canPlaceBlockAt(par1World, par2, par3 + 1, par4);
     }
 
     /**
@@ -468,9 +470,9 @@ public class BlockBossDoor extends Block
     /**
      * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
      */
-    public int idPicked(World par1World, int par2, int par3, int par4)
+    public Item getItem(World par1World, int par2, int par3, int par4)
     {
-        return this.blockMaterial == Material.iron ? Item.doorIron.itemID : Item.doorWood.itemID;
+        return this.blockMaterial == Material.iron ? Items.iron_door : Items.wooden_door;
     }
 
     /**
@@ -478,7 +480,7 @@ public class BlockBossDoor extends Block
      */
     public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer)
     {
-        if (par6EntityPlayer.capabilities.isCreativeMode && (par5 & 8) != 0 && par1World.getBlockId(par2, par3 - 1, par4) == this.blockID)
+        if (par6EntityPlayer.capabilities.isCreativeMode && (par5 & 8) != 0 && par1World.getBlock(par2, par3 - 1, par4) == this)
         {
             par1World.setBlockToAir(par2, par3 - 1, par4);
         }

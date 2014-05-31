@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -200,7 +201,7 @@ public class EntityFloatingPlatform extends Entity
 		{
 			ItemStack var2 = par1EntityPlayer.inventory.getCurrentItem();
 
-			if (var2 != null && var2.itemID == Item.bucketEmpty.itemID)
+			if (var2 != null && var2.getItem() == Items.bucket)
 			{
 				//par1EntityPlayer.openGui(ReploidCraft.instance, GuiIds.UPGRADE_STATION, par1World, i, j, k);
 
@@ -400,11 +401,11 @@ public class EntityFloatingPlatform extends Entity
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 		this.setPointPosition(nbttagcompound.getInteger("Point"));
-		NBTTagList nbttaglist = nbttagcompound.getTagList("CordList");
+		NBTTagList nbttaglist = nbttagcompound.getTagList("CordList", 3);
 		this.currentFlightTargets.clear();
 		for(int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int var5 = nbttagcompound1.getByte("point") & 255;
 			this.currentFlightTargets.add(var5, PlatformPathPoint.loadPointFromNBT(nbttagcompound1));
 		}

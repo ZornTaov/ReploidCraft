@@ -3,7 +3,7 @@ package zornco.reploidcraftenv.bullets;
 import java.util.Iterator;
 import java.util.List;
 
-import zornco.reploidcraftenv.lib.Reference;
+import zornco.reploidcraftenv.ReploidCraftEnv;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -43,7 +43,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 	public int xTile = -1;
 	public int yTile = -1;
 	public int zTile = -1;
-	public int inTile = 0;
+	public Block inTile = null;
 	public int inData = 0;
 	public boolean inGround = false;
 
@@ -217,12 +217,12 @@ public class EntityBulletBase extends Entity implements IProjectile
 			this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)distanceXZ) * 180.0D / Math.PI);
 		}
 
-		int blockAtPoint = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+		Block blockAtPoint = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 
-		if (blockAtPoint > 0)
+		if (blockAtPoint != null)
 		{
-			Block.blocksList[blockAtPoint].setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
-			AxisAlignedBB blockAtPointAABB = Block.blocksList[blockAtPoint].getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
+			blockAtPoint.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
+			AxisAlignedBB blockAtPointAABB = blockAtPoint.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
 			if (blockAtPointAABB != null && blockAtPointAABB.isVecInside(this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ)))
 			{
@@ -237,7 +237,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 
 		if (this.inGround)
 		{
-			int tileID = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+			Block tileID = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 			int tileMeta = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
 			if (tileID == this.inTile && tileMeta == this.inData)
@@ -264,7 +264,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 			tickFlying();
 			Vec3 vecPos = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
 			Vec3 vecPosMotion = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-			MovingObjectPosition bulletMOP = this.worldObj.rayTraceBlocks_do_do(vecPos, vecPosMotion, false, true);
+			MovingObjectPosition bulletMOP = this.worldObj.func_147447_a(vecPos, vecPosMotion, false, true, false);
 			vecPos = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
 			vecPosMotion = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -391,7 +391,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 					this.xTile = bulletMOP.blockX;
 					this.yTile = bulletMOP.blockY;
 					this.zTile = bulletMOP.blockZ;
-					this.inTile = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+					this.inTile = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
 					this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 					if (onHitBlock(bulletMOP)) {
 						this.motionX = (double)((float)(bulletMOP.hitVec.xCoord - this.posX));
@@ -406,7 +406,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 						this.bulletShake = 7;
 						//this.typeOfAttack(false);
 					} else {
-						inTile = 0;
+						inTile = null;
 						inData = 0;
 					}
 				}
@@ -451,7 +451,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 			this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
 			
 			this.setPosition(this.posX, this.posY, this.posZ);
-			this.doBlockCollisions();
+			this.func_145775_I();
 		}
 	}
 
@@ -483,7 +483,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 		par1NBTTagCompound.setShort("xTile", (short)this.xTile);
 		par1NBTTagCompound.setShort("yTile", (short)this.yTile);
 		par1NBTTagCompound.setShort("zTile", (short)this.zTile);
-		par1NBTTagCompound.setByte("inTile", (byte)this.inTile);
+		par1NBTTagCompound.setByte("inTile", (byte)Block.getIdFromBlock(this.inTile));
 		par1NBTTagCompound.setByte("inData", (byte)this.inData);
 		par1NBTTagCompound.setByte("shake", (byte)this.bulletShake);
 		par1NBTTagCompound.setByte("inGround", (byte)(this.inGround ? 1 : 0));
@@ -499,7 +499,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 		this.xTile = par1NBTTagCompound.getShort("xTile");
 		this.yTile = par1NBTTagCompound.getShort("yTile");
 		this.zTile = par1NBTTagCompound.getShort("zTile");
-		this.inTile = par1NBTTagCompound.getByte("inTile") & 255;
+		this.inTile = Block.getBlockById(par1NBTTagCompound.getByte("inTile") & 255);
 		this.inData = par1NBTTagCompound.getByte("inData") & 255;
 		this.bulletShake = par1NBTTagCompound.getByte("shake") & 255;
 		this.inGround = par1NBTTagCompound.getByte("inGround") == 1;
@@ -656,6 +656,6 @@ public class EntityBulletBase extends Entity implements IProjectile
 	}
 	public ResourceLocation getTexture()
 	{
-		return new ResourceLocation(Reference.MOD_ID + ":textures/entity/MetHat.png");
+		return new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/MetHat.png");
 	}
 }

@@ -4,13 +4,15 @@ import org.lwjgl.opengl.GL11;
 
 import zornco.reploidcraftenv.blocks.ContainerItemHolder;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIItemHolder extends GuiContainer {
 	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraftenv", "textures/gui/itemHolder.png");
 
-	GUIItemHolder(IInventory player, IInventory chest)
+	public GUIItemHolder(IInventory player, IInventory chest)
     {
         super( new ContainerItemHolder(player, chest, 184, 184));
         this.xSize = 184;
@@ -18,7 +20,13 @@ public class GUIItemHolder extends GuiContainer {
         this.allowUserInput = false;
     }
 
-    @Override
+	public GUIItemHolder(EntityPlayer player, String title,
+			boolean localized) {
+		// TODO Auto-generated constructor stub
+    	this((IInventory) player, new InventoryBasic(title, localized, 1));
+	}
+
+	@Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

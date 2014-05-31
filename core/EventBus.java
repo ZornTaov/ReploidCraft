@@ -1,19 +1,26 @@
 package zornco.reploidcraftenv.core;
 
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.items.ItemHPEnergy;
 import zornco.reploidcraftenv.items.ItemTank;
 import zornco.reploidcraftenv.sounds.Sounds;
@@ -28,12 +35,22 @@ public class EventBus
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	@SubscribeEvent
+	public void onEntityAttack(AttackEntityEvent event)
+	{
+		//if(event.target != null && event.entityLiving != null){
+			//System.out.println(event.target != null ? event.target.getClass().toString():"null");
+			//if(event.target instanceof EntityDragonPart) System.out.println(((EntityDragonPart)event.target).field_146032_b);
+			//System.out.println(event.entityLiving != null ? event.entityLiving.getClass().toString():"null");
+		//}
+	}
+	
 	/**
 	 * The key is the @ForgeSubscribe annotation and the cast of the Event you put in as argument.
 	 * The method name you pick does not matter. Method signature is public void, always.
 	 */
-	@ForgeSubscribe
-	public void entityAttacked(EntityItemPickupEvent event)
+	@SubscribeEvent
+	public void entityPickup(EntityItemPickupEvent event)
 	{
 		/*
 		 * You can then proceed to read and change the Event's fields where possible
@@ -48,8 +65,8 @@ public class EventBus
 		{
 			event.setCanceled(true);
 		}*/
-		if(item.getEntityItem().itemID == ReploidCraftEnv.healthBit.itemID 
-				|| item.getEntityItem().itemID == ReploidCraftEnv.healthByte.itemID 
+		if(item.getEntityItem().getItem() == ReploidCraftEnv.healthBit 
+				|| item.getEntityItem().getItem() == ReploidCraftEnv.healthByte 
 				//|| item.getEntityItem().itemID == ReploidCraft.weaponBit.shiftedIndex 
 				//|| item.getEntityItem().itemID == ReploidCraft.weaponByte.shiftedIndex 
 				)
@@ -111,9 +128,9 @@ public class EventBus
 		}
 	}
 	private int bitSize(EntityItem item) {
-		if(item.getEntityItem().itemID == ReploidCraftEnv.healthBit.itemID)// || item.getEntityItem().itemID == ReploidCraft.weaponBit.shiftedIndex )
+		if(item.getEntityItem().getItem() == ReploidCraftEnv.healthBit)// || item.getEntityItem().itemID == ReploidCraft.weaponBit.shiftedIndex )
 			return 3;
-		else if(item.getEntityItem().itemID == ReploidCraftEnv.healthByte.itemID)// || item.getEntityItem().itemID == ReploidCraft.weaponByte.shiftedIndex )
+		else if(item.getEntityItem().getItem() == ReploidCraftEnv.healthByte)// || item.getEntityItem().itemID == ReploidCraft.weaponByte.shiftedIndex )
 			return 6;
 		else 
 			return 0;

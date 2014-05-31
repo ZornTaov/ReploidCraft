@@ -6,17 +6,20 @@ import java.util.Iterator;
 import java.util.List;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.network.PacketHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityItemHolder extends TileEntity implements IInventory {
 
@@ -55,7 +58,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public String getInvName()
+	public String getInventoryName()
 	{
 		return "Item Holder";
 	}
@@ -68,9 +71,9 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public void onInventoryChanged()
+	public void markDirty()
 	{
-		super.onInventoryChanged();
+		super.markDirty();
 		setDropped(true);
 		sortTopStacks();
 	}
@@ -163,7 +166,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 			{
 				ItemStack itemstack = chestContents[i];
 				chestContents[i] = null;
-				onInventoryChanged();
+				markDirty();
 				return itemstack;
 			}
 			ItemStack itemstack1 = chestContents[i].splitStack(j);
@@ -171,7 +174,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 			{
 				chestContents[i] = null;
 			}
-			onInventoryChanged();
+			markDirty();
 			return itemstack1;
 		}
 		else
@@ -188,18 +191,18 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 		{
 			itemstack.stackSize = getInventoryStackLimit();
 		}
-		onInventoryChanged();
+		markDirty();
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound)
 	{
 		super.readFromNBT(nbttagcompound);
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		chestContents = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++)
 		{
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j >= 0 && j < chestContents.length)
 			{
@@ -253,7 +256,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 		{
 			return true;
 		}
-		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this)
+		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this)
 		{
 			return false;
 		}
@@ -285,16 +288,18 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 
 		if (worldObj != null && !worldObj.isRemote && ticksSinceSync < 0)
 		{
-			worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder.blockID, 3, ((numUsingPlayers << 3) & 0xF8) | (facing & 0x7));
+			worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 3, ((numUsingPlayers << 3) & 0xF8) | (facing & 0x7));
 		}
 		if (!worldObj.isRemote && inventoryTouched)
 		{
 			inventoryTouched = false;
-			onInventoryChanged();
+			markDirty();
 		}
 
-		if(isDropped() && (this.ticksSinceSync) % 100 == 0) setDropped(false);
-
+		if(isDropped() && (this.ticksSinceSync) % 100 == 0) 
+		{
+			setDropped(false);
+		}
 		this.ticksSinceSync++;
 		prevLidAngle = lidAngle;
 		float f = 0.1F;
@@ -324,7 +329,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 			{
 				double d2 = (double) xCoord + 0.5D;
 				double d3 = (double) zCoord + 0.5D;
-				worldObj.playSoundEffect(d2, (double) yCoord + 0.5D, d3, "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				//worldObj.playSoundEffect(d2, (double) yCoord + 0.5D, d3, "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 			}
 			if (lidAngle < 0.0F)
 			{
@@ -353,19 +358,19 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public void openChest()
+	public void openInventory()
 	{
 		if (worldObj == null) return;
 		numUsingPlayers++;
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder.blockID, 1, numUsingPlayers);
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 1, numUsingPlayers);
 	}
 
 	@Override
-	public void closeChest()
+	public void closeInventory()
 	{
 		if (worldObj == null) return;
 		numUsingPlayers--;
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder.blockID, 1, numUsingPlayers);
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 1, numUsingPlayers);
 	}
 
 	public void setFacing(byte chestFacing)
@@ -383,10 +388,18 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketHandler.getPacket(this);
+		NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tag);
 	}
 
-	public void handlePacketData(int typeData, int[] intData)
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.func_148857_g());
+        worldObj.func_147479_m(xCoord, yCoord, zCoord);
+	}
+
+	public void handlePacketData(int[] intData)
 	{
 		TileEntityItemHolder chest = this;
 		if (intData != null)
@@ -400,7 +413,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 			{
 				if (intData[pos + 2] != 0)
 				{
-					ItemStack is = new ItemStack(intData[pos], intData[pos + 2], intData[pos + 1]);
+					ItemStack is = new ItemStack(Item.getItemById(intData[pos]), intData[pos + 2], intData[pos + 1]);
 					chest.topStacks[i] = is;
 				}
 				else
@@ -420,7 +433,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 		{
 			if (is != null)
 			{
-				sortList[pos++] = is.itemID;
+				sortList[pos++] = is.getItem().getIdFromItem(is.getItem());
 				sortList[pos++] = is.getItemDamage();
 				sortList[pos++] = is.stackSize;
 			}
@@ -460,7 +473,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public boolean isInvNameLocalized()
+	public boolean hasCustomInventoryName()
 	{
 		return false;
 	}
@@ -468,7 +481,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	void rotateAround(ForgeDirection axis)
 	{
 		setFacing((byte)ForgeDirection.getOrientation(facing).getRotation(axis).ordinal());
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder.blockID, 2, getFacing());
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 2, getFacing());
 	}
 	
 	public void removeAdornments()

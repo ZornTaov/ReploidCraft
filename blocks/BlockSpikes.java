@@ -1,24 +1,25 @@
 package zornco.reploidcraftenv.blocks;
 
-import static net.minecraftforge.common.ForgeDirection.*;
+import static net.minecraftforge.common.util.ForgeDirection.*;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSpikes extends Block {
 
-	public BlockSpikes(int par1) {
-		super(par1, Material.iron);
+	public BlockSpikes() {
+		super(Material.iron);
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
 		//this.blockIndexInTexture = 22;
 	}
@@ -58,32 +59,32 @@ public class BlockSpikes extends Block {
 
 		int valid = 0;
 
-		if (par1World.isBlockSolidOnSide(x - 1, y, z, EAST) || par1World.getBlockMaterial(x - 1, y, z) == Material.piston)
+		if (par1World.isSideSolid(x - 1, y, z, EAST) || par1World.getBlock(x - 1, y, z).getMaterial() == Material.piston)
 		{
 			valid++;
 		}
 
-		if (par1World.isBlockSolidOnSide(x + 1, y, z, WEST) || par1World.getBlockMaterial(x + 1, y, z) == Material.piston)
+		if (par1World.isSideSolid(x + 1, y, z, WEST) || par1World.getBlock(x + 1, y, z).getMaterial() == Material.piston)
 		{
 			valid++;
 		}
 
-		if (par1World.isBlockSolidOnSide(x, y, z - 1, SOUTH) || par1World.getBlockMaterial(x, y, z - 1) == Material.piston)
+		if (par1World.isSideSolid(x, y, z - 1, SOUTH) || par1World.getBlock(x, y, z - 1).getMaterial() == Material.piston)
 		{
 			valid++;
 		}
 
-		if (par1World.isBlockSolidOnSide(x, y, z + 1, NORTH) || par1World.getBlockMaterial(x, y, z + 1) == Material.piston)
+		if (par1World.isSideSolid(x, y, z + 1, NORTH) || par1World.getBlock(x, y, z + 1).getMaterial() == Material.piston)
 		{
 			valid++;
 		}
 
-		if (par1World.isBlockSolidOnSide(x, y - 1, z, UP) || par1World.getBlockMaterial(x, y - 1, z) == Material.piston)
+		if (par1World.isSideSolid(x, y - 1, z, UP) || par1World.getBlock(x, y - 1, z).getMaterial() == Material.piston)
 		{
 			valid++;
 		}
 
-		if (par1World.isBlockSolidOnSide(x, y + 1, z, DOWN) || par1World.getBlockMaterial(x, y + 1, z) == Material.piston)
+		if (par1World.isSideSolid(x, y + 1, z, DOWN) || par1World.getBlock(x, y + 1, z).getMaterial() == Material.piston)
 		{
 			valid++;
 		}
@@ -201,12 +202,12 @@ public class BlockSpikes extends Block {
 	 */
 	public boolean canConnectSpikesTo(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
 	{
-		int var5 = par1IBlockAccess.getBlockId(par2, par3, par4);
+		Block var5 = par1IBlockAccess.getBlock(par2, par3, par4);
 
-		if (var5 != this.blockID)
+		if (var5 != this)
 		{
-			Block var6 = Block.blocksList[var5];
-			return var6 != null && var6.blockMaterial.isOpaque() && (var6.renderAsNormalBlock() || ( var6.blockMaterial == Material.piston && var6.blockID != Block.pistonMoving.blockID)) ? var6.blockMaterial != Material.pumpkin : false;
+			Block var6 = var5;
+			return var6 != null && var6.getMaterial().isOpaque() && (var6.renderAsNormalBlock() || ( var6.getMaterial() == Material.piston && var6 != Blocks.piston_extension)) ? var6.getMaterial() != Material.plants : false;
 		}
 		else
 		{
@@ -244,7 +245,7 @@ public class BlockSpikes extends Block {
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
+    public IIcon getBlockTextureFromSideAndMetadata(int par1, int par2)
     {
         return this.blockIcon;
     }
@@ -255,9 +256,9 @@ public class BlockSpikes extends Block {
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerBlockIcons(IIconRegister par1IconRegister)
     {
-        this.blockIcon = Block.blockIron.getBlockTextureFromSide(0);
+        this.blockIcon = Blocks.iron_block.getBlockTextureFromSide(0);
     }
 
 	/**

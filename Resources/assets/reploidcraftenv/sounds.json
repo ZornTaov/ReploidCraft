@@ -1,0 +1,6 @@
+{
+  "bit": {"category": "player","sounds": ["bit"]},
+  "byte": {"category": "player","sounds": ["byte"]},
+  "chargeUp": {"category": "player","sounds": ["chargeUp"]},
+  "chargeCont": {"category": "player","sounds": ["chargeCont"]}
+}

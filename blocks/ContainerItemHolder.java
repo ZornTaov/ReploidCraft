@@ -19,7 +19,7 @@ public class ContainerItemHolder extends Container {
     {
         chest = chestInventory;
         player = ((InventoryPlayer) playerInventory).player;
-        chestInventory.openChest();
+        chestInventory.openInventory();
         layoutContainer(playerInventory, chestInventory, xSize, ySize);
     }
 
@@ -65,7 +65,7 @@ public class ContainerItemHolder extends Container {
     public void onContainerClosed(EntityPlayer entityplayer)
     {
         super.onContainerClosed(entityplayer);
-        chest.closeChest();
+        chest.closeInventory();
     }
 
     protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize)

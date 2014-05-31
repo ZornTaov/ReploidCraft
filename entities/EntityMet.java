@@ -23,6 +23,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -66,7 +67,7 @@ public class EntityMet extends EntityTameable {
 		//this.tasks.addTask(1, new EntityAIPanic(this, 0.38F));
 		this.tasks.addTask(2, this.aiSit);
 		this.tasks.addTask(2, this.aiMetHide);
-		this.tasks.addTask(3, new EntityAITempt(this, 0.25F, Item.ingotGold.itemID, false));
+		this.tasks.addTask(3, new EntityAITempt(this, 0.25F, Items.gold_ingot, false));
 		this.tasks.addTask(4, new EntityAIBulletAttack(this, this.moveSpeed, 1, 60));
 		this.tasks.addTask(4, new EntityAIFollowParent(this, 0.25F));
 		this.tasks.addTask(5, new EntityAIFollowOwner(this, this.moveSpeed, 10.0F, 2.0F));
@@ -145,8 +146,8 @@ public class EntityMet extends EntityTameable {
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(this.isTamed() ? 20 : 8);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.30000001192092896D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(this.isTamed() ? 20 : 8);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.30000001192092896D);
     }
 	
 	protected void entityInit()
@@ -164,23 +165,23 @@ public class EntityMet extends EntityTameable {
 		{
 			//this.entityDropItem(new ItemStack(Block.cloth.blockID, 1, this.getMetHatType()), 0.0F);
 		}
-		int i = getDropItemId();
-		if(i > 0)
+		Item i = getDropItemId();
+		if(i != null)
 			this.dropItem(i, 1);
 	}
 
 	/**
 	 * Returns the item ID for the item the mob drops on death.
 	 */
-	protected int getDropItemId()
+	protected Item getDropItemId()
 	{
 		int i = rand.nextInt(10)+1;
 		switch(i)
 		{
 		case 3:
-			return ReploidCraftEnv.healthBit.itemID;
+			return ReploidCraftEnv.healthBit;
 		case 4:
-			return ReploidCraftEnv.healthByte.itemID;
+			return ReploidCraftEnv.healthByte;
 		/*
 		case 7:
 			return ReploidCraft.energyBit.shiftedIndex;
@@ -189,7 +190,7 @@ public class EntityMet extends EntityTameable {
 		case 9:
 			return ReploidCraft.extraMan.shiftedIndex;*/
 		default:
-			return 0;
+			return null;
 		
 		}
 	}
@@ -236,14 +237,14 @@ public class EntityMet extends EntityTameable {
 				}
 			}
 			//make me sit
-			if (par1EntityPlayer.username.equalsIgnoreCase(this.getOwnerName()) && !this.worldObj.isRemote && !this.isWheat(var2))
+			if (par1EntityPlayer.getGameProfile().getName().equalsIgnoreCase(this.getOwnerName()) && !this.worldObj.isRemote && !this.isWheat(var2))
 			{
 				this.aiSit.setSitting(!this.isSitting());
 				this.isJumping = false;
 				this.setPathToEntity((PathEntity)null);
 			}
 		}
-		else if (var2 != null && var2.itemID == Item.goldNugget.itemID && !this.isHiding())
+		else if (var2 != null && var2.getItem() == Items.gold_nugget && !this.isHiding())
 		{
 			if (!par1EntityPlayer.capabilities.isCreativeMode)
 			{
@@ -266,7 +267,7 @@ public class EntityMet extends EntityTameable {
 					this.aiMetHide.setHiding(false);
 					this.aiSit.setSitting(true);
 					this.setHealth(20);
-					this.setOwner(par1EntityPlayer.username);
+					this.setOwner(par1EntityPlayer.getGameProfile().getName());
 					this.playTameEffect(true);
 					this.worldObj.setEntityState(this, (byte)7);
 				}
@@ -335,7 +336,7 @@ public class EntityMet extends EntityTameable {
 	 */
 	public boolean isWheat(ItemStack par1ItemStack)
 	{
-		return par1ItemStack != null && par1ItemStack.itemID == Item.ingotGold.itemID;
+		return par1ItemStack != null && par1ItemStack.getItem() == Items.gold_ingot;
 	}
 	public int getMetHatType()
 	{

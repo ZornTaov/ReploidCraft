@@ -2,8 +2,8 @@ package zornco.reploidcraftenv.client.renderers;
 
 import org.lwjgl.opengl.GL11;
 
+import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
-import zornco.reploidcraftenv.lib.Reference;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelEnderCrystal;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,7 +17,7 @@ public class RenderFloatingPlatform extends Render {
 
 	private int nagged = -1;
 	private ModelBase modelPlatform;
-	private static final ResourceLocation platform = new ResourceLocation(Reference.MOD_ID + ":textures/entity/FloatingPlatform.png");
+	private static final ResourceLocation platform = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/FloatingPlatform.png");
 
 	public RenderFloatingPlatform()
 	{
@@ -62,7 +62,6 @@ public class RenderFloatingPlatform extends Render {
 	}
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		// TODO Auto-generated method stub
 		return platform;
 	}
 

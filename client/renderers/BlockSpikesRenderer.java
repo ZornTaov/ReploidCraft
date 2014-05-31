@@ -2,14 +2,15 @@ package zornco.reploidcraftenv.client.renderers;
 
 import org.lwjgl.opengl.GL11;
 
+import static net.minecraftforge.common.util.ForgeDirection.*;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.util.Icon;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 
@@ -31,7 +32,7 @@ implements ISimpleBlockRenderingHandler {
 			Block block, int modelId, RenderBlocks renderer) {
 
 		Tessellator tess = Tessellator.instance;
-		Icon icon = getBlockIconFromSide(block, 0);
+		IIcon icon = getBlockIconFromSide(block, 0);
 		double uLeft = (double)icon.getMinU();
 		double uRight = (double)icon.getMaxU();
 		double vTop = (double)icon.getMinV();
@@ -41,7 +42,7 @@ implements ISimpleBlockRenderingHandler {
 		int light = block.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z);
 		tess.setBrightness(light);
 		tess.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-		if (renderer.blockAccess.isBlockNormalCube(x, y + 1, z) || (renderer.blockAccess.getBlockMaterial(x, y + 1, z) == Material.piston && renderer.blockAccess.getBlockId(x, y + 1, z) != Block.pistonMoving.blockID))
+		if (renderer.blockAccess.isSideSolid(x, y + 1, z, UP, true) || (renderer.blockAccess.getBlock(x, y + 1, z).getMaterial() == Material.piston && renderer.blockAccess.getBlock(x, y + 1, z) != Blocks.piston_extension))
 		{
 			renderer.setRenderBounds(0.0, 1.0-offset, 0.0, 1.0, 1.0, 1.0);
 			renderer.renderStandardBlock(block, x, y, z);
@@ -50,7 +51,7 @@ implements ISimpleBlockRenderingHandler {
 			drawY1(tess, x, y, z, uLeft, uRight, vTop, vBottom, light);
 
 		}
-		if (renderer.blockAccess.isBlockNormalCube(x, y - 1, z) || (renderer.blockAccess.getBlockMaterial(x, y - 1, z) ==  Material.piston /*&& renderer.blockAccess.getBlockId(x, y - 1, z) != Block.pistonMoving.blockID*/))
+		if (renderer.blockAccess.isSideSolid(x, y - 1, z, DOWN, true) || (renderer.blockAccess.getBlock(x, y - 1, z).getMaterial() ==  Material.piston /*&& renderer.blockAccess.getBlock(x, y - 1, z) != Blocks.piston_extension*/))
 		{
 			renderer.setRenderBounds(0.0, 0.0, 0.0, 1.0, offset, 1.0);
 			renderer.renderStandardBlock(block, x, y, z);
@@ -59,7 +60,7 @@ implements ISimpleBlockRenderingHandler {
 			drawY2(tess, x, y, z, uLeft, uRight, vTop, vBottom, light);
 
 		}
-		if (renderer.blockAccess.isBlockNormalCube(x + 1, y, z) || (renderer.blockAccess.getBlockMaterial(x + 1, y, z) == Material.piston && renderer.blockAccess.getBlockId(x + 1, y, z) != Block.pistonMoving.blockID))
+		if (renderer.blockAccess.isSideSolid(x + 1, y, z, EAST, true) || (renderer.blockAccess.getBlock(x + 1, y, z).getMaterial() == Material.piston && renderer.blockAccess.getBlock(x + 1, y, z) != Blocks.piston_extension))
 		{
 			//PROBLEM SIDE
 			renderer.setRenderBounds(1.0-offset, 0.0, 0.0, 1.0, 1.0, 1.0);
@@ -69,7 +70,7 @@ implements ISimpleBlockRenderingHandler {
 			drawX1(tess, x, y, z, uLeft, uRight, vTop, vBottom, light);
 
 		}
-		if (renderer.blockAccess.isBlockNormalCube(x - 1, y, z) || (renderer.blockAccess.getBlockMaterial(x - 1, y, z) == Material.piston && renderer.blockAccess.getBlockId(x - 1, y, z) != Block.pistonMoving.blockID))
+		if (renderer.blockAccess.isSideSolid(x - 1, y, z, WEST, true) || (renderer.blockAccess.getBlock(x - 1, y, z).getMaterial() == Material.piston && renderer.blockAccess.getBlock(x - 1, y, z) != Blocks.piston_extension))
 		{
 			renderer.setRenderBounds(0.0, 0.0, 0.0, offset, 1.0, 1.0);
 			renderer.renderStandardBlock(block, x, y, z);
@@ -78,7 +79,7 @@ implements ISimpleBlockRenderingHandler {
 			drawX2(x, y, z, tess, uLeft, uRight, vTop, vBottom, light);
 
 		}
-		if (renderer.blockAccess.isBlockNormalCube(x, y, z + 1) || (renderer.blockAccess.getBlockMaterial(x, y, z + 1) == Material.piston && renderer.blockAccess.getBlockId(x, y, z + 1) != Block.pistonMoving.blockID))
+		if (renderer.blockAccess.isSideSolid(x, y, z + 1, SOUTH, true) || (renderer.blockAccess.getBlock(x, y, z + 1).getMaterial() == Material.piston && renderer.blockAccess.getBlock(x, y, z + 1) != Blocks.piston_extension))
 		{
 			renderer.setRenderBounds(0.0, 0.0, 1.0-offset, 1.0, 1.0, 1.0);
 			renderer.renderStandardBlock(block, x, y, z);
@@ -87,7 +88,7 @@ implements ISimpleBlockRenderingHandler {
 			drayZ1(tess, x, y, z, uLeft, uRight, vTop, vBottom, light);
 
 		}
-		if (renderer.blockAccess.isBlockNormalCube(x, y, z - 1) || (renderer.blockAccess.getBlockMaterial(x, y, z - 1) == Material.piston && renderer.blockAccess.getBlockId(x, y, z - 1) != Block.pistonMoving.blockID))
+		if (renderer.blockAccess.isSideSolid(x, y, z - 1, NORTH, true) || (renderer.blockAccess.getBlock(x, y, z - 1).getMaterial() == Material.piston && renderer.blockAccess.getBlock(x, y, z - 1) != Blocks.piston_extension))
 		{
 			renderer.setRenderBounds(0.0, 0.0, 0.0, 1.0, 1.0, offset);
 			renderer.renderStandardBlock(block, x, y, z);
@@ -95,12 +96,6 @@ implements ISimpleBlockRenderingHandler {
 
 			drawZ2(tess, x, y, z, uLeft, uRight, vTop, vBottom, light);
 
-		}
-		float var13 = 1.0F;
-
-		if (Block.lightValue[block.blockID] > 0)
-		{
-			var13 = 1.0F;
 		}
 		return true;
 	}
@@ -298,7 +293,7 @@ implements ISimpleBlockRenderingHandler {
 	}
 	
 	@Override
-	public boolean shouldRender3DInInventory() {
+	public boolean shouldRender3DInInventory(int modelId) {
 		return true;
 	}
 
@@ -312,7 +307,7 @@ implements ISimpleBlockRenderingHandler {
 		Tessellator tess = Tessellator.instance;
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		tess.startDrawingQuads();
-		Icon icon = block.getBlockTextureFromSide(0);
+		IIcon icon = block.getBlockTextureFromSide(0);
 		tess.setNormal(0.0F, -1.0F, 0.0F);
 		renderblocks.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderblocks.getBlockIconFromSideAndMetadata(block, 0, meta));
 		tess.draw();

@@ -44,9 +44,6 @@ public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 
 	private ModelItemHolder model;
 
-	private static float[][] shifts = { { 0.3F, 0.75F, 0.3F }, { 0.7F, 0.5F, 0.3F }, { 0.3F, 0.5F, 0.7F }, { 0.7F, 0.5F, 0.7F }, { 0.3F, 0.5F, 0.3F },
-		{ 0.7F, 0.5F, 0.3F }, { 0.3F, 0.5F, 0.7F }, { 0.7F, 0.5F, 0.7F }, { 0.5F, 0.5F, 0.5F }, };
-
 	public TileEntityItemHolderRenderer()
 	{
 		model = new ModelItemHolder();
@@ -54,11 +51,11 @@ public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 		renderBlocks = new RenderBlocks();
 		itemRenderer = new RenderItem() {
 			@Override
-			public byte getMiniBlockCount(ItemStack stack) {
+			public byte getMiniBlockCount(ItemStack stack, byte original) {
 				return SignedBytes.saturatedCast(Math.min(stack.stackSize / 32, 15) + 1);
 			}
 			@Override
-			public byte getMiniItemCount(ItemStack stack) {
+			public byte getMiniItemCount(ItemStack stack, byte original) {
 				return SignedBytes.saturatedCast(Math.min(stack.stackSize / 32, 7) + 1);
 			}
 			@Override
@@ -78,51 +75,34 @@ public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 			facing = tile.getFacing();
 		}
 		boolean empty = true;
-		if (tile.getDistanceFrom(this.tileEntityRenderer.playerX, this.tileEntityRenderer.playerY, this.tileEntityRenderer.playerZ) < 128d) {
+		//if (tile.getDistanceFrom(this.field_147501_a.field_147560_j, 
+		//		this.field_147501_a.field_147561_k, this.field_147501_a.field_147558_l) < 128d) {
 			random.setSeed(254L);
-			float shiftX;
-			float shiftY;
-			float shiftZ;
-			int shift = 0;
 			float blockScale = 0.90F;
 			float timeD = (float) (360.0 * (double) (System.currentTimeMillis() & 0x3FFFL) / (double) 0x3FFFL);
 			if (tile.getTopItemStacks()[1] == null) {
-				shift = 8;
 				blockScale = 1.0F;
 			}
 			glPushMatrix();
 			glDisable(2896 /* GL_LIGHTING */);
 			glTranslatef((float) x, (float) y, (float) z);
-			EntityItem customitem = new EntityItem(tileEntityRenderer.worldObj);
-			customitem.hoverStart = 0f;
-			for (ItemStack item : tile.getTopItemStacks()) {
-				if (shift > shifts.length) {
-					break;
-				}
-				if (item == null) {
-					shift++;
-					continue;
-				}
-				else
-				{
-					empty = false;
-				}
-				shiftX = shifts[shift][0];
-				shiftY = shifts[shift][1];
-				shiftZ = shifts[shift][2];
-				shift++;
+			if(((TileEntityItemHolder)tile).getStackInSlot(0) != null){
+				EntityItem customitem = new EntityItem(field_147501_a.field_147550_f);
+				customitem.hoverStart = 0f;
+				ItemStack item = tile.getStackInSlot(0);
+				empty = false;
 				glPushMatrix();
-				glTranslatef(shiftX, shiftY, shiftZ);
+				glTranslatef(0.5F, 0.75F, 0.5F);
 				glRotatef(timeD, 0.0F, 1.0F, 0.0F);
 				glScalef(blockScale, blockScale, blockScale);
 				customitem.setEntityItemStack(item);
-				itemRenderer.doRenderItem(customitem, 0, 0, 0, 0, 0);
+				itemRenderer.doRender(customitem, 0, 0, 0, 0, 0);
 				glPopMatrix();
 			}
 			glEnable(2896 /* GL_LIGHTING */);
 			glPopMatrix();
 			glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
+		//}
 		glDisable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

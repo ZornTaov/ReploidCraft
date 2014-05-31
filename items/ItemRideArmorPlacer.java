@@ -10,15 +10,16 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
+import zornco.reploidcraftenv.entities.EntityRideArmor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemPlatformPlacer extends Item {
+public class ItemRideArmorPlacer extends Item {
 
 	@SideOnly(Side.CLIENT)
-	private IIcon platformSpawnerIcon;
+	private IIcon rideArmorSpawnerIcon;
 
-	public ItemPlatformPlacer()
+	public ItemRideArmorPlacer()
 	{
 		super();
 		this.maxStackSize = 1;
@@ -47,17 +48,17 @@ public class ItemPlatformPlacer extends Item {
                 var12 = 0.5D;
             }
 
-            EntityFloatingPlatform platform = new EntityFloatingPlatform(par3World, (double)((float)par4 + 0.5F), (double)((float)par5 + 1.0F), (double)((float)par6 + 0.5F));
-			platform.rotationYaw = 0;
+            EntityRideArmor rideArmor = new EntityRideArmor(par3World, (double)((float)par4 + 0.5F), (double)((float)par5 + 0.0F), (double)((float)par6 + 0.5F));
+			rideArmor.rotationYaw = 0;
 
-			if (!par3World.getCollidingBoundingBoxes(platform, platform.boundingBox.expand(-0.1D, -0.1D, -0.1D)).isEmpty())
+			if (!par3World.getCollidingBoundingBoxes(rideArmor, rideArmor.boundingBox.expand(-0.1D, -0.1D, -0.1D)).isEmpty())
 			{
 				return false;
 			}
 
 			if (!par3World.isRemote)
 			{
-				par3World.spawnEntityInWorld(platform);
+				par3World.spawnEntityInWorld(rideArmor);
 			}
 
 			if (!par2EntityPlayer.capabilities.isCreativeMode)
@@ -76,13 +77,13 @@ public class ItemPlatformPlacer extends Item {
 	 */
 	public IIcon getIconFromDamage(int par1)
 	{
-		return this.platformSpawnerIcon;
+		return this.rideArmorSpawnerIcon;
     }
 
 	@Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister)
     {
-        this.platformSpawnerIcon = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+this.getUnlocalizedName().substring(5));
+        this.rideArmorSpawnerIcon = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+this.getUnlocalizedName().substring(5));
     }
 }

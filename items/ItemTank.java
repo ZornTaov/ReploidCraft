@@ -1,13 +1,12 @@
 package zornco.reploidcraftenv.items;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.lib.Reference;
 import zornco.reploidcraftenv.sounds.Sounds;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import cpw.mods.fml.relauncher.Side;
@@ -15,9 +14,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemTank extends Item {
 
-	private Icon iconTank;
-	public ItemTank(int par1) {
-		super(par1);
+	private IIcon iconTank;
+	public ItemTank() {
+		super();
 		setMaxDamage(30);
 		this.canRepair = false;
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
@@ -72,9 +71,9 @@ public class ItemTank extends Item {
 
 	@Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerIcons(IIconRegister par1IconRegister)
     {
-            this.iconTank = par1IconRegister.registerIcon(Reference.MOD_ID+":"+this.getUnlocalizedName().substring(5));
+            this.iconTank = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+this.getUnlocalizedName().substring(5));
     }
 
     @SideOnly(Side.CLIENT)
@@ -82,7 +81,7 @@ public class ItemTank extends Item {
     /**
      * Gets an icon index based on an item's damage value
      */
-    public Icon getIconFromDamage(int par1)
+    public IIcon getIconFromDamage(int par1)
     {
         return this.iconTank;
     }
