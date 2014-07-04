@@ -4,6 +4,10 @@ import org.lwjgl.opengl.GL11;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraftenv.entities.EntityRideArmorPart;
+import zornco.reploidcraftenv.entities.parts.PartSlot;
+import zornco.reploidcraftenv.entities.parts.PartType;
+import zornco.reploidcraftenv.entities.parts.PartsRegistry;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelEnderCrystal;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,7 +21,7 @@ public class RenderRideArmor extends Render {
 
 	private int nagged = -1;
 	private ModelBase modelRideArmor;
-	private static final ResourceLocation rideArmor = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorGreen.png");//FloatingPlatform.png");
+	public ResourceLocation defaultTexture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorGreen.png");
 
 	public RenderRideArmor()
 	{
@@ -53,19 +57,42 @@ public class RenderRideArmor extends Render {
 
 		GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);
-        this.bindEntityTexture(entity);
-        if(entity.rideArmorPartsMap != null)
+		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BODY.ordinal()]).getType()));
+        ((ModelrideArmor) this.modelRideArmor).renderTorso(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+        if(entity.rideArmorParts != null)
         {
-        	((ModelrideArmor)modelRideArmor).upperArmLeft.isHidden = entity.rideArmorPartsMap.containsKey("armLeft")?false:true;
-        	((ModelrideArmor)modelRideArmor).upperArmRight.isHidden = entity.rideArmorPartsMap.containsKey("armRight")?false:true;
+        	if (entity.hasPart(PartSlot.ARMLEFT))
+        	{
+        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMLEFT.ordinal()]).getType()));
+        		((ModelrideArmor) this.modelRideArmor).renderArmLeftA(0.0625F);
+        	}
+        	if (entity.hasPart(PartSlot.ARMRIGHT))
+        	{
+        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMRIGHT.ordinal()]).getType()));
+        		((ModelrideArmor) this.modelRideArmor).renderArmRightA((0.0625F));
+        	}
+        	if (entity.hasPart(PartSlot.BACK))
+        	{
+        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BACK.ordinal()]).getType()));
+        		((ModelrideArmor) this.modelRideArmor).renderBackPackA((0.0625F));
+        	}
+        	if (entity.hasPart(PartSlot.LEGS))
+        	{
+        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.LEGS.ordinal()]).getType()));
+        		((ModelrideArmor) this.modelRideArmor).renderHips((0.0625F));
+        	}/*
+        	((ModelrideArmor)modelRideArmor).upperArmLeftA.isHidden = !entity.hasPart(PartSlot.ARMLEFT);
+        	((ModelrideArmor)modelRideArmor).upperArmRightA.isHidden = !entity.hasPart(PartSlot.ARMRIGHT);
+        	((ModelrideArmor)modelRideArmor).backPackA.isHidden = !entity.hasPart(PartSlot.BACK);*/
         }
-		this.modelRideArmor.render(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
 
 		GL11.glPopMatrix();
 	}
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return rideArmor;
+		
+		
+		return defaultTexture;
 	}
 
 }

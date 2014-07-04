@@ -74,6 +74,7 @@ public class ReploidCraftEnv {
 	public void preInit(FMLPreInitializationEvent event) {
 		proxy.registerKeyBindingHandler();
 		proxy.registerSounds();
+		proxy.registerParts();
 		config.addItems();
 		config.addBlocks();
 	}

@@ -13,6 +13,7 @@ package zornco.reploidcraftenv.client.renderers;
 
 import org.lwjgl.opengl.GL11;
 
+import zornco.reploidcraftenv.entities.parts.PartSlot;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -22,13 +23,13 @@ public class ModelrideArmor extends ModelBase
 	//fields
 		ModelRenderer torso;
 		ModelRenderer hips;
-		ModelRenderer upperArmLeft;
+		ModelRenderer upperArmLeftA;
 		ModelRenderer lowerArmLeft;
-		ModelRenderer upperArmRight;
+		ModelRenderer upperArmRightA;
 		ModelRenderer lowerArmRight;
-		ModelRenderer BackPackA;
-		ModelRenderer BackPackARight;
-		ModelRenderer BackPackALeft;
+		ModelRenderer backPackA;
+		ModelRenderer backPackARight;
+		ModelRenderer backPackALeft;
 		ModelRenderer leftPedel;
 		ModelRenderer rightPedel;
 		ModelRenderer leftVentA;
@@ -60,6 +61,7 @@ public class ModelrideArmor extends ModelBase
 			    setTextureOffset("seat.rightStick1", 8, 57);
 			    setTextureOffset("seat.rightStick2", 0, 57);
 			    setTextureOffset("seat.rightStick3", 3, 62);
+			    
 			    setTextureOffset("chest.frontSide", 0, 0);
 			    setTextureOffset("chest.backSide", 0, 19);
 			    setTextureOffset("chest.rightSide", 0, 64);
@@ -85,25 +87,29 @@ public class ModelrideArmor extends ModelBase
 			    setTextureOffset("leftVentAAngled2.leftVent7", 4, 44);
 			    setTextureOffset("leftVentAAngled2.leftVent8", 5, 44);
 			    setTextureOffset("leftVentAAngled2.leftVent9", 6, 44);
-			    setTextureOffset("BackPackA.Mid", 72, 64);
-			    setTextureOffset("BackPackARight.top", 72, 78);
-			    setTextureOffset("BackPackARight.tank", 78, 100);
-			    setTextureOffset("BackPackARight.choke", 78, 114);
-			    setTextureOffset("BackPackARight.nozzle", 40, 54);
-			    setTextureOffset("BackPackALeft.top", 72, 78);
-			    setTextureOffset("BackPackALeft.tank", 78, 100);
-			    setTextureOffset("BackPackALeft.choke", 78, 114);
-			    setTextureOffset("BackPackALeft.nozzle", 40, 54);
+			    
+			    setTextureOffset("backPackA.Mid", 72, 64);
+			    setTextureOffset("backPackARight.top", 72, 78);
+			    setTextureOffset("backPackARight.tank", 78, 100);
+			    setTextureOffset("backPackARight.choke", 78, 114);
+			    setTextureOffset("backPackARight.nozzle", 40, 54);
+			    setTextureOffset("backPackALeft.top", 72, 78);
+			    setTextureOffset("backPackALeft.tank", 78, 100);
+			    setTextureOffset("backPackALeft.choke", 78, 114);
+			    setTextureOffset("backPackALeft.nozzle", 40, 54);
+			    
 			    setTextureOffset("upperArmRight.shoulderRight", 58, 0);
 			    setTextureOffset("upperArmRight.bicepLeftRight", 106, 0);
 			    setTextureOffset("lowerArmRight.armRight", 110, 0);
 			    setTextureOffset("lowerArmRight.thumbRight", 158, 0);
 			    setTextureOffset("lowerArmRight.elbowRight", 158, 11);
+			    
 			    setTextureOffset("upperArmLeft.shoulderLeft", 58, 0);
 			    setTextureOffset("upperArmLeft.bicepLeft", 106, 0);
 			    setTextureOffset("lowerArmLeft.armLeft", 110, 0);
 			    setTextureOffset("lowerArmLeft.thumbLeft", 158, 0);
 			    setTextureOffset("lowerArmLeft.elbowLeft", 158, 11);
+			    
 			    setTextureOffset("hips.waist", 58, 24);
 			    setTextureOffset("hips.hip1", 186, 0);
 			    setTextureOffset("hips.hip2", 186, 25);
@@ -158,6 +164,8 @@ public class ModelrideArmor extends ModelBase
 				seat.addBox("rightStick2", -7F, -5F, -5F, 2, 8, 2);
 				seat.addBox("rightStick3", -12F, 1.5F, -6.5F, 3, 5, 5);
 			torso.addChild(seat);
+			
+			
 				chest = new ModelRenderer(this, "chest");
 				chest.setRotationPoint(0F, 0F, 0F);
 				setRotation(chest, 0F, 0F, 0F);
@@ -170,57 +178,6 @@ public class ModelrideArmor extends ModelBase
 				chest.addBox("leftNozzle", 13F, 13.5F, -0.5F, 1, 3, 3);
 				chest.mirror = false;
 				chest.addBox("rightNozzle", -14F, 13.5F, -0.5F, 1, 3, 3);
-					upperArmRight = new ModelRenderer(this, "upperArmRight");
-					upperArmRight.setRotationPoint(-18F, -1F, 0F);
-					setRotation(upperArmRight, 0F, 0F, 0F);
-					upperArmRight.addBox("shoulderRight", -6F, -6F, -6F, 12, 12, 12);
-					upperArmRight.addBox("bicepLeftRight", -4F, 6F, -4F, 8, 16, 8);
-						lowerArmRight = new ModelRenderer(this, "lowerArmRight");
-						lowerArmRight.setRotationPoint(0F, 22F, 0F);
-						setRotation(lowerArmRight, 0F, 0F, 0F);
-						lowerArmRight.addBox("armRight", -5F, -5F, -22F, 10, 13, 28);
-						lowerArmRight.addBox("thumbRight", -1F, -7F, -17F, 8, 8, 3);
-						lowerArmRight.addBox("elbowRight", -4F, -4F, 6F, 8, 11, 5);
-					upperArmRight.addChild(lowerArmRight);
-				chest.addChild(upperArmRight);
-					upperArmLeft = new ModelRenderer(this, "upperArmLeft");
-					upperArmLeft.setRotationPoint(18F, -1F, 0F);
-					setRotation(upperArmLeft, 0F, 0F, 0F);
-					upperArmLeft.mirror = true;
-					upperArmLeft.addBox("shoulderLeft", -6F, -6F, -6F, 12, 12, 12);
-					upperArmLeft.addBox("bicepLeft", -4F, 6F, -4F, 8, 16, 8);
-						lowerArmLeft = new ModelRenderer(this, "lowerArmLeft");
-						lowerArmLeft.setRotationPoint(0F, 22F, 0F);
-						setRotation(lowerArmLeft, 0F, 0F, 0F);
-						lowerArmLeft.mirror = true;
-						lowerArmLeft.addBox("armLeft", -5F, -5F, -22F, 10, 13, 28);
-						lowerArmLeft.addBox("thumbLeft", -7F, -7F, -17F, 8, 8, 3);
-						lowerArmLeft.mirror = false;
-						lowerArmLeft.addBox("elbowLeft", -4F, -4F, 6F, 8, 11, 5);
-					upperArmLeft.addChild(lowerArmLeft);
-				chest.addChild(upperArmLeft);
-					BackPackA = new ModelRenderer(this, "BackPackA");
-					BackPackA.setRotationPoint(0F, 0F, 0F);
-					setRotation(BackPackA, 0F, 0F, 0F);
-					BackPackA.addBox("Mid", -3F, 4F, 13F, 6, 9, 5);
-						BackPackARight = new ModelRenderer(this, "BackPackARight");
-						BackPackARight.setRotationPoint(0F, 0F, 0F);
-						setRotation(BackPackARight, 0F, 0F, 0F);
-						BackPackARight.addBox("top", -8F, 2F, 14F, 4, 1, 4);
-						BackPackARight.addBox("tank", -9F, 3F, 13F, 6, 8, 6);
-						BackPackARight.addBox("choke", -8F, 11F, 14F, 4, 1, 4);
-						BackPackARight.addBox("nozzle", -9F, 12F, 13F, 6, 3, 6);
-					BackPackA.addChild(BackPackARight);
-						BackPackALeft = new ModelRenderer(this, "BackPackALeft");
-						BackPackALeft.setRotationPoint(0F, 0F, 0F);
-						setRotation(BackPackALeft, 0F, 0F, 0F);
-						BackPackALeft.mirror = true;
-						BackPackALeft.addBox("top", 4F, 2F, 14F, 4, 1, 4);
-						BackPackALeft.addBox("tank", 3F, 3F, 13F, 6, 8, 6);
-						BackPackALeft.addBox("choke", 4F, 11F, 14F, 4, 1, 4);
-						BackPackALeft.addBox("nozzle", 3F, 12F, 13F, 6, 3, 6);
-					BackPackA.addChild(BackPackALeft);
-				chest.addChild(BackPackA);
 					leftVentA = new ModelRenderer(this, "leftVentA");
 					leftVentA.setRotationPoint(0F, 0F, 0F);
 					setRotation(leftVentA, 0F, 0F, 0F);
@@ -266,6 +223,64 @@ public class ModelrideArmor extends ModelBase
 						rightVentAAngled2.addBox("rightVent9", -9F, 7F, -16F, 4, 0, 2);
 					rightVentA.addChild(rightVentAAngled2);
 				chest.addChild(rightVentA);
+				
+				
+					upperArmRightA = new ModelRenderer(this, "upperArmRight");
+					upperArmRightA.setRotationPoint(-18F, -25F, 0F);
+					setRotation(upperArmRightA, 0F, 0F, 0F);
+					upperArmRightA.addBox("shoulderRight", -6F, -6F, -6F, 12, 12, 12);
+					upperArmRightA.addBox("bicepLeftRight", -4F, 6F, -4F, 8, 16, 8);
+						lowerArmRight = new ModelRenderer(this, "lowerArmRight");
+						lowerArmRight.setRotationPoint(0F, 22F, 0F);
+						setRotation(lowerArmRight, 0F, 0F, 0F);
+						lowerArmRight.addBox("armRight", -5F, -5F, -22F, 10, 13, 28);
+						lowerArmRight.addBox("thumbRight", -1F, -7F, -17F, 8, 8, 3);
+						lowerArmRight.addBox("elbowRight", -4F, -4F, 6F, 8, 11, 5);
+					upperArmRightA.addChild(lowerArmRight);
+				//chest.addChild(upperArmRightA);
+					
+					upperArmLeftA = new ModelRenderer(this, "upperArmLeft");
+					upperArmLeftA.setRotationPoint(18F, -25F, 0F);
+					setRotation(upperArmLeftA, 0F, 0F, 0F);
+					upperArmLeftA.mirror = true;
+					upperArmLeftA.addBox("shoulderLeft", -6F, -6F, -6F, 12, 12, 12);
+					upperArmLeftA.addBox("bicepLeft", -4F, 6F, -4F, 8, 16, 8);
+						lowerArmLeft = new ModelRenderer(this, "lowerArmLeft");
+						lowerArmLeft.setRotationPoint(0F, 22F, 0F);
+						setRotation(lowerArmLeft, 0F, 0F, 0F);
+						lowerArmLeft.mirror = true;
+						lowerArmLeft.addBox("armLeft", -5F, -5F, -22F, 10, 13, 28);
+						lowerArmLeft.addBox("thumbLeft", -7F, -7F, -17F, 8, 8, 3);
+						lowerArmLeft.mirror = false;
+						lowerArmLeft.addBox("elbowLeft", -4F, -4F, 6F, 8, 11, 5);
+					upperArmLeftA.addChild(lowerArmLeft);
+				//chest.addChild(upperArmLeftA);
+				
+				
+					backPackA = new ModelRenderer(this, "backPackA");
+					backPackA.setRotationPoint(0F, -24F, 0F);
+					setRotation(backPackA, 0F, 0F, 0F);
+					backPackA.addBox("Mid", -3F, 4F, 13F, 6, 9, 5);
+						backPackARight = new ModelRenderer(this, "backPackARight");
+						backPackARight.setRotationPoint(0F, 0F, 0F);
+						setRotation(backPackARight, 0F, 0F, 0F);
+						backPackARight.addBox("top", -8F, 2F, 14F, 4, 1, 4);
+						backPackARight.addBox("tank", -9F, 3F, 13F, 6, 8, 6);
+						backPackARight.addBox("choke", -8F, 11F, 14F, 4, 1, 4);
+						backPackARight.addBox("nozzle", -9F, 12F, 13F, 6, 3, 6);
+					backPackA.addChild(backPackARight);
+						backPackALeft = new ModelRenderer(this, "backPackALeft");
+						backPackALeft.setRotationPoint(0F, 0F, 0F);
+						setRotation(backPackALeft, 0F, 0F, 0F);
+						backPackALeft.mirror = true;
+						backPackALeft.addBox("top", 4F, 2F, 14F, 4, 1, 4);
+						backPackALeft.addBox("tank", 3F, 3F, 13F, 6, 8, 6);
+						backPackALeft.addBox("choke", 4F, 11F, 14F, 4, 1, 4);
+						backPackALeft.addBox("nozzle", 3F, 12F, 13F, 6, 3, 6);
+					backPackA.addChild(backPackALeft);
+				//chest.addChild(backPackA);
+				
+				
 			torso.addChild(chest);
 			hips = new ModelRenderer(this, "hips");
 			hips.setRotationPoint(0F, 0F, 0F);
@@ -273,6 +288,8 @@ public class ModelrideArmor extends ModelBase
 			hips.addBox("waist", -6F, -6F, -6F, 12, 4, 12);
 			hips.addBox("hip1", -7F, -2F, -10F, 14, 5, 20);
 			hips.addBox("hip2", -7F, 3F, -8F, 14, 6, 16);
+			
+			
 				upperLegLeft = new ModelRenderer(this, "upperLegLeft");
 				upperLegLeft.setRotationPoint(9F, 6F, 0F);
 				setRotation(upperLegLeft, 0F, 0F, 0F);
@@ -324,12 +341,35 @@ public class ModelrideArmor extends ModelBase
 			hips.addChild(upperLegRight);
 		}
 
-		public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+		public void renderTorso(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 		{
 			super.render(entity, f, f1, f2, f3, f4, f5);
 			setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+			//upperArmLeftA.isHidden = true;
+			upperArmRightA.isHidden = true;
+			//backPackA.isHidden = true;
+			hips.isHidden = true;
 			torso.render(f5);
+		}
+
+		public void renderHips(float f5) {
+			hips.isHidden = false;
 			hips.render(f5);
+		}
+
+		public void renderArmLeftA(float f5) {
+			upperArmLeftA.isHidden = false;
+			upperArmLeftA.render(f5);
+		}
+
+		public void renderArmRightA(float f5) {
+			upperArmRightA.isHidden = false;
+			upperArmRightA.render(f5);
+		}
+
+		public void renderBackPackA(float f5) {
+			backPackA.isHidden = false;
+			backPackA.render(f5);
 		}
 
 		private void setRotation(ModelRenderer model, float x, float y, float z)
@@ -357,9 +397,9 @@ public class ModelrideArmor extends ModelBase
 			//System.out.println(f10);
 			GL11.glTranslatef(0.0F, -f9/5F-(f10*0.6325F)-0.01F, 0F);
 			setRotation(chest, 0F, f7/2, 0F);
-			setRotation(upperArmRight, f7, 0F, 0.2F);
+			setRotation(upperArmRightA, f7, 0F, 0.2F);
 			setRotation(lowerArmRight, -f7, 0F, 0F);
-			setRotation(upperArmLeft, -f7, 0F, -0.2F);
+			setRotation(upperArmLeftA, -f7, 0F, -0.2F);
 			setRotation(lowerArmLeft, f7, 0F, 0F);
 			float f11 = (float)(Math.sin((double)(f1 * (float)Math.PI * 0.2F )))/4f * f;
 			setRotation(upperLegRight, 30F*DEG_TO_RAD-(f2*160F*DEG_TO_RAD), 0F, 0F);

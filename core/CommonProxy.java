@@ -1,9 +1,14 @@
 package zornco.reploidcraftenv.core;
 
 
+import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.ContainerItemHolder;
 import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraftenv.entities.parts.PartList;
+import zornco.reploidcraftenv.entities.parts.PartSlot;
+import zornco.reploidcraftenv.entities.parts.PartType;
+import zornco.reploidcraftenv.entities.parts.PartsRegistry;
 import zornco.reploidcraftenv.network.PacketRideArmor;
 import zornco.reploidcraftenv.utils.RiderState;
 import net.minecraft.entity.Entity;
@@ -88,5 +93,41 @@ public class CommonProxy implements IGuiHandler {
 	public RiderState getRiderState(Entity rider)
 	{
 		return null;
+	}
+
+	public PartsRegistry partRegistry = new PartsRegistry();
+
+	public void registerParts()
+	{
+		this.partRegistry.registerPart(PartType.GREEN, PartSlot.HEAD, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
+		this.partRegistry.registerPart(PartType.GREEN, PartSlot.BODY, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
+		this.partRegistry.registerPart(PartType.GREEN, PartSlot.BACK, makeFloatArray(0.0F, 1.5F, 1.5F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart(PartType.GREEN, PartSlot.LEGS, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
+		this.partRegistry.registerPart(PartType.GREEN, PartSlot.ARMLEFT, makeFloatArray(1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart(PartType.GREEN, PartSlot.ARMRIGHT, makeFloatArray(-1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+
+		this.partRegistry.registerPart(PartType.RED, PartSlot.HEAD, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
+		this.partRegistry.registerPart(PartType.RED, PartSlot.BODY, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
+		this.partRegistry.registerPart(PartType.RED, PartSlot.BACK, makeFloatArray(0.0F, 1.5F, 1.5F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart(PartType.RED, PartSlot.LEGS, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
+		this.partRegistry.registerPart(PartType.RED, PartSlot.ARMLEFT, makeFloatArray(1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart(PartType.RED, PartSlot.ARMRIGHT, makeFloatArray(-1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		
+		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.HEAD, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
+		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.BODY, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
+		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.BACK, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.LEGS, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
+		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.ARMLEFT, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));  
+		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.ARMRIGHT, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		int s = 0;
+		for (Object list : this.partRegistry.getMap().values()) {
+			s += ((PartList) list).getPartList().size();
+		}
+		ReploidCraftEnv.logger.info("Registered " + s + " parts!");
+	}
+
+	public float[] makeFloatArray(float ... args)
+	{
+		return args;
 	}
 }
