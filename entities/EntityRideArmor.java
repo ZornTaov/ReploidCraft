@@ -302,7 +302,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		if (par1 > 1.0F)
 		{
-			this.playSound("mob.mech.land", 0.4F, 1.0F);
+			this.playSound("mob.mech.land", 0.4F, 1.0F);			
 		}
 
 		int i = MathHelper.ceiling_float_int(par1 * 0.5F - 3.0F);
@@ -709,9 +709,35 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			this.jumpRearingCounter = 0;
 			this.setRearing(false);
 		}*/
-		if (this.mechJumping && this.onGround)
+		if (this.isRearing() && this.onGround)
 		{
-			this.mechJumping = false;
+			this.setRearing(false);
+			System.out.println("I'm jumping!");
+			
+		}
+		if(!this.onGround && !this.mechJumping)
+			this.mechJumping = true;
+		//this.mechJumping = false;
+		//System.out.println(FMLCommonHandler.instance().getEffectiveSide() +  "" + this.isCollidedVertically);
+		if(this.worldObj.isRemote && this.onGround && this.mechJumping) 
+		{
+			System.out.println("hit");
+			this.mechJumping = false; 
+			for (int i = 0; i < 8; ++i)
+			{
+				float f3 = this.rotationYaw * (float)Math.PI / 180.0F;
+				float f1 = MathHelper.sin(f3);
+				float f2 = MathHelper.cos(f3);
+				double X = this.posX + 0.4 * f2 * ((i%2)==0?-1:1) + 1.2 * f1;
+				double Z = this.posZ + 0.4 * f1 * ((i%2)==0?-1:1) - 1.2 * f2;
+				double d0 = this.rand.nextGaussian() * 0.02D;
+				double d1 = this.rand.nextGaussian() * 0.02D;
+				double d2 = this.rand.nextGaussian() * 0.02D;
+				this.worldObj.spawnParticle("cloud", 
+						X, 
+						this.posY + 1.8D, 
+						Z, d0, d1, d2);
+			}
 		}
 
 		if (this.field_110278_bp > 0 && ++this.field_110278_bp > 8)
@@ -793,6 +819,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				this.mouthOpenness = 0.0F;
 			}
 		}
+		if(this.riddenByEntity != null)
+			ReploidCraftEnv.proxy.updateRiderState(this, this.riddenByEntity);
 		//if(!this.worldObj.isRemote)this.rideArmorParts[5].setType(GREEN);
 		this.updateParts();
 		//this.worldObj.spawnParticle("note", this.rideArmorArmRight.posX , this.rideArmorArmRight.posY, this.rideArmorArmRight.posZ, 0.0D, 0.0D, 0.0D);
@@ -880,6 +908,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			}
 		}
 	}
+	
 
 	/**
 	 * Moves the entity based on the specified heading.  Args: strafe, forward
@@ -922,34 +951,36 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				
 
 				this.jumpPower = 0.0F;
-			}*/
+			}*///TODO:
 			if ((this.riddenByEntity instanceof EntityPlayer))
 			{
-				if (this.riderState.isJump() && !this.mechJumping)
+				if (this.riderState.isJump() && !this.isRearing())
 				{
 
-					this.motionY  += 5D;
-					System.out.println("JUMP YOU FOOL!");
-					this.mechJumping = true;
-					//this.isAirBorne = true;
+					this.motionY = this.getMechJumpStrength();// * (double)this.jumpPower;
+					//System.out.println("JUMP YOU FOOL!");
+					this.setRearing(true);
+					this.isAirBorne = true;
+					//this.onGround = false;
+					/*
 					if (par2 > 0.0F)
 					{
 						float f2 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
 						float f3 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
-						this.motionX += (double)(-0.4F * f2 * this.jumpPower);
-						this.motionZ += (double)(0.4F * f3 * this.jumpPower);
-						this.playSound("mob.mech.jump", 0.4F, 1.0F);
-					}
+						this.motionX += (double)(-0.4F * f2);// * this.jumpPower);
+						this.motionZ += (double)(0.4F * f3);// * this.jumpPower);
+					}*/
+					this.playSound("mob.mech.jump", 0.4F, 1.0F);
 				}
 			}
 			this.stepHeight = 1.0F;
 			//this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
 
-			if (!this.worldObj.isRemote)
-			{
+//			if (!this.worldObj.isRemote)
+//			{
 				this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
 				super.moveEntityWithHeading(par1, par2);
-			}
+			//}
 
 			this.prevLimbSwingAmount = this.limbSwingAmount;
 			double d1 = this.posX - this.prevPosX;
@@ -1226,19 +1257,19 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		super.updateRiderPosition();
 
-		if (this.prevRearingAmount > 0.0F)
-		{
+		/*if (this.prevRearingAmount > 0.0F)
+		{*/
 			float f = MathHelper.sin(this.renderYawOffset * (float)Math.PI / 180.0F);
 			float f1 = MathHelper.cos(this.renderYawOffset * (float)Math.PI / 180.0F);
-			float f2 = 0.7F * this.prevRearingAmount;
-			float f3 = 0.15F * this.prevRearingAmount;
-			this.riddenByEntity.setPosition(this.posX + (double)(f2 * f), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (double)f3, this.posZ - (double)(f2 * f1));
+			float f2 = 0.2F;// * this.prevRearingAmount;
+			//float f3 = 0.2F;// * this.prevRearingAmount;
+			this.riddenByEntity.setPosition(this.posX + (double)(f2 * f), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ - (double)(f2 * f1));
 
 			if (this.riddenByEntity instanceof EntityLivingBase)
 			{
 				((EntityLivingBase)this.riddenByEntity).renderYawOffset = this.renderYawOffset;
 			}
-		}
+		//}
 	}
 
 	@Override
