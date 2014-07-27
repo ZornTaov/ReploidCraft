@@ -7,8 +7,9 @@ import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.entities.parts.PartList;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
-import zornco.reploidcraftenv.entities.parts.PartType;
 import zornco.reploidcraftenv.entities.parts.PartsRegistry;
+import zornco.reploidcraftenv.entities.parts.green.*;
+import zornco.reploidcraftenv.entities.parts.red.*;
 import zornco.reploidcraftenv.network.PacketRideArmor;
 import zornco.reploidcraftenv.utils.RiderState;
 import net.minecraft.entity.Entity;
@@ -99,26 +100,26 @@ public class CommonProxy implements IGuiHandler {
 
 	public void registerParts()
 	{
-		this.partRegistry.registerPart(PartType.GREEN, PartSlot.HEAD, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
-		this.partRegistry.registerPart(PartType.GREEN, PartSlot.BODY, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
-		this.partRegistry.registerPart(PartType.GREEN, PartSlot.BACK, makeFloatArray(0.0F, 1.5F, 1.5F), makeFloatArray(1.0F, 1.0F));
-		this.partRegistry.registerPart(PartType.GREEN, PartSlot.LEGS, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
-		this.partRegistry.registerPart(PartType.GREEN, PartSlot.ARMLEFT, makeFloatArray(1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
-		this.partRegistry.registerPart(PartType.GREEN, PartSlot.ARMRIGHT, makeFloatArray(-1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
-
-		this.partRegistry.registerPart(PartType.RED, PartSlot.HEAD, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
-		this.partRegistry.registerPart(PartType.RED, PartSlot.BODY, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
-		this.partRegistry.registerPart(PartType.RED, PartSlot.BACK, makeFloatArray(0.0F, 1.5F, 1.5F), makeFloatArray(1.0F, 1.0F));
-		this.partRegistry.registerPart(PartType.RED, PartSlot.LEGS, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
-		this.partRegistry.registerPart(PartType.RED, PartSlot.ARMLEFT, makeFloatArray(1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
-		this.partRegistry.registerPart(PartType.RED, PartSlot.ARMRIGHT, makeFloatArray(-1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart("GREEN", PartSlot.HEAD, 		20, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
+		this.partRegistry.registerPart("GREEN", PartSlot.BODY, 		new GreenBody());
+		this.partRegistry.registerPart("GREEN", PartSlot.BACK, 		new GreenBack());
+		this.partRegistry.registerPart("GREEN", PartSlot.LEGS, 		new GreenLegs());
+		this.partRegistry.registerPart("GREEN", PartSlot.ARMLEFT, 	new GreenArm());
+		this.partRegistry.registerPart("GREEN", PartSlot.ARMRIGHT, 	new GreenArm());
 		
-		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.HEAD, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
-		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.BODY, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
-		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.BACK, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.0F, 1.0F));
-		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.LEGS, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
-		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.ARMLEFT, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));  
-		this.partRegistry.registerPart(PartType.EMPTY, PartSlot.ARMRIGHT, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart("RED", PartSlot.HEAD,		20, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
+		this.partRegistry.registerPart("RED", PartSlot.BODY, 		40, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
+		this.partRegistry.registerPart("RED", PartSlot.BACK, 		new RedBack());
+		this.partRegistry.registerPart("RED", PartSlot.LEGS, 		20, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
+		this.partRegistry.registerPart("RED", PartSlot.ARMLEFT, 	20, makeFloatArray(1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart("RED", PartSlot.ARMRIGHT, 	20, makeFloatArray(-1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		
+		this.partRegistry.registerPart("EMPTY", PartSlot.HEAD, 		0, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
+		this.partRegistry.registerPart("EMPTY", PartSlot.BODY, 		0, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
+		this.partRegistry.registerPart("EMPTY", PartSlot.BACK, 		0, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart("EMPTY", PartSlot.LEGS, 		0, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
+		this.partRegistry.registerPart("EMPTY", PartSlot.ARMLEFT, 	0, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));  
+		this.partRegistry.registerPart("EMPTY", PartSlot.ARMRIGHT, 	0, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
 		int s = 0;
 		for (Object list : this.partRegistry.getMap().values()) {
 			s += ((PartList) list).getPartList().size();

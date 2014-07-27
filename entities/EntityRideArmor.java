@@ -1,11 +1,12 @@
 package zornco.reploidcraftenv.entities;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.entities.parts.IPartArm;
+import zornco.reploidcraftenv.entities.parts.IPartBack;
+import zornco.reploidcraftenv.entities.parts.IPartLegs;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
-import zornco.reploidcraftenv.entities.parts.PartType;
 import zornco.reploidcraftenv.utils.RiderState;
 import static zornco.reploidcraftenv.entities.parts.PartSlot.*;
-import static zornco.reploidcraftenv.entities.parts.PartType.*;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,6 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Iterator;
 import java.util.List;
 
+import scala.reflect.internal.Trees.This;
 import scala.util.parsing.combinator.PackratParsers.Head;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -96,7 +98,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	public EntityRideArmor(World par1World)
 	{
 		super(par1World);
-		this.setSize(1.0F, 2.5F);
+		this.setSize(1.4F, 2.5F);
 		this.isImmuneToFire = false;
 		this.setChested(false);
 		this.getNavigator().setAvoidsWater(true);
@@ -107,15 +109,16 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		this.tasks.addTask(8, new EntityAILookIdle(this));
 		this.func_110226_cD();
 		this.riderState = new RiderState();
-		this.stepHeight = 1.0F;
 		this.rideArmorParts = new EntityRideArmorPart[] {
-				rideArmorHead = new EntityRideArmorPart(this, EMPTY, HEAD),
-						rideArmorBody = new EntityRideArmorPart(this, EMPTY, BODY),
-						rideArmorBack = new EntityRideArmorPart(this, EMPTY, BACK),
-						rideArmorFeet = new EntityRideArmorPart(this, EMPTY, LEGS),
-						rideArmorArmLeft = new EntityRideArmorPart(this, EMPTY, ARMLEFT),
-						rideArmorArmRight = new EntityRideArmorPart(this, EMPTY, ARMRIGHT)
+				rideArmorHead = new EntityRideArmorPart(this, "EMPTY", HEAD),
+						rideArmorBody = new EntityRideArmorPart(this, "EMPTY", BODY),
+						rideArmorBack = new EntityRideArmorPart(this, "EMPTY", BACK),
+						rideArmorFeet = new EntityRideArmorPart(this, "EMPTY", LEGS),
+						rideArmorArmLeft = new EntityRideArmorPart(this, "EMPTY", ARMLEFT),
+						rideArmorArmRight = new EntityRideArmorPart(this, "EMPTY", ARMRIGHT)
 		};
+
+		setStepHeight(1.0F);
 	}
 
 	public EntityRideArmor(World par1World, double par2, double par4, double par6) {
@@ -154,7 +157,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		return this.dataWatcher.getWatchableObjectByte(19);
 	}
 
-	public void setPart(PartSlot slot, PartType type)
+	public void setPart(PartSlot slot, String type)
 	{
 		this.partSwitch(slot.ordinal()).setType(type);
 		this.func_110232_cE();
@@ -406,7 +409,43 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	public double getMechJumpStrength()
 	{
-		return this.getEntityAttribute(mechJumpStrength).getAttributeValue();
+		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK) instanceof IPartBack)
+		{
+			return ((IPartBack)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK)).getJumpHeight();
+		}
+		else return 0.4F;
+	}
+	
+	public boolean doMechAttackLeft()
+	{
+		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT) instanceof IPartArm)
+		{
+			return ((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT)).doAttack(this);
+		}
+		else return false;
+	}
+
+	public boolean doMechAttackRight()
+	{
+		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT) instanceof IPartArm)
+		{
+			return ((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT)).doAttack(this);
+		}
+		else return false;
+	}
+	
+	public void doMechParticle(Entity mech, PartSlot slot)
+	{
+		ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(slot.ordinal()).getType(), slot).doParticle(mech);
+	}
+	
+	public float getMechSpeed()
+	{
+		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(LEGS.ordinal()).getType(), LEGS) instanceof IPartLegs)
+		{
+			return ((IPartLegs)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(LEGS.ordinal()).getType(), LEGS)).getSpeed();
+		}
+		else return 0.2F;
 	}
 
 	/**
@@ -422,6 +461,16 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		boolean flag = this.rand.nextInt(4) == 0;
 		int i = this.getMechType();
 		return ReploidCraftEnv.rideArmorPlacer;
+	}
+
+	@Override
+	protected void dropFewItems(boolean par1, int par2) {
+		Item item = this.getDropItem();
+
+		if (item != null)
+		{
+			this.dropItem(item, 1);
+		}
 	}
 
 	/**
@@ -527,7 +576,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			//par1EntityPlayer.displayGUIMech(this, this.mechChest);
 		}
 	}
-	
+
 	/**
 	 * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
 	 */
@@ -712,8 +761,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		if (this.isRearing() && this.onGround)
 		{
 			this.setRearing(false);
-			System.out.println("I'm jumping!");
-			
+			//System.out.println("I'm jumping!");
+
 		}
 		if(!this.onGround && !this.mechJumping)
 			this.mechJumping = true;
@@ -721,23 +770,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		//System.out.println(FMLCommonHandler.instance().getEffectiveSide() +  "" + this.isCollidedVertically);
 		if(this.worldObj.isRemote && this.onGround && this.mechJumping) 
 		{
-			System.out.println("hit");
 			this.mechJumping = false; 
-			for (int i = 0; i < 8; ++i)
-			{
-				float f3 = this.rotationYaw * (float)Math.PI / 180.0F;
-				float f1 = MathHelper.sin(f3);
-				float f2 = MathHelper.cos(f3);
-				double X = this.posX + 0.4 * f2 * ((i%2)==0?-1:1) + 1.2 * f1;
-				double Z = this.posZ + 0.4 * f1 * ((i%2)==0?-1:1) - 1.2 * f2;
-				double d0 = this.rand.nextGaussian() * 0.02D;
-				double d1 = this.rand.nextGaussian() * 0.02D;
-				double d2 = this.rand.nextGaussian() * 0.02D;
-				this.worldObj.spawnParticle("cloud", 
-						X, 
-						this.posY + 1.8D, 
-						Z, d0, d1, d2);
-			}
+			this.doMechParticle(this, BODY);
 		}
 
 		if (this.field_110278_bp > 0 && ++this.field_110278_bp > 8)
@@ -908,7 +942,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			}
 		}
 	}
-	
+
 
 	/**
 	 * Moves the entity based on the specified heading.  Args: strafe, forward
@@ -917,26 +951,28 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		if (this.riddenByEntity != null)
 		{
-			this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
-			this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
-			this.setRotation(this.rotationYaw, this.rotationPitch);
-			this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-			par1 = ((EntityLivingBase)this.riddenByEntity).moveStrafing * 0.5F;
-			par2 = ((EntityLivingBase)this.riddenByEntity).moveForward;
-
-			if (par2 <= 0.0F)
+			if(this.hasPart(LEGS))
 			{
-				par2 *= 0.25F;
-				this.field_110285_bP = 0;
-			}
+				this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
+				this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
+				this.setRotation(this.rotationYaw, this.rotationPitch);
+				this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
+				par1 = ((EntityLivingBase)this.riddenByEntity).moveStrafing * 0.5F;
+				par2 = ((EntityLivingBase)this.riddenByEntity).moveForward;
 
-			/*if (this.onGround && this.jumpPower == 0.0F && this.isRearing() && !this.field_110294_bI)
+				if (par2 <= 0.0F)
+				{
+					par2 *= 0.5F;
+					this.field_110285_bP = 0;
+				}
+
+				/*if (this.onGround && this.jumpPower == 0.0F && this.isRearing() && !this.field_110294_bI)
 			{
 				par1 = 0.0F;
 				par2 = 0.0F;
 			}*/
 
-			/*if (this.jumpPower > 0.0F && !this.isMechJumping() && this.onGround)
+				/*if (this.jumpPower > 0.0F && !this.isMechJumping() && this.onGround)
 			{
 				this.motionY = this.getMechJumpStrength() * (double)this.jumpPower;
 
@@ -948,59 +984,56 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				this.setMechJumping(true);
 				this.isAirBorne = true;
 
-				
+
 
 				this.jumpPower = 0.0F;
 			}*///TODO:
-			if ((this.riddenByEntity instanceof EntityPlayer))
-			{
-				if (this.riderState.isJump() && !this.isRearing())
+				if ((this.riddenByEntity instanceof EntityPlayer))
 				{
-
-					this.motionY = this.getMechJumpStrength();// * (double)this.jumpPower;
-					//System.out.println("JUMP YOU FOOL!");
-					this.setRearing(true);
-					this.isAirBorne = true;
-					//this.onGround = false;
-					/*
-					if (par2 > 0.0F)
+					if (this.riderState.isJump() && !this.isRearing() && this.onGround)
 					{
-						float f2 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
-						float f3 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
-						this.motionX += (double)(-0.4F * f2);// * this.jumpPower);
-						this.motionZ += (double)(0.4F * f3);// * this.jumpPower);
-					}*/
-					this.playSound("mob.mech.jump", 0.4F, 1.0F);
+
+						this.motionY = this.getMechJumpStrength();// * (double)this.jumpPower;
+						//System.out.println("JUMP YOU FOOL!");
+						this.setRearing(true);
+						this.isAirBorne = true;
+						doMechParticle(this, BACK);
+						this.playSound("mob.mech.jump", 0.4F, 1.0F);
+					}
 				}
-			}
-			this.stepHeight = 1.0F;
-			//this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
+				setStepHeight(1.0F);
+				//this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
 
-//			if (!this.worldObj.isRemote)
-//			{
-				this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
+				//			if (!this.worldObj.isRemote)
+				//			{
+				this.setAIMoveSpeed(getMechSpeed());
 				super.moveEntityWithHeading(par1, par2);
-			//}
+				//}
+				/*this.prevLimbSwingAmount = this.limbSwingAmount;
+				double d1 = this.posX - this.prevPosX;
+				double d0 = this.posZ - this.prevPosZ;
+				float f4 = MathHelper.sqrt_double(d1 * d1 + d0 * d0) * 4.0F;
 
-			this.prevLimbSwingAmount = this.limbSwingAmount;
-			double d1 = this.posX - this.prevPosX;
-			double d0 = this.posZ - this.prevPosZ;
-			float f4 = MathHelper.sqrt_double(d1 * d1 + d0 * d0) * 4.0F;
+				if (f4 > 1.0F)
+				{
+					f4 = 1.0F;
+				}
 
-			if (f4 > 1.0F)
-			{
-				f4 = 1.0F;
+				this.limbSwingAmount += (f4 - this.limbSwingAmount) * 0.4F;
+				this.limbSwing += this.limbSwingAmount;*/
+
 			}
-
-			this.limbSwingAmount += (f4 - this.limbSwingAmount) * 0.4F;
-			this.limbSwing += this.limbSwingAmount;
 		}
 		else
 		{
-			this.stepHeight = 0.5F;
+			setStepHeight(0.5F);
 			//this.jumpMovementFactor = 0.02F;
-			super.moveEntityWithHeading(par1, par2);
+			super.moveEntityWithHeading(0.0F, 0.0F);
 		}
+	}
+
+	public void setStepHeight(float step) {
+		this.stepHeight = this.hasPart(LEGS)?step:0.0F;
 	}
 
 	/**
@@ -1123,7 +1156,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				//System.out.println(FMLCommonHandler.instance().getEffectiveSide() + " read " + this.partSwitch(i).getName().toString());
 				if(part != null)
 				{
-					if(partSwitch(i).getType() != EMPTY) 
+					if(partSwitch(i).getType().equals("EMPTY")) 
 					{
 						partSwitch(i).copyDataFrom(part, true);
 						//System.out.println("a");
@@ -1181,7 +1214,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			String[] sa = s.split(":");
 			for(int i = 0; i < sa.length; i++)
 			{
-				partSwitch(i).setType(PartType.fromString(sa[i]));
+				partSwitch(i).setType(sa[i]);
 			}
 		}
 		return s;
@@ -1259,23 +1292,26 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 		/*if (this.prevRearingAmount > 0.0F)
 		{*/
-			float f = MathHelper.sin(this.renderYawOffset * (float)Math.PI / 180.0F);
-			float f1 = MathHelper.cos(this.renderYawOffset * (float)Math.PI / 180.0F);
-			float f2 = 0.2F;// * this.prevRearingAmount;
-			//float f3 = 0.2F;// * this.prevRearingAmount;
-			this.riddenByEntity.setPosition(this.posX + (double)(f2 * f), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ - (double)(f2 * f1));
+		float f = MathHelper.sin(this.renderYawOffset * (float)Math.PI / 180.0F);
+		float f1 = MathHelper.cos(this.renderYawOffset * (float)Math.PI / 180.0F);
+		float f2 = 0.2F;// * this.prevRearingAmount;
+		//float f3 = 0.2F;// * this.prevRearingAmount;
+		this.riddenByEntity.setPosition(this.posX + (double)(f2 * f), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ - (double)(f2 * f1));
 
-			if (this.riddenByEntity instanceof EntityLivingBase)
-			{
-				((EntityLivingBase)this.riddenByEntity).renderYawOffset = this.renderYawOffset;
-			}
+		if (this.riddenByEntity instanceof EntityLivingBase)
+		{
+			((EntityLivingBase)this.riddenByEntity).renderYawOffset = this.renderYawOffset;
+		}
 		//}
 	}
 
 	@Override
 	public double getMountedYOffset() {
-		float f10 = (float)(Math.sin((double)(this.sitAngle * (float)Math.PI +0.75F)))*0.7375F-0.5F;
-		return (double)this.height * 0.0D + 2.125D + f10;
+		return (double)this.height * 0.0D + 2.125D + getSitOffset();
+	}
+
+	public float getSitOffset() {
+		return (float)(Math.sin((double)(this.sitAngle * (float)Math.PI +0.75F)))*0.7375F-0.5F;
 	}
 
 	/**
@@ -1293,7 +1329,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 
 	public boolean hasPart(PartSlot part) {
-		return this.partSwitch(part.ordinal()).getType() != EMPTY;
+		return !this.partSwitch(part.ordinal()).getType().equals("EMPTY");
 	}
 
 	public void setRiderState(RiderState riderState) {
@@ -1320,19 +1356,19 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		//System.out.println("hit on the " + part.getName() + FMLCommonHandler.instance().getEffectiveSide());
 		if(part.getName() == ARMLEFT && hasPart(ARMLEFT))
 		{
-			this.rideArmorArmLeft.setType(EMPTY);
+			this.rideArmorArmLeft.setType("EMPTY");
 			//this.rideArmorPartsMap.get("armLeft").setDead();
 			return true;
 		}
 		if(part.getName() == ARMRIGHT && hasPart(ARMRIGHT))
 		{
-			this.rideArmorArmRight.setType(EMPTY);
+			this.rideArmorArmRight.setType("EMPTY");
 			//this.rideArmorPartsMap.get("armLeft").setDead();
 			return true;
 		}
 		if(part.getName() == BACK && hasPart(BACK))
 		{
-			this.rideArmorBack.setType(EMPTY);
+			this.rideArmorBack.setType("EMPTY");
 			//this.rideArmorPartsMap.get("armLeft").setDead();
 			return true;
 		}
@@ -1345,6 +1381,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			}
 			else if(var2.getEntity() == this.riddenByEntity)
 			{
+				doMechAttackLeft();
 				return true;
 			}
 		}
@@ -1353,6 +1390,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		{
 			if(this.riddenByEntity != null && var2.getEntity() == this.riddenByEntity)
 			{
+				doMechAttackLeft();
 				return true;
 			}
 			return this.attackEntityFrom2(var2, var3);
@@ -1361,8 +1399,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		if(part.getName() == LEGS)
 		{
 			//effect legs
-			//this.rideArmorFeet.setType(EMPTY);
-			return this.attackEntityFrom2(var2, var3);
+			this.rideArmorFeet.setType("EMPTY");
+			//return this.attackEntityFrom2(var2, var3);
 		}
 		return false;
 	}
@@ -1404,6 +1442,12 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		float f1 = MathHelper.sin(rotation);
 		float f2 = MathHelper.cos(rotation);
 		float[] offsets = part.getOffsetsPos();
+		if(this.hasPart(ARMRIGHT) && part.slot == ARMRIGHT && ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot) instanceof IPartArm )
+		{
+			if(((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot)).isMirrored())
+				offsets = ((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot)).getArmPos(ARMRIGHT);
+		}
+		
 		double X = this.posX + offsets[0] * f2 + offsets[2] * f1;
 		double Z = this.posZ + offsets[0] * f1 - offsets[2] * f2;
 		part.onUpdate();

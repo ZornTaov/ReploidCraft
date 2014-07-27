@@ -34,7 +34,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 
-	private static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraftenv","textures/blocks/itemHolder.png");
+	protected static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraftenv","textures/blocks/itemHolder.png");
 
 	private Random random;
 

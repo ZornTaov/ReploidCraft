@@ -16,11 +16,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemComponent extends Item {
 
 	 /** List of dye color names */
-    public static final String[] componentNames = new String[] {"Diamond Dust", "AEGD"};
-    public static final String[][] componentDesc = new String[][] {{"",""}, {"Accumulative Energy", "Generation Device"}};
-    public static final String[] componentIconName = new String[] {"diamond_dust", "AEGD"};
+    public static final String[] componentNames = new String[] {"Diamond Dust", "AEGD", "Armored Fist", "Spiked Fist", "Red Arm", "Green Arm", "Blue Arm", "Cockpit", "Vent", "Propeller"};
+    public static final String[][] componentDesc = new String[][] {{"",""}, {"Accumulative Energy", "Generation Device"}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}};
+    public static final String[] componentIconName = new String[] {"diamond_dust", "AEGD", "fist", "spikedfist", "redarm", "greenarm", "bluearm", "cockpit", "vent", "propeller"};
 	public static final int[] chipColors = new int[] {1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 2651799, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320};
-    public static final int typeAmmount = 2;
+    public static final int typeAmmount = 10;
 	@SideOnly(Side.CLIENT)
 	private IIcon[] componentIcon;
     public ItemComponent()

@@ -6,13 +6,17 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
+import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 import zornco.reploidcraftenv.bullets.EntityMetBullet;
 import zornco.reploidcraftenv.client.renderers.BlockBossDoorRenderer;
 import zornco.reploidcraftenv.client.renderers.BlockSpikesRenderer;
+import zornco.reploidcraftenv.client.renderers.ItemItemHolderRenderer;
 import zornco.reploidcraftenv.client.renderers.ModelMet;
 import zornco.reploidcraftenv.client.renderers.ModelMetHat;
 import zornco.reploidcraftenv.client.renderers.RenderBulletBase;
@@ -20,6 +24,7 @@ import zornco.reploidcraftenv.client.renderers.RenderFloatingPlatform;
 import zornco.reploidcraftenv.client.renderers.RenderMet;
 import zornco.reploidcraftenv.client.renderers.RenderRideArmor;
 import zornco.reploidcraftenv.client.renderers.TileEntityItemHolderRenderer;
+import zornco.reploidcraftenv.client.renderers.TileEntityMechBayRenderer;
 import zornco.reploidcraftenv.core.CommonProxy;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityMet;
@@ -66,8 +71,9 @@ public class ClientProxy extends CommonProxy {
 
 		RenderingRegistry.registerBlockHandler(new BlockSpikesRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockBossDoorRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(zornco.reploidcraftenv.blocks.TileEntityItemHolder.class, new TileEntityItemHolderRenderer());
-
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new TileEntityItemHolderRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechBay.class, new TileEntityMechBayRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ReploidCraftEnv.blockItemHolder), new ItemItemHolderRenderer());
 
 	}
 	@Override

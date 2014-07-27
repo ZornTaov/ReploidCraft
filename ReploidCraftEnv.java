@@ -69,6 +69,7 @@ public class ReploidCraftEnv {
 	public static Block spikes;
 	public static Block doorBossBlock;
 	public static Block blockItemHolder;
+	public static Block blockMechBay;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

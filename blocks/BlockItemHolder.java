@@ -42,8 +42,6 @@ public class BlockItemHolder extends BlockContainer {
 	public BlockItemHolder()
 	{
 		super(Material.iron);
-		setBlockName("IronChest");
-		setHardness(3.0F);
 		//setBlockBounds(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		random = new Random();
 		setCreativeTab(ReploidCraftEnv.reploidTab);

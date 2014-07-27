@@ -8,8 +8,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.BiomeGenBase;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.BlockItemHolder;
+import zornco.reploidcraftenv.blocks.BlockMechBay;
 import zornco.reploidcraftenv.blocks.BlockSpikes;
 import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
+import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 import zornco.reploidcraftenv.bullets.EntityMetBullet;
 import zornco.reploidcraftenv.crafting.RecipeHandler;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
@@ -53,11 +55,14 @@ public class Config {
 		ReploidCraftEnv.spikes = new BlockSpikes().setStepSound(Block.soundTypeStone).setBlockName("spikes").setHardness(3.5F);
 		//doorBossBlock = (new BlockBossDoor(doorBossBlockID, Material.iron)).setHardness(5.0F).setStepSound(Block.soundMetalFootstep).setUnlocalizedName("doorBoss").setRequiresSelfNotify();
 		ReploidCraftEnv.blockItemHolder = new BlockItemHolder().setStepSound(Block.soundTypeStone).setBlockName("itemHolder").setHardness(3.5F);
+		ReploidCraftEnv.blockMechBay = new BlockMechBay().setStepSound(Block.soundTypeAnvil).setBlockName("mechBay").setHardness(3.5F);
 
 		GameRegistry.registerBlock(ReploidCraftEnv.spikes, "spikes");
 		//GameRegistry.registerBlock(doorBossBlock, "doorBoss");
 		GameRegistry.registerBlock(ReploidCraftEnv.blockItemHolder, "itemHolder");
 		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
+		GameRegistry.registerBlock(ReploidCraftEnv.blockMechBay, "mechBay");
+		GameRegistry.registerTileEntity(TileEntityMechBay.class, "mechBay");
 	}
 	public void addItems() {
 		/** Items **/

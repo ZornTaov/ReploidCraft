@@ -36,7 +36,6 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	
 	public TileEntityItemHolder()
 	{
-		super();
 		this.chestContents = new ItemStack[getSizeInventory()];
 		this.topStacks = new ItemStack[8];
 	}

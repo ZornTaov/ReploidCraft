@@ -15,13 +15,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
-import zornco.reploidcraftenv.entities.parts.PartType;
 
 public class ItemRideArmorPart extends Item
 {
 	@SideOnly(Side.CLIENT)
 	private IIcon[] partIcon;
-	private int typeAmmount = PartSlot.values().length * PartType.values().length;
+	private int typeAmmount = PartSlot.values().length;// * PartType.values().length;
     public ItemRideArmorPart()
     {
     	super();
@@ -54,9 +53,9 @@ public class ItemRideArmorPart extends Item
     	if(!desc1.equals(""))
         par3List.add(desc1);
 
-    	String desc2 = PartType.values()[par1ItemStack.getItemDamage()/PartType.getSize()].toString();
+    	/*String desc2 = PartType.values()[par1ItemStack.getItemDamage()/PartType.getSize()].toString();
     	if(!desc2.equals(""))
-        par3List.add(desc2);
+        par3List.add(desc2);*/
     }
 
     @SideOnly(Side.CLIENT)
@@ -87,7 +86,7 @@ public class ItemRideArmorPart extends Item
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister)
     {
-        this.partIcon = new IIcon[typeAmmount];
+       /* this.partIcon = new IIcon[typeAmmount];
         int k = 0;
         for (int i = 0; i < PartSlot.values().length; ++i)
         {
@@ -98,6 +97,6 @@ public class ItemRideArmorPart extends Item
         			k++;
         		}
 			}
-        }
+        }*/
     }
 }

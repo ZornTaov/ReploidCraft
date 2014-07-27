@@ -3,7 +3,6 @@ package zornco.reploidcraftenv.entities;
 import cpw.mods.fml.common.FMLCommonHandler;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
-import zornco.reploidcraftenv.entities.parts.PartType;
 //import zornco.reploidcraftenv.entities.parts.SharedPartsAttributes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
@@ -28,10 +27,10 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	protected float offsetY = 0.0F;
 	protected float offsetZ = 0.0F;
 	public EntityRideArmorPart(IEntityMultiPart par1iEntityMultiPart, PartSlot name) {
-		this(par1iEntityMultiPart, PartType.EMPTY, name);
+		this(par1iEntityMultiPart, "EMPTY", name);
 	}
 
-	public EntityRideArmorPart(IEntityMultiPart par1iEntityMultiPart, PartType type, PartSlot slot) {
+	public EntityRideArmorPart(IEntityMultiPart par1iEntityMultiPart, String type, PartSlot slot) {
 		super(par1iEntityMultiPart, "", 0.0F, 0.0F);
 		this.slot = slot;
 		this.setType(type);
@@ -83,11 +82,11 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	{
 		return ReploidCraftEnv.proxy.partRegistry.getPart(getType(), slot).getSize();
 	}
-	public PartType getType() {
-		return (PartType.fromString(this.dataWatcher.getWatchableObjectString(20)));
+	public String getType() {
+		return (this.dataWatcher.getWatchableObjectString(20));
 	}
 
-	public EntityRideArmorPart setType(PartType type) {
+	public EntityRideArmorPart setType(String type) {
 		this.dataWatcher.updateObject(20, type.toString());
 		//if(this.worldObj.isRemote)System.out.println(FMLCommonHandler.instance().getEffectiveSide() + " set type for " + this.slot + " to " + this.getType());
 		return this;
@@ -150,7 +149,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	 * (abstract) Protected helper method to read subclass entity data from NBT.
 	 */
 	 protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
-		 this.setType(PartType.fromString(par1NBTTagCompound.getString("type")));
+		 this.setType(par1NBTTagCompound.getString("type"));
 		 this.setSize(par1NBTTagCompound.getFloat("width"), par1NBTTagCompound.getFloat("height"));
 
 	 }
@@ -183,7 +182,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 
 				 if (itemstack.getItem() == Items.wheat)
 				 {
-					 ((EntityRideArmor) this.entityDragonObj).setPart(this.slot, PartType.RED);
+					 ((EntityRideArmor) this.entityDragonObj).setPart(this.slot, "RED");
 				 }
 			 }
 			 return true;

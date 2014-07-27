@@ -9,13 +9,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Facing;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.entities.EntityRideArmorPart;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
-import zornco.reploidcraftenv.entities.parts.PartType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -56,7 +56,7 @@ public class ItemRideArmorPlacer extends Item {
 			EntityRideArmor rideArmor = new EntityRideArmor(par3World, (double)((float)par4 + 0.5F), (double)((float)par5 + 0.0F), (double)((float)par6 + 0.5F));
 
 
-			rideArmor.rotationYaw = par2EntityPlayer.rotationYawHead - 180;
+			rideArmor.rotationYaw = (float)(((MathHelper.floor_double((double)(par2EntityPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 2) * 90);//par2EntityPlayer.rotationYawHead - 180;
 
 			if (!par3World.getCollidingBoundingBoxes(rideArmor, rideArmor.boundingBox.expand(-0.1D, -0.1D, -0.1D)).isEmpty())
 			{
@@ -67,12 +67,12 @@ public class ItemRideArmorPlacer extends Item {
 			{
 				par3World.spawnEntityInWorld(rideArmor);
 			}
-			rideArmor.setPart(PartSlot.HEAD, PartType.GREEN);
-			rideArmor.setPart(PartSlot.BODY, PartType.GREEN);
-			rideArmor.setPart(PartSlot.BACK, PartType.GREEN);
-			rideArmor.setPart(PartSlot.LEGS, PartType.GREEN);
-			rideArmor.setPart(PartSlot.ARMLEFT, PartType.GREEN);
-			rideArmor.setPart(PartSlot.ARMRIGHT, PartType.GREEN);
+			rideArmor.setPart(PartSlot.HEAD, "GREEN");
+			rideArmor.setPart(PartSlot.BODY, "GREEN");
+			rideArmor.setPart(PartSlot.BACK, "GREEN");
+			rideArmor.setPart(PartSlot.LEGS, "GREEN");
+			rideArmor.setPart(PartSlot.ARMLEFT, "GREEN");
+			rideArmor.setPart(PartSlot.ARMRIGHT, "GREEN");
 			if (!par2EntityPlayer.capabilities.isCreativeMode)
 			{
 				//--par1ItemStack.stackSize;

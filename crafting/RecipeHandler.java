@@ -79,7 +79,15 @@ public class RecipeHandler {
 			Character.valueOf('b'), Blocks.iron_block
 		}
 				);
-
+		
+		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.component, 1, 9), 
+				new Object[] { 
+			" i ", " b ", "i i", 
+			Character.valueOf('i'), new ItemStack(ReploidCraftEnv.reploidPlate, 1, 7), 
+			Character.valueOf('b'), Items.iron_ingot
+		}
+				);
+		
 		/*GameRegistry.addRecipe(new ItemStack(doorBossItem, 1), 
 				new Object[] { 
 			"ipi", "i i", "ipi", 
