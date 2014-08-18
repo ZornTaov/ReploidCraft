@@ -1,17 +1,17 @@
 package zornco.reploidcraftenv.client.renderers;
 
-import org.lwjgl.opengl.GL11;
-
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
+
+import org.lwjgl.opengl.GL11;
+
+import zornco.reploidcraftenv.core.Config;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class BlockBossDoorRenderer extends RenderBlocks
 implements ISimpleBlockRenderingHandler {
@@ -19,7 +19,7 @@ implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
-		if (modelID == ReploidCraftEnv.config.spikesRI)
+		if (modelID == Config.spikesRI)
 		{
 			renderer.setRenderBounds(0.0F, 0.25F, 0.0F, 1.0F, 0.3125F, 1.0F);
 			renderDo(renderer, block, metadata);
@@ -37,7 +37,7 @@ implements ISimpleBlockRenderingHandler {
 		double vTop = (double)icon.getMinV();
 		double vBottom = (double)icon.getMaxV(); 
 		double offset = 0.0625F;
-		double i, j;
+		//double i, j;
 		int light = block.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z);
 		tess.setBrightness(light);
 		tess.setColorOpaque_F(1.0F, 1.0F, 1.0F);
@@ -292,7 +292,7 @@ implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-		return ReploidCraftEnv.config.bossDoorRI;
+		return Config.bossDoorRI;
 	}
 
 	public static void renderDo(RenderBlocks renderblocks, Block block, int meta)

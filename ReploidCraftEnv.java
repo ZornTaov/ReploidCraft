@@ -4,18 +4,18 @@ package zornco.reploidcraftenv;
 
 import java.util.Random;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import zornco.reploidcraftenv.core.CommonProxy;
 import zornco.reploidcraftenv.core.Config;
 import zornco.reploidcraftenv.core.EventBus;
 import zornco.reploidcraftenv.core.TabReploid;
 import zornco.reploidcraftenv.network.PacketPipeline;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -82,7 +82,7 @@ public class ReploidCraftEnv {
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
-		config.recipes.registerRecipes();
+		Config.recipes.registerRecipes();
 		proxy.registerRenderInformation();
 		events = new EventBus();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);

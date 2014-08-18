@@ -11,12 +11,11 @@
 
 package zornco.reploidcraftenv.client.renderers;
 
-import org.lwjgl.opengl.GL11;
-
-import zornco.reploidcraftenv.entities.parts.PartSlot;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+
+import org.lwjgl.opengl.GL11;
 
 public class ModelrideArmor extends ModelBase
 {

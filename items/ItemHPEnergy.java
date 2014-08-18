@@ -1,7 +1,6 @@
 package zornco.reploidcraftenv.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -10,8 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.sounds.Sounds;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.sounds.Sounds;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -27,8 +26,6 @@ public class ItemHPEnergy extends ItemFood {
 	/** set by setPotionEffect */
 	private int potionAmplifier;
 
-	/** probably of the set potion effect occurring */
-	private float potionEffectProbability;
 	public int type;
     private IIcon healthIcons;
 
@@ -47,7 +44,6 @@ public class ItemHPEnergy extends ItemFood {
 		this.potionId = par1;
 		this.potionDuration = par2;
 		this.potionAmplifier = par3;
-		this.potionEffectProbability = par4;
 		return this;
 	}
 	@Override

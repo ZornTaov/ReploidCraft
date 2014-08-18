@@ -102,7 +102,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 			double var16 = xDis / distance;
 			double var18 = zDis / distance;
 			this.setLocationAndAngles(attacker.posX + var16, this.posY, attacker.posZ + var18, var14, var15);
-			float var20 = (float)distance * 0.2F;
+			//float var20 = (float)distance * 0.2F;
 			this.setThrowableHeading(xDis, yDis/* + (double)var20*/, zDis, speed, 0);
 		}
 	}
@@ -206,9 +206,9 @@ public class EntityBulletBase extends Entity implements IProjectile
 	public void onUpdate()
 	{
 		super.onUpdate();
-		double prevVelX = motionX;
-		double prevVelY = motionY;
-		double prevVelZ = motionZ;
+		//double prevVelX = motionX;
+		//double prevVelY = motionY;
+		//double prevVelZ = motionZ;
 
 		if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
 		{
@@ -224,7 +224,7 @@ public class EntityBulletBase extends Entity implements IProjectile
 			blockAtPoint.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
 			AxisAlignedBB blockAtPointAABB = blockAtPoint.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
 
-			if (blockAtPointAABB != null && blockAtPointAABB.isVecInside(this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ)))
+			if (blockAtPointAABB != null && blockAtPointAABB.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ)))
 			{
 				this.inGround = true;
 			}
@@ -262,21 +262,21 @@ public class EntityBulletBase extends Entity implements IProjectile
 		{
 			++this.ticksInAir;
 			tickFlying();
-			Vec3 vecPos = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-			Vec3 vecPosMotion = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			Vec3 vecPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			Vec3 vecPosMotion = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			MovingObjectPosition bulletMOP = this.worldObj.func_147447_a(vecPos, vecPosMotion, false, true, false);
-			vecPos = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-			vecPosMotion = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			vecPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			vecPosMotion = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
 			if (bulletMOP != null)
 			{
-				vecPosMotion = this.worldObj.getWorldVec3Pool().getVecFromPool(bulletMOP.hitVec.xCoord, bulletMOP.hitVec.yCoord, bulletMOP.hitVec.zCoord);
+				vecPosMotion = Vec3.createVectorHelper(bulletMOP.hitVec.xCoord, bulletMOP.hitVec.yCoord, bulletMOP.hitVec.zCoord);
 			}
 
 			Entity entityHit = null;
-			List entitiesInAABBExThis = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+			List<?> entitiesInAABBExThis = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
 			double var7 = 0.0D;
-			Iterator entitiesInAABBExThisIterator = entitiesInAABBExThis.iterator();
+			Iterator<?> entitiesInAABBExThisIterator = entitiesInAABBExThis.iterator();
 
 			while (entitiesInAABBExThisIterator.hasNext())
 			{

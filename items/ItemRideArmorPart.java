@@ -2,12 +2,8 @@ package zornco.reploidcraftenv.items;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +11,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemRideArmorPart extends Item
 {
@@ -42,6 +40,8 @@ public class ItemRideArmorPart extends Item
 				+ "." + PartType.values()[par1ItemStack.getItemDamage()/PartType.getSize()].toString();
 	}*/
 
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
 
     /**
@@ -58,6 +58,8 @@ public class ItemRideArmorPart extends Item
         par3List.add(desc2);*/
     }
 
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
 
     /**

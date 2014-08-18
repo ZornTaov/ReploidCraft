@@ -85,6 +85,10 @@ public class EntityAIMetHide extends EntityAIBase {
         this.isHiding = par1;
     }
 
+	public boolean isHiding() {
+		return isHiding;
+	}
+
 	public void enable(boolean b) {
 		this.enabled = b; 
 	}

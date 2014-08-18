@@ -237,7 +237,7 @@ public class EntityMet extends EntityTameable {
 				}
 			}
 			//make me sit
-			if (par1EntityPlayer.getGameProfile().getName().equalsIgnoreCase(this.getOwnerName()) && !this.worldObj.isRemote && !this.isWheat(var2))
+			if (this.func_152114_e(par1EntityPlayer) && !this.worldObj.isRemote && !this.isWheat(var2))
 			{
 				this.aiSit.setSitting(!this.isSitting());
 				this.isJumping = false;
@@ -267,7 +267,7 @@ public class EntityMet extends EntityTameable {
 					this.aiMetHide.setHiding(false);
 					this.aiSit.setSitting(true);
 					this.setHealth(20);
-					this.setOwner(par1EntityPlayer.getGameProfile().getName());
+                    this.func_152115_b(par1EntityPlayer.getUniqueID().toString());
 					this.playTameEffect(true);
 					this.worldObj.setEntityState(this, (byte)7);
 				}
@@ -406,7 +406,7 @@ public class EntityMet extends EntityTameable {
 	public void onUpdate()
 	{
 
-		boolean hat = getIsHatNotWorn();
+		//boolean hat = getIsHatNotWorn();
 		float halfhp = (getMaxHealth()/2)+1;
 		if(this.getHealth() < halfhp)
 			this.setIsHatWorn(true);

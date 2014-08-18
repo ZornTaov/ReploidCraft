@@ -65,7 +65,7 @@ public class EntityMetBullet extends EntityBulletBase {
 	}
 
 	public double getDamage() {
-		double v = this.getSpeed();
+		//double v = this.getSpeed();
 		double damage = 2/*Math.floor(v * damageFactor)*/;
 		//System.out.format("%.2f -> %d", v, damage);
 		return damage;

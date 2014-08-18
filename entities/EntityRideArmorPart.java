@@ -1,12 +1,8 @@
 package zornco.reploidcraftenv.entities;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.parts.PartSlot;
 //import zornco.reploidcraftenv.entities.parts.SharedPartsAttributes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -16,8 +12,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.entities.parts.PartSlot;
 
 public class EntityRideArmorPart extends EntityDragonPart {
 
@@ -26,6 +24,10 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	protected float offsetX = 0.0F;
 	protected float offsetY = 0.0F;
 	protected float offsetZ = 0.0F;
+	public int maxHurtResistantTime = 20;
+	public float lastDamage;
+	public float prevHealth;
+	public int hurtTime;
 	public EntityRideArmorPart(IEntityMultiPart par1iEntityMultiPart, PartSlot name) {
 		this(par1iEntityMultiPart, "EMPTY", name);
 	}
@@ -52,7 +54,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 
 	protected void entityInit() {
 		this.dataWatcher.addObject(6, Float.valueOf(1.0F));
-        this.dataWatcher.addObject(20, String.valueOf(""));
+		this.dataWatcher.addObject(20, String.valueOf(""));
 	}
 
 	public float[] getOffsetsPos() {
@@ -75,9 +77,19 @@ public class EntityRideArmorPart extends EntityDragonPart {
 				this.height = size[1];
 			}
 		}
-		
-	}
 
+	}
+	/**
+	 * Deals damage to the entity. If its a EntityPlayer then will take damage from the armor first and then health
+	 * second with the reduced value. Args: damageAmount
+	 */
+	protected void damageEntity(DamageSource p_70665_1_, float p_70665_2_)
+	{
+		if (!this.isEntityInvulnerable())
+		{
+			this.setHealth(this.getHealth() - p_70665_2_);
+		}
+	}
 	public float[] getSize()
 	{
 		return ReploidCraftEnv.proxy.partRegistry.getPart(getType(), slot).getSize();
@@ -127,7 +139,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	{
 		//IAttributeInstance Hp = this.getEntityAttribute(SharedPartsAttributes.maxHealth);
 		//return Hp != null ? (float)Hp.getAttributeValue():20.0F;
-		return 20.0F;
+		return ReploidCraftEnv.proxy.partRegistry.getPart(this.getType(), slot).getMaxHealth();
 	}
 
 	public IAttributeInstance getEntityAttribute(IAttribute par1Attribute)
@@ -148,45 +160,50 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	/**
 	 * (abstract) Protected helper method to read subclass entity data from NBT.
 	 */
-	 protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
-		 this.setType(par1NBTTagCompound.getString("type"));
-		 this.setSize(par1NBTTagCompound.getFloat("width"), par1NBTTagCompound.getFloat("height"));
+	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
+		this.setType(par1NBTTagCompound.getString("type"));
+		this.setSize(par1NBTTagCompound.getFloat("width"), par1NBTTagCompound.getFloat("height"));
 
-	 }
+	}
 
-	 @Override
-	 public String toString() {
-		 NBTTagCompound tags = new NBTTagCompound();
-		 writeEntityToNBT(tags);
-		 return tags.toString();
-	 }
+	@Override
+	public String toString() {
+		NBTTagCompound tags = new NBTTagCompound();
+		writeEntityToNBT(tags);
+		return tags.toString();
+	}
 
-	 /**
-	  * (abstract) Protected helper method to write subclass entity data to NBT.
-	  */
-	 protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
-		 par1NBTTagCompound.setString("type", getType().toString());
-		 par1NBTTagCompound.setFloat("height", height);
-		 par1NBTTagCompound.setFloat("width", width);
+	/**
+	 * (abstract) Protected helper method to write subclass entity data to NBT.
+	 */
+	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
+		par1NBTTagCompound.setString("type", getType().toString());
+		par1NBTTagCompound.setFloat("height", height);
+		par1NBTTagCompound.setFloat("width", width);
 
-	 }
+	}
 
-	 @Override
-	 public boolean interactFirst(EntityPlayer par1EntityPlayer) {
-		 ItemStack itemstack = par1EntityPlayer.inventory.getCurrentItem();
-		 if (par1EntityPlayer.isSneaking())
-		 {
-			 if (itemstack != null)
-			 {
-				 boolean flag = false;
+	@Override
+	public boolean interactFirst(EntityPlayer par1EntityPlayer) {
+		ItemStack itemstack = par1EntityPlayer.inventory.getCurrentItem();
 
-				 if (itemstack.getItem() == Items.wheat)
-				 {
-					 ((EntityRideArmor) this.entityDragonObj).setPart(this.slot, "RED");
-				 }
-			 }
-			 return true;
-		 }
-		 return ((Entity) entityDragonObj).interactFirst(par1EntityPlayer);
-	 }
+		boolean flag = true;
+		if (par1EntityPlayer.isSneaking())
+		{
+			if (itemstack != null)
+			{
+				if (itemstack.getItem() == Items.iron_ingot)//placeholder for something the a player can do to the armer with a held item
+				{
+					this.heal(1.0F);
+					flag = false;
+				}
+			}
+		}
+		if (flag)
+		{
+			((EntityRideArmor) this.entityDragonObj).doMechAttackRight(par1EntityPlayer);
+		}
+		return flag && ((Entity) entityDragonObj).interactFirst(par1EntityPlayer);
+
+	}
 }

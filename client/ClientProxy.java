@@ -26,10 +26,10 @@ import zornco.reploidcraftenv.client.renderers.RenderRideArmor;
 import zornco.reploidcraftenv.client.renderers.TileEntityItemHolderRenderer;
 import zornco.reploidcraftenv.client.renderers.TileEntityMechBayRenderer;
 import zornco.reploidcraftenv.core.CommonProxy;
+import zornco.reploidcraftenv.core.Config;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityMet;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.network.PacketPipeline;
 import zornco.reploidcraftenv.network.PacketRideArmor;
 import zornco.reploidcraftenv.sounds.Sounds;
 import zornco.reploidcraftenv.utils.RiderState;
@@ -66,8 +66,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMetBullet.class, new RenderBulletBase()); 
 		RenderingRegistry.registerEntityRenderingHandler(EntityRideArmor.class, new RenderRideArmor()); 
 
-		ReploidCraftEnv.config.spikesRI = RenderingRegistry.getNextAvailableRenderId();
-		ReploidCraftEnv.config.bossDoorRI = RenderingRegistry.getNextAvailableRenderId();
+		Config.spikesRI = RenderingRegistry.getNextAvailableRenderId();
+		Config.bossDoorRI = RenderingRegistry.getNextAvailableRenderId();
 
 		RenderingRegistry.registerBlockHandler(new BlockSpikesRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockBossDoorRenderer());

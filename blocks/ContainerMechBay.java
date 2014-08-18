@@ -10,11 +10,9 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerMechBay extends Container {
 	private TileEntityMechBay mechBay;
-	private InventoryPlayer ip;
 	public ContainerMechBay(TileEntityMechBay tileEntity, InventoryPlayer ip) {
 		this.mechBay = tileEntity;
 		this.mechBay.eventHandler = this;
-		this.ip = ip;
 		this.addSlotToContainer(new SlotCrafting(ip.player, this.mechBay, this.mechBay, 0, 124, 35));
         int l;
         int i1;

@@ -1,6 +1,12 @@
 package zornco.reploidcraftenv.core;
 
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.ContainerItemHolder;
 import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
@@ -8,18 +14,14 @@ import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.entities.parts.PartList;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
 import zornco.reploidcraftenv.entities.parts.PartsRegistry;
-import zornco.reploidcraftenv.entities.parts.green.*;
-import zornco.reploidcraftenv.entities.parts.red.*;
-import zornco.reploidcraftenv.network.PacketRideArmor;
+import zornco.reploidcraftenv.entities.parts.green.GreenArm;
+import zornco.reploidcraftenv.entities.parts.green.GreenBack;
+import zornco.reploidcraftenv.entities.parts.green.GreenBody;
+import zornco.reploidcraftenv.entities.parts.green.GreenLegs;
+import zornco.reploidcraftenv.entities.parts.red.RedBack;
 import zornco.reploidcraftenv.utils.RiderState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy implements IGuiHandler {

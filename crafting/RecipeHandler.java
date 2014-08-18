@@ -1,14 +1,12 @@
 package zornco.reploidcraftenv.crafting;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import zornco.reploidcraftenv.ReploidCraftEnv;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeHandler {
@@ -108,10 +106,12 @@ public class RecipeHandler {
 		);*/
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void addOreRecipe(ItemStack output, Object[] input) {
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(output, new Object[] { Boolean.valueOf(true), input }));
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void addShapelessOreRecipe(ItemStack output, Object[] input)
 	{
 		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(output, input));

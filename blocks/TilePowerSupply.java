@@ -1,7 +1,6 @@
 package zornco.reploidcraftenv.blocks;
 
 import cofh.api.energy.IEnergyHandler;
-import cofh.api.tileentity.IEnergyInfo;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 

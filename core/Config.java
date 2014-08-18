@@ -19,15 +19,12 @@ import zornco.reploidcraftenv.entities.EntityMet;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.items.ItemComponent;
 import zornco.reploidcraftenv.items.ItemHPEnergy;
-import zornco.reploidcraftenv.items.ItemItemHolder;
 import zornco.reploidcraftenv.items.ItemPlatformPlacer;
 import zornco.reploidcraftenv.items.ItemReploidPlate;
 import zornco.reploidcraftenv.items.ItemRideArmorPlacer;
 import zornco.reploidcraftenv.items.ItemTank;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Config {
 	//ID's

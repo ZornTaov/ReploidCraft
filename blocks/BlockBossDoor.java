@@ -4,7 +4,6 @@ package zornco.reploidcraftenv.blocks;
 
 import java.util.Random;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +15,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import zornco.reploidcraftenv.core.Config;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -152,7 +152,7 @@ public class BlockBossDoor extends Block
      */
 	public int getRenderType()
 	{
-		return ReploidCraftEnv.config.bossDoorRI;
+		return Config.bossDoorRI;
 	}
 
     @SideOnly(Side.CLIENT)
@@ -362,7 +362,7 @@ public class BlockBossDoor extends Block
                 var7 = true;
             }
 
-            if (!par1World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4))
+            if (!World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4))
             {
                 par1World.setBlockToAir(par2, par3, par4);
                 var7 = true;
@@ -428,7 +428,7 @@ public class BlockBossDoor extends Block
      */
     public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
-        return par3 >= 255 ? false : par1World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4) && super.canPlaceBlockAt(par1World, par2, par3, par4) && super.canPlaceBlockAt(par1World, par2, par3 + 1, par4);
+        return par3 >= 255 ? false : World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4) && super.canPlaceBlockAt(par1World, par2, par3, par4) && super.canPlaceBlockAt(par1World, par2, par3 + 1, par4);
     }
 
     /**

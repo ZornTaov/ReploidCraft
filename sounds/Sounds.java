@@ -1,13 +1,8 @@
 package zornco.reploidcraftenv.sounds;
 
-import java.io.File;
-import java.util.logging.Level;
-
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class Sounds {

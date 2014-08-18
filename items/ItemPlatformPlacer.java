@@ -40,11 +40,11 @@ public class ItemPlatformPlacer extends Item {
             par4 += Facing.offsetsXForSide[par7];
             par5 += Facing.offsetsYForSide[par7];
             par6 += Facing.offsetsZForSide[par7];
-            double var12 = 0.0D;
+            //double var12 = 0.0D;
 
             if (par7 == 1 && var11 != null && var11.getRenderType() == 11)
             {
-                var12 = 0.5D;
+                //var12 = 0.5D;
             }
 
             EntityFloatingPlatform platform = new EntityFloatingPlatform(par3World, (double)((float)par4 + 0.5F), (double)((float)par5 + 1.0F), (double)((float)par6 + 0.5F));

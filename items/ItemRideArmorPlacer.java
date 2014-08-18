@@ -1,7 +1,5 @@
 package zornco.reploidcraftenv.items;
 
-import java.util.HashMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,9 +10,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.EntityRideArmorPart;
 import zornco.reploidcraftenv.entities.parts.PartSlot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -46,11 +42,11 @@ public class ItemRideArmorPlacer extends Item {
 			par4 += Facing.offsetsXForSide[par7];
 			par5 += Facing.offsetsYForSide[par7];
 			par6 += Facing.offsetsZForSide[par7];
-			double var12 = 0.0D;
+			//double var12 = 0.0D;
 
 			if (par7 == 1 && var11 != null && var11.getRenderType() == 11)
 			{
-				var12 = 0.5D;
+				//var12 = 0.5D;
 			}
 
 			EntityRideArmor rideArmor = new EntityRideArmor(par3World, (double)((float)par4 + 0.5F), (double)((float)par5 + 0.0F), (double)((float)par6 + 0.5F));

@@ -14,19 +14,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemReploidPlate extends Item {
 
-	 /** List of dye color names */
-    public static final String[] plateColorNames = new String[] {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "Enhanced", "Basic"};
-    public static final int[] chipColors = new int[] {1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320, 2651799};
+	/** List of dye color names */
+	public static final String[] plateColorNames = new String[] {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "Enhanced", "Basic"};
+	public static final int[] chipColors = new int[] {1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320, 2651799};
 
 	private IIcon iconPlate;
-    public static final int typeAmmount = 17;
-    public ItemReploidPlate()
-    {
-        super();
-        this.setHasSubtypes(true);
-        this.setMaxDamage(0);
+	public static final int typeAmmount = 17;
+	public ItemReploidPlate()
+	{
+		super();
+		this.setHasSubtypes(true);
+		this.setMaxDamage(0);
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
-    }
+	}
 
 	/**
 	 * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
@@ -39,35 +39,36 @@ public class ItemReploidPlate extends Item {
 	}
 
 	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister)
-    {
-            this.iconPlate = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":reploidPlate");
-    }
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister par1IconRegister)
+	{
+		this.iconPlate = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":reploidPlate");
+	}
 
-    @SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 
-    /**
-     * Gets an icon index based on an item's damage value
-     */
-    public IIcon getIconFromDamage(int par1)
-    {
-        return this.iconPlate;
-    }
+	/**
+	 * Gets an icon index based on an item's damage value
+	 */
+	public IIcon getIconFromDamage(int par1)
+	{
+		return this.iconPlate;
+	}
 
-    @SideOnly(Side.CLIENT)
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SideOnly(Side.CLIENT)
 
-    /**
-     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
-     */
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int var4 = 0; var4 < typeAmmount; ++var4)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
-    }
-    public int getColorFromItemStack(ItemStack par1, int par2)
+	/**
+	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
+	 */
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
+	{
+		for (int var4 = 0; var4 < typeAmmount; ++var4)
+		{
+			par3List.add(new ItemStack(par1, 1, var4));
+		}
+	}
+	public int getColorFromItemStack(ItemStack par1, int par2)
 	{
 		/*if(par1 != 0)
 		{
@@ -87,6 +88,6 @@ public class ItemReploidPlate extends Item {
 		}
 		System.out.println("getColorFromDamage par1 is not 0");
 		return 0xFF00FF;*/
-    	return chipColors[par1.getItemDamage()];
+		return chipColors[par1.getItemDamage()];
 	}
 }

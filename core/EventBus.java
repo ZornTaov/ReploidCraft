@@ -1,29 +1,17 @@
 package zornco.reploidcraftenv.core;
 
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityDragonPart;
-import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.items.ItemHPEnergy;
 import zornco.reploidcraftenv.items.ItemTank;
 import zornco.reploidcraftenv.sounds.Sounds;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 /**
  * Name and cast of this class are irrelevant
  */

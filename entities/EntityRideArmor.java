@@ -1,36 +1,15 @@
 package zornco.reploidcraftenv.entities;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.parts.IPartArm;
-import zornco.reploidcraftenv.entities.parts.IPartBack;
-import zornco.reploidcraftenv.entities.parts.IPartLegs;
-import zornco.reploidcraftenv.entities.parts.PartSlot;
-import zornco.reploidcraftenv.utils.RiderState;
 import static zornco.reploidcraftenv.entities.parts.PartSlot.*;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import java.util.Iterator;
-import java.util.List;
-
-import scala.reflect.internal.Trees.This;
-import scala.util.parsing.combinator.PackratParsers.Head;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -48,12 +27,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.entities.parts.IPartArm;
+import zornco.reploidcraftenv.entities.parts.IPartBack;
+import zornco.reploidcraftenv.entities.parts.IPartLegs;
+import zornco.reploidcraftenv.entities.parts.PartSlot;
+import zornco.reploidcraftenv.utils.RiderState;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntityMultiPart {
@@ -72,27 +57,27 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	public RiderState riderState;
 
 	private static final IAttribute mechJumpStrength = (new RangedAttribute("mech.jumpStrength", 0.7D, 0.0D, 2.0D)).setDescription("Jump Strength").setShouldWatch(true);
-	private static final String[] mechArmorTextures = new String[] {null, "textures/entity/mech/armor/mech_armor_iron.png", "textures/entity/mech/armor/mech_armor_gold.png", "textures/entity/mech/armor/mech_armor_diamond.png"};
-	private static final String[] mechTextures = new String[] {"textures/entity/mech/mech_white.png", "textures/entity/mech/mech_creamy.png", "textures/entity/mech/mech_chestnut.png", "textures/entity/mech/mech_brown.png", "textures/entity/mech/mech_black.png", "textures/entity/mech/mech_gray.png", "textures/entity/mech/mech_darkbrown.png"};
+	//private static final String[] mechArmorTextures = new String[] {null, "textures/entity/mech/armor/mech_armor_iron.png", "textures/entity/mech/armor/mech_armor_gold.png", "textures/entity/mech/armor/mech_armor_diamond.png"};
+	//private static final String[] mechTextures = new String[] {"textures/entity/mech/mech_white.png", "textures/entity/mech/mech_creamy.png", "textures/entity/mech/mech_chestnut.png", "textures/entity/mech/mech_brown.png", "textures/entity/mech/mech_black.png", "textures/entity/mech/mech_gray.png", "textures/entity/mech/mech_darkbrown.png"};
 
-	private int jumpRearingCounter;
+	//private int jumpRearingCounter;
 	public int field_110278_bp;
 	public int field_110279_bq;
 	protected boolean mechJumping;
 	private AnimalChest mechChest;
 	protected float jumpPower;
-	private boolean field_110294_bI;
+	//private boolean field_110294_bI;
 
-	private float headLean;
-	private float prevHeadLean;
-	private float rearingAmount;
-	private float prevRearingAmount;
-	private float mouthOpenness;
-	private float prevMouthOpenness;
+	//private float headLean;
+	//private float prevHeadLean;
+	//private float rearingAmount;
+	//private float prevRearingAmount;
+	//private float mouthOpenness;
+	//private float prevMouthOpenness;
 
-	private int field_110285_bP;
-	private String field_110286_bQ;
-	private String[] field_110280_bR = new String[3];
+	//private int field_110285_bP;
+	//private String field_110286_bQ;
+	//private String[] field_110280_bR = new String[3];
 	private String debug = "";
 
 	public EntityRideArmor(World par1World)
@@ -425,13 +410,14 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		else return false;
 	}
 
-	public boolean doMechAttackRight()
+	public boolean doMechAttackRight(Entity par1)
 	{
-		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT) instanceof IPartArm)
-		{
-			return ((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT)).doAttack(this);
-		}
-		else return false;
+		if(par1 == this.riddenByEntity)
+			if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT) instanceof IPartArm)
+			{
+				return ((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT)).doAttack(this);
+			}
+		return false;
 	}
 	
 	public void doMechParticle(Entity mech, PartSlot slot)
@@ -458,8 +444,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	protected Item getDropItem()
 	{
-		boolean flag = this.rand.nextInt(4) == 0;
-		int i = this.getMechType();
+		//boolean flag = this.rand.nextInt(4) == 0;
+		//int i = this.getMechType();
 		return ReploidCraftEnv.rideArmorPlacer;
 	}
 
@@ -789,7 +775,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			}
 		}
 
-		this.prevHeadLean = this.headLean;
+		//this.prevHeadLean = this.headLean;
 
 		/*if (this.isEatingHaystack())
 		{
@@ -810,7 +796,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			}
 		}*/
 
-		this.prevRearingAmount = this.rearingAmount;
+		/*this.prevRearingAmount = this.rearingAmount;
 
 		if (this.isRearing())
 		{
@@ -852,7 +838,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			{
 				this.mouthOpenness = 0.0F;
 			}
-		}
+		}*/
 		if(this.riddenByEntity != null)
 			ReploidCraftEnv.proxy.updateRiderState(this, this.riddenByEntity);
 		//if(!this.worldObj.isRemote)this.rideArmorParts[5].setType(GREEN);
@@ -905,7 +891,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		if (!this.worldObj.isRemote)
 		{
-			this.jumpRearingCounter = 1;
+			//this.jumpRearingCounter = 1;
 			this.setRearing(true);
 		}
 	}
@@ -963,7 +949,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				if (par2 <= 0.0F)
 				{
 					par2 *= 0.5F;
-					this.field_110285_bP = 0;
+					//this.field_110285_bP = 0;
 				}
 
 				/*if (this.onGround && this.jumpPower == 0.0F && this.isRearing() && !this.field_110294_bI)
@@ -1237,7 +1223,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		}
 		else
 		{
-			this.field_110294_bI = true;
+			//this.field_110294_bI = true;
 			this.makeMechRear();
 		}
 
@@ -1351,57 +1337,80 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	@Override
 	public boolean attackEntityFromPart(EntityDragonPart var1, DamageSource var2, float var3) {
-
+		
 		EntityRideArmorPart part = (EntityRideArmorPart)var1;
+		if (part.getHealth() <= 0.0F)
+        {
+            return false;
+        }
+		if ((float)part.hurtResistantTime > (float)part.maxHurtResistantTime / 2.0F)
+        {
+            if (var3 <= part.lastDamage)
+            {
+                return false;
+            }
+
+            part.damageEntity(var2, var3 - part.lastDamage);
+            part.lastDamage = var3;
+        }
+        else
+        {
+        	part.lastDamage = var3;
+        	part.prevHealth = part.getHealth();
+        	part.hurtResistantTime = part.maxHurtResistantTime;
+        	part.damageEntity(var2, var3);
+        	part.hurtTime = this.maxHurtTime = 10;
+        }
 		//System.out.println("hit on the " + part.getName() + FMLCommonHandler.instance().getEffectiveSide());
-		if(part.getName() == ARMLEFT && hasPart(ARMLEFT))
+		if(part.getHealth() <= 0.0F)
 		{
-			this.rideArmorArmLeft.setType("EMPTY");
-			//this.rideArmorPartsMap.get("armLeft").setDead();
-			return true;
-		}
-		if(part.getName() == ARMRIGHT && hasPart(ARMRIGHT))
-		{
-			this.rideArmorArmRight.setType("EMPTY");
-			//this.rideArmorPartsMap.get("armLeft").setDead();
-			return true;
-		}
-		if(part.getName() == BACK && hasPart(BACK))
-		{
-			this.rideArmorBack.setType("EMPTY");
-			//this.rideArmorPartsMap.get("armLeft").setDead();
-			return true;
-		}
-		if(part.getName() == HEAD)
-		{
-			if(this.riddenByEntity != null && var2.getEntity() != this.riddenByEntity)
+			if(part.getName() == ARMLEFT && hasPart(ARMLEFT))
 			{
-				this.riddenByEntity.attackEntityFrom(var2, var3);
+				this.rideArmorArmLeft.setType("EMPTY");
 				return true;
 			}
-			else if(var2.getEntity() == this.riddenByEntity)
+			if(part.getName() == ARMRIGHT && hasPart(ARMRIGHT))
 			{
-				doMechAttackLeft();
+				this.rideArmorArmRight.setType("EMPTY");
 				return true;
 			}
-		}
+			if(part.getName() == BACK && hasPart(BACK))
+			{
+				this.rideArmorBack.setType("EMPTY");
+				return true;
+			}
+			if(part.getName() == HEAD)
+			{
+				if(this.riddenByEntity != null && var2.getEntity() != this.riddenByEntity)
+				{
+					this.riddenByEntity.attackEntityFrom(var2, var3);
+					return true;
+				}
+				else if(var2.getEntity() == this.riddenByEntity)
+				{
+					doMechAttackLeft();
+					return true;
+				}
+			}
 
-		if(part.getName() == BODY)
-		{
-			if(this.riddenByEntity != null && var2.getEntity() == this.riddenByEntity)
+			if(part.getName() == BODY)
 			{
-				doMechAttackLeft();
-				return true;
+				if(this.riddenByEntity != null && var2.getEntity() == this.riddenByEntity)
+				{
+					doMechAttackLeft();
+					return true;
+				}
+				return this.attackEntityFrom2(var2, var3);
 			}
-			return this.attackEntityFrom2(var2, var3);
-		}
 
-		if(part.getName() == LEGS)
-		{
-			//effect legs
-			this.rideArmorFeet.setType("EMPTY");
-			//return this.attackEntityFrom2(var2, var3);
+			if(part.getName() == LEGS)
+			{
+				//effect legs
+				this.rideArmorFeet.setType("EMPTY");
+				//return this.attackEntityFrom2(var2, var3);
+			}
 		}
+		
 		return false;
 	}
 

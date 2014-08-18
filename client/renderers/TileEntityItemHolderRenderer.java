@@ -1,10 +1,10 @@
 package zornco.reploidcraftenv.client.renderers;
 
-import java.util.*;
-
-import org.lwjgl.opengl.GLContext;
-
-import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
@@ -13,24 +13,19 @@ import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.primitives.SignedBytes;
+import java.util.Random;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
+
+import com.google.common.primitives.SignedBytes;
 
 public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 
@@ -38,7 +33,7 @@ public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 
 	private Random random;
 
-	private RenderBlocks renderBlocks;
+	//private RenderBlocks renderBlocks;
 
 	private RenderItem itemRenderer;
 
@@ -48,7 +43,7 @@ public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 	{
 		model = new ModelItemHolder();
 		random = new Random();
-		renderBlocks = new RenderBlocks();
+		//renderBlocks = new RenderBlocks();
 		itemRenderer = new RenderItem() {
 			@Override
 			public byte getMiniBlockCount(ItemStack stack, byte original) {

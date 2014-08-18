@@ -7,7 +7,6 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -96,7 +95,7 @@ public class EntityFloatingPlatform extends Entity
 			double targetPosY = this.currentFlightTargets.get(getPointPosition()).posY;
 			double targetPosZ = this.currentFlightTargets.get(getPointPosition()).posZ;
 			//ReploidCraft.logger.warning("" + targetPosX + " " + targetPosY + " " + targetPosZ);
-			float speed = this.currentFlightTargets.get(getPointPosition()).speed;
+			//float speed = this.currentFlightTargets.get(getPointPosition()).speed;
 			double delta_x = targetPosX - this.prevFlightTarget.posX;
 			double delta_y = targetPosY - this.prevFlightTarget.posY;
 			double delta_z = targetPosZ - this.prevFlightTarget.posZ;
@@ -124,8 +123,7 @@ public class EntityFloatingPlatform extends Entity
 			double nextPosX = lerp(this.prevFlightTarget.posX, targetPosX, time, timeSinceStart);
 			double nextPosY = lerp(this.prevFlightTarget.posY, targetPosY, time, timeSinceStart);
 			double nextPosZ = lerp(this.prevFlightTarget.posZ, targetPosZ, time, timeSinceStart);
-			List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getAABBPool()
-					.getAABB(this.posX-0.5, this.posY, this.posZ-0.5, this.posX+0.5, this.posY + 0.50D, this.posZ+0.5));
+			List<?> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 
             for (int l = 0; l < list.size(); ++l)
             {
@@ -385,7 +383,7 @@ public class EntityFloatingPlatform extends Entity
 	{
 		nbttagcompound.setInteger("Point", this.getPointPosition());
 		NBTTagList nbttaglist = new NBTTagList();
-		Iterator it=currentFlightTargets.iterator();
+		Iterator<PlatformPathPoint> it=currentFlightTargets.iterator();
 		byte i = 0;
 		while(it.hasNext())
 		{

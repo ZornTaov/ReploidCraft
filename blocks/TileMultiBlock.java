@@ -1,7 +1,6 @@
 package zornco.reploidcraftenv.blocks;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileMultiBlock extends TileEntity {

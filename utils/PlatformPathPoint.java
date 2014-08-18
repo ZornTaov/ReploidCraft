@@ -1,8 +1,8 @@
 package zornco.reploidcraftenv.utils;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+@SuppressWarnings("rawtypes")
 public class PlatformPathPoint implements Comparable
 {
     public double posX;

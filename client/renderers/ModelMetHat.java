@@ -6,14 +6,13 @@
 
 package zornco.reploidcraftenv.client.renderers;
 
-import org.lwjgl.opengl.GL11;
-
-import zornco.reploidcraftenv.entities.EntityMet;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.src.*;
+
+import org.lwjgl.opengl.GL11;
+
+import zornco.reploidcraftenv.entities.EntityMet;
 public class ModelMetHat extends ModelBase
 {
 	//fields

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -262,6 +262,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 		return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 64D;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void updateEntity()
 	{
@@ -271,8 +272,8 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 		{
 			this.numUsingPlayers = 0;
 			float var1 = 5.0F;
-			List var2 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB((double)((float)this.xCoord - var1), (double)((float)this.yCoord - var1), (double)((float)this.zCoord - var1), (double)((float)(this.xCoord + 1) + var1), (double)((float)(this.yCoord + 1) + var1), (double)((float)(this.zCoord + 1) + var1)));
-			Iterator var3 = var2.iterator();
+			List<Entity> var2 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)((float)this.xCoord - var1), (double)((float)this.yCoord - var1), (double)((float)this.zCoord - var1), (double)((float)(this.xCoord + 1) + var1), (double)((float)(this.yCoord + 1) + var1), (double)((float)(this.zCoord + 1) + var1)));
+			Iterator<Entity> var3 = var2.iterator();
 
 			while (var3.hasNext())
 			{
@@ -326,8 +327,8 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 			float f2 = 0.5F;
 			if (lidAngle < f2 && f1 >= f2)
 			{
-				double d2 = (double) xCoord + 0.5D;
-				double d3 = (double) zCoord + 0.5D;
+				//double d2 = (double) xCoord + 0.5D;
+				//double d3 = (double) zCoord + 0.5D;
 				//worldObj.playSoundEffect(d2, (double) yCoord + 0.5D, d3, "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
 			}
 			if (lidAngle < 0.0F)
@@ -432,7 +433,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 		{
 			if (is != null)
 			{
-				sortList[pos++] = is.getItem().getIdFromItem(is.getItem());
+				sortList[pos++] = Item.getIdFromItem(is.getItem());
 				sortList[pos++] = is.getItemDamage();
 				sortList[pos++] = is.stackSize;
 			}

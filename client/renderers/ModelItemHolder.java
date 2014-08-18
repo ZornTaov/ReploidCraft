@@ -13,7 +13,6 @@ package zornco.reploidcraftenv.client.renderers;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelItemHolder extends ModelBase
 {

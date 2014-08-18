@@ -2,13 +2,9 @@ package zornco.reploidcraftenv.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.io.IOException;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
-import zornco.reploidcraftenv.utils.PlayerUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.PacketBuffer;
+import zornco.reploidcraftenv.utils.PlayerUtils;
+import cpw.mods.fml.common.network.ByteBufUtils;
 
 public class PacketItemHolder extends AbstractPacket {
 	public int windowId;

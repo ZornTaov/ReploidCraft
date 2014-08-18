@@ -41,23 +41,25 @@ public class ItemComponent extends Item {
 		return super.getUnlocalizedName() + "." + componentNames[i];
 	}
 
-    @SideOnly(Side.CLIENT)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@SideOnly(Side.CLIENT)
 
     /**
      * allows items to add custom lines of information to the mouseover description
      */
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
-    	String desc1 = this.componentDesc[par1ItemStack.getItemDamage()][0];
+    	String desc1 = ItemComponent.componentDesc[par1ItemStack.getItemDamage()][0];
     	if(!desc1.equals(""))
         par3List.add(desc1);
 
-    	String desc2 = this.componentDesc[par1ItemStack.getItemDamage()][1];
+    	String desc2 = ItemComponent.componentDesc[par1ItemStack.getItemDamage()][1];
     	if(!desc2.equals(""))
         par3List.add(desc2);
     }
 
-    @SideOnly(Side.CLIENT)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@SideOnly(Side.CLIENT)
 
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)

@@ -1,7 +1,7 @@
 package zornco.reploidcraftenv.blocks;
 
-import static net.minecraftforge.common.util.ForgeDirection.*;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.core.Config;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -14,7 +14,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSpikes extends Block {
 
@@ -57,7 +56,7 @@ public class BlockSpikes extends Block {
 	public void onNeighborBlockChange(World par1World, int x, int y, int z, int par5)
 	{
 
-		int valid = 0;
+		/*int valid = 0;
 
 		if (par1World.isSideSolid(x - 1, y, z, EAST) || par1World.getBlock(x - 1, y, z).getMaterial() == Material.piston)
 		{
@@ -87,7 +86,7 @@ public class BlockSpikes extends Block {
 		if (par1World.isSideSolid(x, y + 1, z, DOWN) || par1World.getBlock(x, y + 1, z).getMaterial() == Material.piston)
 		{
 			valid++;
-		}
+		}*/
 
 		/*if (valid == 0)
 		{
@@ -141,7 +140,7 @@ public class BlockSpikes extends Block {
 		}*/
 		//return AxisAlignedBB.getAABBPool().getAABB((double)((float)x + var9), (double)((float)y + var11), (double)((float)z + var13),(double)((float)x + var10), (double)((float)y + var12), (double)((float)z + var14));
 	    float f = 0.0625F;
-        return AxisAlignedBB.getAABBPool().getAABB(x + f, y + f, z + f, x + 1 - f, y + 1 - f, z + 1 - f);
+        return AxisAlignedBB.getBoundingBox(x + f, y + f, z + f, x + 1 - f, y + 1 - f, z + 1 - f);
     
 	}@SideOnly(Side.CLIENT)
 
@@ -151,7 +150,7 @@ public class BlockSpikes extends Block {
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
         float f = 0.0625F;
-        return AxisAlignedBB.getAABBPool().getAABB(par2 + f, par3 + f, par4 + f, par2 + 1 - f, par3 + 1 - f, par4 + 1 - f);
+        return AxisAlignedBB.getBoundingBox(par2 + f, par3 + f, par4 + f, par2 + 1 - f, par3 + 1 - f, par4 + 1 - f);
     }
 	/*public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
 	{
@@ -266,7 +265,7 @@ public class BlockSpikes extends Block {
 	 */
 	public int getRenderType()
 	{
-		return ReploidCraftEnv.config.spikesRI;
+		return Config.spikesRI;
 	}
 	@SideOnly(Side.CLIENT)
 
