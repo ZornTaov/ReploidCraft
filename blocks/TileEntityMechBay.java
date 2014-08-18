@@ -1,6 +1,8 @@
 package zornco.reploidcraftenv.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -8,12 +10,54 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public ItemStack[] inv = new ItemStack[11];
 	Container eventHandler;
-	
-	public Packet func_145844_m()
+	private int direction = 0;
+	private static final int[][] baseBlocks = new int[][] {
+		{ 0, 0, 0 }, { -1, 0, 0 }, { 1, 0, 0 }, { 0, 0, -1 }, { 0, 0, 1 }, { -1, 0, -1 }, { -1, 0, 1 }, { 1, 0, -1 }, { 1, 0, 1 }
+	};
+	private static final int[][] airBlocks = new int[][] {
+		{ -1, 0, -1 }, { -1, 0, 0 }, { -1, 0, 1 }, { 0, 0, -1 }, { 0, 0, 0 }, { 0, 0, 1 }, { 1, 0, -1 }, { 1, 0, 0 }, { 1, 0, 1 }
+	};
+	private static final int[][][] sideRotations = new int[][][] {
+
+		//North South
+		{
+			{ 2, 0, -1 }, { 2, 0, 0 }, { 2, 0, 1 }, { 2, 1, -1 }, { 2, 1, 0 },	{ 2, 1, 1 },
+			{ -2, 0, -1 }, { -2, 0, 0 }, { -2, 0, 1 }, { -2, 1, -1 }, { -2, 1, 0 }, { -2, 1, 1 }
+		},
+		//East West
+		{
+			{ -1, 0, -2 }, { 0, 0, -2 }, { 1, 0, -2 }, { -1, 1, -2 }, { 0, 1, -2 }, { 1, 1, -2 },
+			{ -1, 0, 2 }, { 0, 0, 2 }, { 1, 0, 2 }, { -1, 1, 2 }, { 0, 1, 2 }, { 1, 1, 2 }
+		}
+	};
+	private static final int[][][] backRotations = new int[][][] {
+		//North
+		{
+			{ -1, 0, -2 }, { 0, 0, -2 }, { 1, 0, -2 }, { -1, 1, -2 }, { 0, 1, -2 }, { 1, 1, -2 }, { -1, 2, -2 }, { 0, 2, -2 }, { 1, 2, -2 }
+		},
+		//South
+		{
+			{ -1, 0, 2 }, { 0, 0, 2 }, { 1, 0, 2 }, { -1, 1, 2 }, { 0, 1, 2 }, { 1, 1, 2 }, { -1, 2, 2 }, { 0, 2, 2 }, { 1, 2, 2 }
+		},
+		//West
+		{
+			{ -2, 0, -1 }, { -2, 0, 0 }, { -2, 0, 1 }, { -2, 1, -1 }, { -2, 1, 0 }, { -2, 1, 1 }, { -2, 2, -1 }, { -2, 2, 0 }, { -2, 2, 1 }
+		},
+		//East
+		{
+			{ 2, 0, -1 }, { 2, 0, 0 }, { 2, 0, 1 }, { 2, 1, -1 }, { 2, 1, 0 }, { 2, 1, 1 }, { 2, 2, -1 }, { 2, 2, 0 }, { 2, 2, 1 }
+		}
+	};
+	private static final int[][] backCheck = new int [][] {
+		{ 0, 2, -2 }, { 0, 2, 2 }, { -2, 2, 0 }, { 2, 2, 0 }
+	};
+
+	public Packet getDescriptionPacket()
 	{
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		masterWriteToNBT(nbttagcompound);
@@ -123,36 +167,157 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	@Override
 	public void doMultiBlockStuff() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public boolean checkMultiBlockForm() {
-		// TODO Auto-generated method stub
-		return false;
+		int dir = -1;
+		int checked = 0;
+		TileEntity tile;
+		for (int i = 0; i < backCheck.length; i++) {
+			if (worldObj.getTileEntity(this.xCoord + backCheck[i][0], this.yCoord + backCheck[i][1]+1, this.zCoord + backCheck[i][2]) instanceof TileEntityMechBay)
+			{
+				checked++;
+				dir = i;
+			}
+		}
+		if (checked != 1) {
+			//set invalid structure
+			return false;
+		}
+		for (int[] base : baseBlocks) {
+			tile = worldObj.getTileEntity(this.xCoord + base[0], this.yCoord + base[1], this.zCoord + base[2]);
+			if(!(tile instanceof TileEntityMechBay) )
+			{
+				return false;
+			}
+		}
+		for (int[] back : backRotations[dir])
+		{
+			tile = worldObj.getTileEntity(this.xCoord + back[0], this.yCoord + back[1]+1, this.zCoord + back[2]);
+			if(!(tile instanceof TileEntityMechBay) )
+			{
+				return false;
+			}
+		}
+		
+		for (int[] sides : sideRotations[dir / 2])
+		{
+			tile = worldObj.getTileEntity(this.xCoord + sides[0], this.yCoord + sides[1]+1, this.zCoord + sides[2]);
+			if(!(tile instanceof TileEntityMechBay) )
+			{
+				return false;
+			}
+		}
+		Block block;
+		for (int i = 0; i < 4; i++) {
+			for (int[] air : airBlocks) {
+				block = worldObj.getBlock(this.xCoord + air[0], this.yCoord + air[1] + i+1, this.zCoord + air[2]);
+				if( block != Blocks.air )
+				{
+					return false;
+				}
+			}
+		}
+		this.setDirection(dir);
+		return true;
 	}
-
+	
 	@Override
 	public void setupStructure() {
-		// TODO Auto-generated method stub
-		
+
+		TileEntity tile;
+		System.out.println(getDirection());
+		int i = 0;
+		for (int[] base : baseBlocks) {
+			tile = worldObj.getTileEntity(this.xCoord + base[0], this.yCoord + base[1], this.zCoord + base[2]);
+			i++;
+			boolean master = (this.xCoord + base[0] == xCoord && this.yCoord + base[1] == yCoord && this.zCoord + base[2] == zCoord);
+			if(tile != null && (tile instanceof TileEntityMechBay) )
+			{
+				((TileEntityMechBay) tile).setMasterCoords(xCoord, yCoord, zCoord);
+				((TileEntityMechBay) tile).setHasMaster(true);
+				((TileEntityMechBay) tile).setIsMaster(i == 1);
+				if(((TileEntityMechBay) tile).isMaster())System.out.println("ding");
+			}
+			else
+			{
+				System.out.println((this.xCoord + base[0]) + " " + (this.yCoord + base[1]) + " " + (this.zCoord + base[2]));
+			}
+		}
+		for (int[] back : backRotations[getDirection()])
+		{
+			tile = worldObj.getTileEntity(this.xCoord + back[0], this.yCoord + back[1]+1, this.zCoord + back[2]);
+			if(tile != null && (tile instanceof TileEntityMechBay) ){
+				((TileEntityMechBay) tile).setMasterCoords(xCoord, yCoord, zCoord);
+				((TileEntityMechBay) tile).setHasMaster(true);
+			}
+			else
+			{
+				System.out.println((this.xCoord + back[0]) + " " + (this.yCoord + back[1]) + " " + (this.zCoord + back[2]));
+			}
+		}
+		for (int[] sides : sideRotations[getDirection() / 2])
+		{
+			tile = worldObj.getTileEntity(this.xCoord + sides[0], this.yCoord + sides[1]+1, this.zCoord + sides[2]);
+			if(tile != null && (tile instanceof TileEntityMechBay) ){
+				((TileEntityMechBay) tile).setMasterCoords(xCoord, yCoord, zCoord);
+				((TileEntityMechBay) tile).setHasMaster(true);
+			}
+			else
+			{
+				System.out.println((this.xCoord + sides[0]) + " " + (this.yCoord + sides[1]) + " " + (this.zCoord + sides[2]));
+			}
+		}
+		System.out.println("done");
 	}
 
 	@Override
 	public void resetStructure() {
-		// TODO Auto-generated method stub
-		
+
+		TileEntity tile;
+
+		for (int[] base : baseBlocks) {
+			tile = worldObj.getTileEntity(this.xCoord + base[0], this.yCoord + base[1], this.zCoord + base[2]);
+
+			if(tile != null && !(tile instanceof TileEntityMechBay) )
+			{
+				((TileEntityMechBay) tile).reset();
+			}
+		}
+		for (int[] back : backRotations[getDirection()])
+		{
+			tile = worldObj.getTileEntity(this.xCoord + back[0], this.yCoord + back[1], this.zCoord + back[2]);
+			if(tile != null && !(tile instanceof TileEntityMechBay) ){
+				((TileEntityMechBay) tile).reset();
+			}
+		}
+		for (int[] sides : sideRotations[getDirection() / 2])
+		{
+			tile = worldObj.getTileEntity(this.xCoord + sides[0], this.yCoord + sides[1], this.zCoord + sides[2]);
+			if(tile != null && !(tile instanceof TileEntityMechBay) ){
+				((TileEntityMechBay) tile).reset();
+			}
+		}
 	}
 
 	@Override
 	public void masterWriteToNBT(NBTTagCompound tag) {
-		// TODO Auto-generated method stub
-		
+		tag.setByte("direction", (byte)getDirection());
 	}
 
 	@Override
 	public void masterReadFromNBT(NBTTagCompound tag) {
-		// TODO Auto-generated method stub
-		
+		setDirection(tag.getByte("direction"));
 	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
 }

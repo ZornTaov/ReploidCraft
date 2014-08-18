@@ -27,6 +27,7 @@ public abstract class TileMultiBlock extends TileEntity {
                     setupStructure();
             }
         }
+    	if (worldObj != null && worldObj.getWorldTime() % 20 == 0) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     /** Stuff the multiblock will do when formed */

@@ -61,6 +61,7 @@ public class ReploidCraftEnv {
 	public static Item component;
 	public static Item reploidPlate;
 	public static Item itemHolder;
+	public static Item debugger;
 
 	public static Item platformPlacer;
 	public static Item rideArmorPlacer;

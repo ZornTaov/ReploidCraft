@@ -1,15 +1,32 @@
 package zornco.reploidcraftenv.items;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import java.util.List;
+
+import zornco.reploidcraftenv.blocks.BlockMechBay;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemMultiTexture;
+import net.minecraft.item.ItemStack;
 
 public class ItemMechBay extends ItemMultiTexture {
 
-	public ItemMechBay(Block var1,
-			String[] var2) {
-		super(var1, var1, var2);
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
-	}
+	public ItemMechBay(Block var1){
+		super(var1, var1, BlockMechBay.names);
 
+		setMaxDamage(0);
+		setHasSubtypes(true);
+	}
+	public int getMetadata(int i)
+	{
+		return i;
+	}
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_,
+			List p_150895_3_) {
+		for (int ix = 0; ix <  BlockMechBay.names.length; ix++) {
+			p_150895_3_.add(new ItemStack(this, 1, ix));
+		}
+	}
 }

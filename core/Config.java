@@ -12,13 +12,17 @@ import zornco.reploidcraftenv.blocks.BlockMechBay;
 import zornco.reploidcraftenv.blocks.BlockSpikes;
 import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
+import zornco.reploidcraftenv.blocks.TileEntityMechBayController;
+import zornco.reploidcraftenv.blocks.TileEntityMechBayEnergy;
 import zornco.reploidcraftenv.bullets.EntityMetBullet;
 import zornco.reploidcraftenv.crafting.RecipeHandler;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityMet;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.items.ItemComponent;
+import zornco.reploidcraftenv.items.ItemDebugger;
 import zornco.reploidcraftenv.items.ItemHPEnergy;
+import zornco.reploidcraftenv.items.ItemMechBay;
 import zornco.reploidcraftenv.items.ItemPlatformPlacer;
 import zornco.reploidcraftenv.items.ItemReploidPlate;
 import zornco.reploidcraftenv.items.ItemRideArmorPlacer;
@@ -58,8 +62,10 @@ public class Config {
 		//GameRegistry.registerBlock(doorBossBlock, "doorBoss");
 		GameRegistry.registerBlock(ReploidCraftEnv.blockItemHolder, "itemHolder");
 		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
-		GameRegistry.registerBlock(ReploidCraftEnv.blockMechBay, "mechBay");
+		GameRegistry.registerBlock(ReploidCraftEnv.blockMechBay, ItemMechBay.class, "mechBay");
 		GameRegistry.registerTileEntity(TileEntityMechBay.class, "mechBay");
+		GameRegistry.registerTileEntity(TileEntityMechBayController.class, "mechBayController");
+		GameRegistry.registerTileEntity(TileEntityMechBayEnergy.class, "mechBayEnergy");
 	}
 	public void addItems() {
 		/** Items **/
@@ -75,6 +81,7 @@ public class Config {
 		ReploidCraftEnv.reploidPlate = new ItemReploidPlate().setUnlocalizedName("reploidPlate");
 		ReploidCraftEnv.component = new ItemComponent().setUnlocalizedName("component");
 		//ReploidCraftEnv.itemHolder = (new ItemItemHolder(itemHolderID)).setUnlocalizedName("holder").setTextureName("item_holder");
+		ReploidCraftEnv.debugger = new ItemDebugger().setUnlocalizedName("debugger");
 
 		ReploidCraftEnv.platformPlacer = new ItemPlatformPlacer().setUnlocalizedName("platformPlacer");
 		ReploidCraftEnv.rideArmorPlacer = new ItemRideArmorPlacer().setUnlocalizedName("rideArmorPlacer");
@@ -84,6 +91,7 @@ public class Config {
 		registerItem(ReploidCraftEnv.healthTank);
 		registerItem(ReploidCraftEnv.reploidPlate);
 		registerItem(ReploidCraftEnv.component);
+		registerItem(ReploidCraftEnv.debugger);
 		registerItem(ReploidCraftEnv.platformPlacer);
 		registerItem(ReploidCraftEnv.rideArmorPlacer);
 	}
