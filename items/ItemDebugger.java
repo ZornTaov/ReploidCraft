@@ -38,12 +38,12 @@ public class ItemDebugger extends Item {
 		if (tile != null) {
 			if (tile instanceof TileEntityMechBayEnergy) {
 				TileEntityMechBay tilebed = (TileEntityMechBay) tile;
-				ReploidCraftEnv.logger.info(tilebed.isMaster() + "2");
+				ReploidCraftEnv.logger.info(tilebed.hasMaster() + "2");
 				ReploidCraftEnv.logger.info(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ());
 			}
 			if (tile instanceof TileEntityMechBay) {
 				TileEntityMechBay tilebed = (TileEntityMechBay) tile;
-				ReploidCraftEnv.logger.info(tilebed.isMaster() + "1");
+				ReploidCraftEnv.logger.info(tilebed.hasMaster() + "1");
 				ReploidCraftEnv.logger.info(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ());
 			}
 		} else {

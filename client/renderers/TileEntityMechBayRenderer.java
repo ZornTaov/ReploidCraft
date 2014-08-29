@@ -1,10 +1,5 @@
 package zornco.reploidcraftenv.client.renderers;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
@@ -23,7 +18,7 @@ import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 
 public class TileEntityMechBayRenderer extends TileEntitySpecialRenderer {
 
-	protected static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraftenv","textures/blocks/MechBay.png");
+	protected static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraftenv","textures/blocks/ModelMechBay.png");
 	private ModelMechBay model;
 	public TileEntityMechBayRenderer() {
 		super();
@@ -34,7 +29,6 @@ public class TileEntityMechBayRenderer extends TileEntitySpecialRenderer {
 			return;
 		}
 		if (!tile.isMaster()) return;
-		System.out.println("a");
 		int facing = 3;
 		if (tile != null && tile.getWorldObj() != null) {
 			facing = tile.getDirection();
@@ -48,16 +42,16 @@ public class TileEntityMechBayRenderer extends TileEntitySpecialRenderer {
 		glTranslatef(0.5F, 0.5F, 0.5F);
 		int k = 0;
 		if (facing == 0) {
-			k = 180;
-		}
-		if (facing == 1) {
 			k = 0;
 		}
+		if (facing == 1) {
+			k = 180;
+		}
 		if (facing == 2) {
-			k = 90;
+			k = -90;
 		}
 		if (facing == 3) {
-			k = -90;
+			k = 90;
 		}
 		glRotatef(k, 0.0F, 1.0F, 0.0F);
 		//glTranslatef(-0.5F, -0.5F, -0.5F);

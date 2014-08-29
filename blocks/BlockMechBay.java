@@ -8,14 +8,18 @@ import zornco.reploidcraftenv.ReploidCraftEnv;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockMechBay extends Block implements ITileEntityProvider {
 
+	@SideOnly(Side.CLIENT)
+	protected IIcon[] blockIcons;
 	public static String[] names = {"basic", "controller", "power"};
 	public BlockMechBay() {
 		super(Material.iron);
@@ -39,16 +43,48 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
 			return new TileEntityMechBayController();
 		case 2:
 			return new TileEntityMechBayEnergy();
-			
+		case 0:
 		default:
 			return new TileEntityMechBay();	
 		}
 	}
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess p_149646_1_,
-			int p_149646_2_, int p_149646_3_, int p_149646_4_, int p_149646_5_) {
-		// TODO Auto-generated method stub
-		return super.shouldSideBeRendered(p_149646_1_, p_149646_2_, p_149646_3_,
-				p_149646_4_, p_149646_5_);
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
+	{
+		this.setBlockBounds(0, 0, 0, 1, 1, 1);
+	}
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) 
+	{
+		int[][] sideOffset = {{0,1,0},{0,-1,0},{0,0,1},{0,0,-1},{1,0,0},{-1,0,0}};
+		TileEntity tile = world.getTileEntity(x + sideOffset[side][0], y + sideOffset[side][1], z + sideOffset[side][2]);
+		if(tile != null && tile instanceof TileEntityMechBay)
+		{
+			if(((TileEntityMechBay)tile).hasMaster())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	public boolean isOpaqueCube()
+    {
+        return false;
+    }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+
+	/**
+	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+	 * is the only chance you get to register icons.
+	 */
+	public void registerBlockIcons(IIconRegister par1IconRegister)
+	{
+		this.blockIcons = new IIcon[] {par1IconRegister.registerIcon("reploidcraftenv:mechBay"), par1IconRegister.registerIcon("reploidcraftenv:mechBayController"), par1IconRegister.registerIcon("reploidcraftenv:mechBayEnergy")};
+	}
+	@Override
+	public IIcon getIcon(int side, int metadata) {
+		return blockIcons[metadata];
 	}
 }

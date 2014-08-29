@@ -1,21 +1,27 @@
 package zornco.reploidcraftenv.blocks;
 
+import java.util.List;
+
+import zornco.reploidcraftenv.entities.EntityRideArmor;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public ItemStack[] inv = new ItemStack[11];
 	Container eventHandler;
 	private int direction = 0;
+	private int[][] sideOffset = {{0,0,-1},{0,0,1},{-1,0,0},{1,0,0}};
+	private int[] rotations = {0, 180, -90, 90};
+	private EntityRideArmor myRide;
+	private boolean hasRide = false;
 	private static final int[][] baseBlocks = new int[][] {
 		{ 0, 0, 0 }, { -1, 0, 0 }, { 1, 0, 0 }, { 0, 0, -1 }, { 0, 0, 1 }, { -1, 0, -1 }, { -1, 0, 1 }, { 1, 0, -1 }, { 1, 0, 1 }
 	};
@@ -38,37 +44,32 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	private static final int[][][] backRotations = new int[][][] {
 		//North
 		{
-			{ -1, 0, -2 }, { 0, 0, -2 }, { 1, 0, -2 }, { -1, 1, -2 }, { 0, 1, -2 }, { 1, 1, -2 }, { -1, 2, -2 }, { 0, 2, -2 }, { 1, 2, -2 }
+			{ -2, 0, -2 }, { -1, 0, -2 }, { 0, 0, -2 }, { 1, 0, -2 }, { 2, 0, -2 }, 
+			{ -2, 1, -2 }, { -1, 1, -2 }, { 0, 1, -2 }, { 1, 1, -2 }, { 2, 1, -2 }, 
+			{ -2, 2, -2 }, { -1, 2, -2 }, { 0, 2, -2 }, { 1, 2, -2 }, { 2, 2, -2 }
 		},
 		//South
 		{
-			{ -1, 0, 2 }, { 0, 0, 2 }, { 1, 0, 2 }, { -1, 1, 2 }, { 0, 1, 2 }, { 1, 1, 2 }, { -1, 2, 2 }, { 0, 2, 2 }, { 1, 2, 2 }
+			{ -2, 0, 2 }, { -1, 0, 2 }, { 0, 0, 2 }, { 1, 0, 2 }, { 2, 0, 2 }, 
+			{ -2, 1, 2 }, { -1, 1, 2 }, { 0, 1, 2 }, { 1, 1, 2 }, { 2, 1, 2 }, 
+			{ -2, 2, 2 }, { -1, 2, 2 }, { 0, 2, 2 }, { 1, 2, 2 }, { 2, 2, 2 }
 		},
 		//West
 		{
-			{ -2, 0, -1 }, { -2, 0, 0 }, { -2, 0, 1 }, { -2, 1, -1 }, { -2, 1, 0 }, { -2, 1, 1 }, { -2, 2, -1 }, { -2, 2, 0 }, { -2, 2, 1 }
+			{ -2, 0, -2 }, { -2, 0, -1 }, { -2, 0, 0 }, { -2, 0, 1 }, { -2, 0, 2 }, 
+			{ -2, 1, -2 }, { -2, 1, -1 }, { -2, 1, 0 }, { -2, 1, 1 }, { -2, 1, 2 }, 
+			{ -2, 2, -2 }, { -2, 2, -1 }, { -2, 2, 0 }, { -2, 2, 1 }, { -2, 2, 2 }
 		},
 		//East
 		{
-			{ 2, 0, -1 }, { 2, 0, 0 }, { 2, 0, 1 }, { 2, 1, -1 }, { 2, 1, 0 }, { 2, 1, 1 }, { 2, 2, -1 }, { 2, 2, 0 }, { 2, 2, 1 }
+			{ 2, 0, -2 }, { 2, 0, -1 }, { 2, 0, 0 }, { 2, 0, 1 }, { 2, 0, 2 }, 
+			{ 2, 1, -2 }, { 2, 1, -1 }, { 2, 1, 0 }, { 2, 1, 1 }, { 2, 1, 2 }, 
+			{ 2, 2, -2 }, { 2, 2, -1 }, { 2, 2, 0 }, { 2, 2, 1 }, { 2, 2, 2 }
 		}
 	};
 	private static final int[][] backCheck = new int [][] {
 		{ 0, 2, -2 }, { 0, 2, 2 }, { -2, 2, 0 }, { 2, 2, 0 }
 	};
-
-	public Packet getDescriptionPacket()
-	{
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		masterWriteToNBT(nbttagcompound);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 3, nbttagcompound);
-	}
-
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-	{
-		super.onDataPacket(net, pkt);
-		masterReadFromNBT(pkt.func_148857_g());
-	}
 
 	@Override
 	public int getSizeInventory() {
@@ -166,8 +167,26 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 
 	@Override
 	public void doMultiBlockStuff() {
-		// TODO Auto-generated method stub
 
+		List<Entity> list = this.worldObj.getEntitiesWithinAABB(EntityRideArmor.class, getRenderBoundingBox());
+		if(!hasRide)
+		{
+			
+			for (Entity entity : list) {
+				if(entity.riddenByEntity == null)
+				{
+					myRide = ((EntityRideArmor)entity);
+					hasRide = true;
+				}
+				break; //only need the one
+			}
+		}
+		else
+		{
+			if(list.isEmpty() || myRide.riddenByEntity != null) hasRide = false;
+			myRide.setLocationAndAngles(this.xCoord + 0.5F, this.yCoord + 1F, this.zCoord + 0.5F, rotations[direction], 0);
+		}
+		
 	}
 
 	@Override
@@ -233,7 +252,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		for (int[] base : baseBlocks) {
 			tile = worldObj.getTileEntity(this.xCoord + base[0], this.yCoord + base[1], this.zCoord + base[2]);
 			i++;
-			boolean master = (this.xCoord + base[0] == xCoord && this.yCoord + base[1] == yCoord && this.zCoord + base[2] == zCoord);
+			//boolean master = (this.xCoord + base[0] == xCoord && this.yCoord + base[1] == yCoord && this.zCoord + base[2] == zCoord);
 			if(tile != null && (tile instanceof TileEntityMechBay) )
 			{
 				((TileEntityMechBay) tile).setMasterCoords(xCoord, yCoord, zCoord);
@@ -281,27 +300,32 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		for (int[] base : baseBlocks) {
 			tile = worldObj.getTileEntity(this.xCoord + base[0], this.yCoord + base[1], this.zCoord + base[2]);
 
-			if(tile != null && !(tile instanceof TileEntityMechBay) )
+			if(tile != null && (tile instanceof TileEntityMechBay) )
 			{
 				((TileEntityMechBay) tile).reset();
+				((TileEntityMechBay) tile).hasRide = false;
 			}
 		}
 		for (int[] back : backRotations[getDirection()])
 		{
-			tile = worldObj.getTileEntity(this.xCoord + back[0], this.yCoord + back[1], this.zCoord + back[2]);
-			if(tile != null && !(tile instanceof TileEntityMechBay) ){
+			tile = worldObj.getTileEntity(this.xCoord + back[0], this.yCoord + back[1]+1, this.zCoord + back[2]);
+			if(tile != null && (tile instanceof TileEntityMechBay) ){
 				((TileEntityMechBay) tile).reset();
 			}
 		}
 		for (int[] sides : sideRotations[getDirection() / 2])
 		{
-			tile = worldObj.getTileEntity(this.xCoord + sides[0], this.yCoord + sides[1], this.zCoord + sides[2]);
-			if(tile != null && !(tile instanceof TileEntityMechBay) ){
+			tile = worldObj.getTileEntity(this.xCoord + sides[0], this.yCoord + sides[1]+1, this.zCoord + sides[2]);
+			if(tile != null && (tile instanceof TileEntityMechBay) ){
 				((TileEntityMechBay) tile).reset();
 			}
 		}
 	}
-
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() 
+	{
+		return AxisAlignedBB.getBoundingBox(xCoord-2, yCoord, zCoord-2, xCoord+3, yCoord+4, zCoord+3);
+	}
 	@Override
 	public void masterWriteToNBT(NBTTagCompound tag) {
 		tag.setByte("direction", (byte)getDirection());

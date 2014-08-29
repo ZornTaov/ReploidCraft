@@ -2,7 +2,6 @@ package zornco.reploidcraftenv.client.renderers;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 public class ModelMechBay extends ModelBase
 {
@@ -169,6 +168,9 @@ public class ModelMechBay extends ModelBase
 		rail3.render(f5);
 		rail4.render(f5);
 		hose1.render(f5);
+		
+		hose1.setRotationPoint(12F, -10F, 0F);
+		setRotation(hose1, 0, -0.4F, 0);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z)

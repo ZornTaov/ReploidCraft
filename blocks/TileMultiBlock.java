@@ -1,6 +1,9 @@
 package zornco.reploidcraftenv.blocks;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileMultiBlock extends TileEntity {
@@ -56,6 +59,19 @@ public abstract class TileMultiBlock extends TileEntity {
 
     /** Reset all the parts of the structure */
     public abstract void resetStructure();
+
+	public Packet getDescriptionPacket()
+	{
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		writeToNBT(nbttagcompound);
+		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 3, nbttagcompound);
+	}
+
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
+	{
+		super.onDataPacket(net, pkt);
+		readFromNBT(pkt.func_148857_g());
+	}
 
     public abstract void masterWriteToNBT(NBTTagCompound tag);
 
