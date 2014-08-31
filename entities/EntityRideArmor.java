@@ -1,6 +1,6 @@
 package zornco.reploidcraftenv.entities;
 
-import static zornco.reploidcraftenv.entities.ArmorParts.PartSlot.*;
+import static zornco.reploidcraftenv.entities.armorParts.PartSlot.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -32,10 +32,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.ArmorParts.IPartArm;
-import zornco.reploidcraftenv.entities.ArmorParts.IPartBack;
-import zornco.reploidcraftenv.entities.ArmorParts.IPartLegs;
-import zornco.reploidcraftenv.entities.ArmorParts.PartSlot;
+import zornco.reploidcraftenv.entities.armorParts.IPartArm;
+import zornco.reploidcraftenv.entities.armorParts.IPartBack;
+import zornco.reploidcraftenv.entities.armorParts.IPartLegs;
+import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 import zornco.reploidcraftenv.utils.RiderState;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

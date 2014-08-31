@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 import zornco.reploidcraftenv.blocks.TileEntityMechBayEnergy;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -52,8 +51,6 @@ public class ItemDebugger extends Item {
 				ReploidCraftEnv.logger.info(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ());
 				ReploidCraftEnv.logger.info(tilebed.hasRide());
 			}
-		} else {
-			return false;
 		}
 
 		return true;

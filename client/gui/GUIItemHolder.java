@@ -1,17 +1,14 @@
 package zornco.reploidcraftenv.client.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import zornco.reploidcraftenv.blocks.ContainerItemHolder;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.ArmorParts.PartSlot;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import zornco.reploidcraftenv.blocks.ContainerItemHolder;
 
 public class GUIItemHolder extends GuiContainer {
 	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraftenv", "textures/gui/itemHolder.png");

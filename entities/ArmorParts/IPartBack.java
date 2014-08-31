@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.entities.ArmorParts;
+package zornco.reploidcraftenv.entities.armorParts;
 
 public interface IPartBack {
 	public float getJumpHeight();

@@ -11,7 +11,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.ArmorParts.PartSlot;
+import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

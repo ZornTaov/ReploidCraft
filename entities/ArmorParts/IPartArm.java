@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.entities.ArmorParts;
+package zornco.reploidcraftenv.entities.armorParts;
 
 import net.minecraft.item.ItemStack;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
