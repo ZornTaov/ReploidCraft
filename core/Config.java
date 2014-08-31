@@ -25,6 +25,7 @@ import zornco.reploidcraftenv.items.ItemHPEnergy;
 import zornco.reploidcraftenv.items.ItemMechBay;
 import zornco.reploidcraftenv.items.ItemPlatformPlacer;
 import zornco.reploidcraftenv.items.ItemReploidPlate;
+import zornco.reploidcraftenv.items.ItemRideArmorPart;
 import zornco.reploidcraftenv.items.ItemRideArmorPlacer;
 import zornco.reploidcraftenv.items.ItemTank;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -77,9 +78,11 @@ public class Config {
 		ReploidCraftEnv.healthTank = new ItemTank().setUnlocalizedName("Health Tank").setMaxStackSize(1); //use EventBus to add to this, then use some other method to heal the player per heart
 		//weaponTank = new ItemTank(weaponTankID).setItemName("Weapon Tank").setMaxStackSize(1);
 		//extraMan = new ItemLife(extraManID).setItemName("Extra Man").setMaxStackSize(9); //possibly use ticker to instantly heal player?
-
+		
 		ReploidCraftEnv.reploidPlate = new ItemReploidPlate().setUnlocalizedName("reploidPlate");
 		ReploidCraftEnv.component = new ItemComponent().setUnlocalizedName("component");
+		ReploidCraftEnv.rideArmorPart = new ItemRideArmorPart().setUnlocalizedName("part");
+		((ItemRideArmorPart) ReploidCraftEnv.rideArmorPart).populateParts();
 		//ReploidCraftEnv.itemHolder = (new ItemItemHolder(itemHolderID)).setUnlocalizedName("holder").setTextureName("item_holder");
 		ReploidCraftEnv.debugger = new ItemDebugger().setUnlocalizedName("debugger");
 
@@ -89,6 +92,7 @@ public class Config {
 		registerItem(ReploidCraftEnv.healthBit);
 		registerItem(ReploidCraftEnv.healthByte);
 		registerItem(ReploidCraftEnv.healthTank);
+		registerItem(ReploidCraftEnv.rideArmorPart);
 		registerItem(ReploidCraftEnv.reploidPlate);
 		registerItem(ReploidCraftEnv.component);
 		registerItem(ReploidCraftEnv.debugger);

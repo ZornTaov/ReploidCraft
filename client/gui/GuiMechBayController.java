@@ -25,7 +25,7 @@ public class GuiMechBayController extends GuiContainer {
 		super(new ContainerMechBay(mechBay, player));
 		if(((TileMultiBlock) mechBay).hasMaster() && !((TileMultiBlock) mechBay).isMaster())
 		{
-			this.mechBay = (TileEntityMechBay) ReploidCraftEnv.proxy.getClientWorld().getTileEntity(this.mechBay.getMasterX(), this.mechBay.getMasterY(), this.mechBay.getMasterZ());
+			this.mechBay = (TileEntityMechBay) ReploidCraftEnv.proxy.getClientWorld().getTileEntity(((TileMultiBlock) mechBay).getMasterX(), ((TileMultiBlock) mechBay).getMasterY(), ((TileMultiBlock) mechBay).getMasterZ());
 		}
 		else
 		{
@@ -50,7 +50,7 @@ public class GuiMechBayController extends GuiContainer {
 		if(mechBay != null)
 		{
 			
-			if(mechBay.hasRide())
+			if(mechBay.hasRide() && this.mechBay.getMyRide() != null)
 				func_147046_a(this.guiLeft + this.xSize - this.xSize/4, this.guiTop + 70, 20, 0, 0, mechBay.getMyRide());
 		}
 

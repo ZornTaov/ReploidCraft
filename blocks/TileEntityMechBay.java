@@ -12,7 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraftenv.entities.EntityRideArmorPart;
+import zornco.reploidcraftenv.entities.armorParts.PartSlot;
+import zornco.reploidcraftenv.items.ItemRideArmorPart;
 import cofh.api.energy.EnergyStorage;
 
 public class TileEntityMechBay extends TileMultiBlock implements IInventory {
@@ -164,21 +168,40 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 
 	@Override
 	public void openInventory() {
+		if(hasRide())
+		{
+			int i = 0, j = -1;
+			for (Entity part : this.myRide.getParts()) {
+				j = ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) part).getType(), PartSlot.values()[i]).getPartNumber();
+				if(j != -1)
+					inv[i] = new ItemStack(ReploidCraftEnv.rideArmorPart, 1, j);
+				i++;
+				j = -1;
+			}
+			
+		}
 	}
 
 	@Override
 	public void closeInventory() {
+		if(hasRide())
+		{
+			String[] s;
+			for (int i = 0; i < myRide.getParts().length; i++) {
+				if(inv[i] == null) 
+				{
+					this.myRide.setPart(PartSlot.values()[i], "EMPTY");
+					continue;
+				}
+				s = ((ItemRideArmorPart)inv[i].getItem()).getPartByMetadata(inv[i].getItemDamage()).split("\\.");
+				this.myRide.setPart(PartSlot.getSlot(s[0]), s[1]);
+			}
+		}
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {
 		return (var1 != 10) || (var2 == null);
-	}
-	
-	public void populateInventory(EntityRideArmor rideArmor)
-	{
-		
-		
 	}
 
 	/*
@@ -192,7 +215,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		{
 			
 			for (Entity entity : list) {
-				if(entity.riddenByEntity == null)
+				if(entity instanceof EntityRideArmor && entity.riddenByEntity == null)
 				{
 					myRide = ((EntityRideArmor)entity);
 					hasRide = true;
@@ -202,7 +225,11 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		}
 		else
 		{
-			if(list.isEmpty() || myRide.riddenByEntity != null) hasRide = false;
+			if((list.isEmpty() || myRide == null || myRide.riddenByEntity != null) && hasRide) 
+			{
+				hasRide = false;
+				return;
+			}
 			myRide.setLocationAndAngles(this.xCoord + 0.5F, this.yCoord + 1F, this.zCoord + 0.5F, rotations[direction], 0);
 		}
 		
@@ -266,7 +293,6 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public void setupStructure() {
 
 		TileEntity tile;
-		System.out.println(getDirection());
 		int i = 0;
 		for (int[] base : baseBlocks) {
 			tile = worldObj.getTileEntity(this.xCoord + base[0], this.yCoord + base[1], this.zCoord + base[2]);
@@ -277,7 +303,6 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				((TileEntityMechBay) tile).setMasterCoords(xCoord, yCoord, zCoord);
 				((TileEntityMechBay) tile).setHasMaster(true);
 				((TileEntityMechBay) tile).setIsMaster(i == 1);
-				if(((TileEntityMechBay) tile).isMaster())System.out.println("ding");
 			}
 			else
 			{
@@ -308,7 +333,6 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				System.out.println((this.xCoord + sides[0]) + " " + (this.yCoord + sides[1]) + " " + (this.zCoord + sides[2]));
 			}
 		}
-		System.out.println("done");
 	}
 
 	@Override
@@ -352,9 +376,11 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public void masterReadFromNBT(NBTTagCompound tag) {
 		setDirection(tag.getByte("direction"));
 		this.hasRide = tag.getBoolean("hasMech");
-		if(hasRide)
-			myRide = (EntityRideArmor) this.worldObj.getEntityByID(tag.getInteger("MechID"));	
-		
+		if(hasRide && this.worldObj != null)
+		{
+			Entity ent = this.worldObj.getEntityByID(tag.getInteger("MechID"));
+			if(ent != null) myRide = (EntityRideArmor) ent; 	
+		}
 	}
 
 	/*

@@ -24,6 +24,10 @@ public class PartBase {
 	
 	protected Random rand;
 
+	private int partNumber;
+	
+	private String partTypeSlot;
+
 	public PartBase(float health, float[] offsetXYZ, float[] size)
 	{
 		this.offsetXYZ = offsetXYZ;
@@ -108,4 +112,20 @@ public class PartBase {
 		return null;
     }
 	public void doParticle(Entity mech) {}
+	
+	public int getPartNumber() {
+		return partNumber;
+	}
+	public void setPartNumber(int partNumber) {
+		this.partNumber = partNumber;
+	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.partTypeSlot;
+	}
+	public void setString(String string) {
+		// TODO Auto-generated method stub
+		this.partTypeSlot = string;
+	}
 }

@@ -15,7 +15,7 @@ public class PartsRegistry extends RegistrySimple
 
 	@SuppressWarnings("rawtypes")
 	private Map field_148764_a;
-
+	private static int partNumber = 0; 
 	private float[] emptyPos = {0,0,0};
 	private float[] emptySize = {0,0,0};
 	private PartBase emptyPart = new PartBase(0, emptyPos, emptySize);
@@ -79,7 +79,8 @@ public class PartsRegistry extends RegistrySimple
 			ReploidCraftEnv.logger.warn("ERROR: Tried adding a part that was already there. " + type + ":" + slot);
 			return;
 		}
-
+		part.setPartNumber(partNumber++);
+		part.setString(type+"."+slot);
 		((PartList)this.getObject(type)).getPartList().put(slot, part);
 		ReploidCraftEnv.logger.info("registered " + type + ":" + slot);
 	}

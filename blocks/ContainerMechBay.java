@@ -10,19 +10,20 @@ import net.minecraft.item.ItemStack;
 public class ContainerMechBay extends Container {
 	private TileEntityMechBay mechBay;
 	public ContainerMechBay(IInventory tileEntity, IInventory ip) {
-		if(((TileMultiBlock) mechBay).hasMaster() && !((TileMultiBlock) mechBay).isMaster())
+		if(((TileMultiBlock) tileEntity).hasMaster() && !((TileMultiBlock) tileEntity).isMaster())
 		{
-			this.mechBay = (TileEntityMechBay) ReploidCraftEnv.proxy.getClientWorld().getTileEntity(this.mechBay.getMasterX(), this.mechBay.getMasterY(), this.mechBay.getMasterZ());
+			this.mechBay = (TileEntityMechBay) ReploidCraftEnv.proxy.getClientWorld().getTileEntity(((TileMultiBlock) tileEntity).getMasterX(), ((TileMultiBlock) tileEntity).getMasterY(), ((TileMultiBlock) tileEntity).getMasterZ());
 		}
 		else
 		{
-			this.mechBay = (TileEntityMechBay) mechBay;
+			this.mechBay = (TileEntityMechBay) tileEntity;
 		}
+		this.mechBay.openInventory();
 		this.mechBay.eventHandler = this;
 		//this.addSlotToContainer(new SlotCrafting(ip.player, this.mechBay, this.mechBay, 0, 124, 35));
         int l;
         int i1;
-
+ 
         for (l = 0; l < 3; ++l)
         {
             for (i1 = 0; i1 < 3; ++i1)
@@ -87,6 +88,7 @@ public class ContainerMechBay extends Container {
 		
 		if(!this.mechBay.getWorldObj().isRemote)
 		{
+			this.mechBay.closeInventory();
 			this.mechBay.eventHandler = null;
 		}
 	}

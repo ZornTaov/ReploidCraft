@@ -1,5 +1,6 @@
 package zornco.reploidcraftenv.items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -9,8 +10,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.entities.armorParts.PartBase;
+import zornco.reploidcraftenv.entities.armorParts.PartList;
 import zornco.reploidcraftenv.entities.armorParts.PartSlot;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,14 +24,15 @@ public class ItemRideArmorPart extends Item
 	@SideOnly(Side.CLIENT)
 	private IIcon[] partIcon;
 	private int typeAmmount = PartSlot.values().length;// * PartType.values().length;
-    public ItemRideArmorPart()
-    {
-    	super();
-        this.setHasSubtypes(true);
-        this.setMaxDamage(0);
-        this.maxStackSize = 1;
+	private List<PartBase> partList = new ArrayList<PartBase>();;
+	public ItemRideArmorPart()
+	{
+		super();
+		this.setHasSubtypes(true);
+		this.setMaxDamage(0);
+		this.maxStackSize = 1;
 		this.setCreativeTab(ReploidCraftEnv.reploidTab);
-    }
+	}
 
 	/**
 	 * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
@@ -36,42 +42,47 @@ public class ItemRideArmorPart extends Item
 	{
 		int i = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, typeAmmount);
 		return super.getUnlocalizedName()
-				+ "." + PartName.values()[par1ItemStack.getItemDamage()%PartName.getSize()].toString()
-				+ "." + PartType.values()[par1ItemStack.getItemDamage()/PartType.getSize()].toString();
+				+ "." + partList.get(par1ItemStack.getItemDamage()).toString();
 	}*/
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-    @SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 
-    /**
-     * allows items to add custom lines of information to the mouseover description
-     */
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
-    {
-    	String desc1 = PartSlot.values()[par1ItemStack.getItemDamage()%PartSlot.getSize()].toString();
-    	if(!desc1.equals(""))
-        par3List.add(desc1);
+	/**
+	 * allows items to add custom lines of information to the mouseover description
+	 */
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	{
+		String t = partList.get(par1ItemStack.getItemDamage()).toString();
+		String[] s = t.split("\\.");
+		if(!s.equals(""))
+		{
+			String desc1 = "type." + s[0].toLowerCase();
+			if(!desc1.equals("type."))
+				t = (StatCollector.translateToLocal(desc1));
 
-    	/*String desc2 = PartType.values()[par1ItemStack.getItemDamage()/PartType.getSize()].toString();
-    	if(!desc2.equals(""))
-        par3List.add(desc2);*/
-    }
+			String desc2 = "slot." + s[1].toLowerCase();
+			if(!desc2.equals("slot."))
+				t += " " + (StatCollector.translateToLocal(desc2));
+		}
+		par3List.add(t);
+	}
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-    @SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 
-    /**
-     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
-     */
-    public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int var4 = 0; var4 < typeAmmount; ++var4)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
-    }
+	/**
+	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
+	 */
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
+	{
+		for (int var4 = 0; var4 < typeAmmount; ++var4)
+		{
+			par3List.add(new ItemStack(par1, 1, var4));
+		}
+	}
 
 	@SideOnly(Side.CLIENT)
 
@@ -80,25 +91,37 @@ public class ItemRideArmorPart extends Item
 	 */
 	public IIcon getIconFromDamage(int par1)
 	{
-        int var2 = MathHelper.clamp_int(par1, 0, typeAmmount);
+		int var2 = MathHelper.clamp_int(par1, 0, typeAmmount);
 		return this.partIcon[var2];
-    }
+	}
 
 	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister par1IconRegister)
-    {
-       /* this.partIcon = new IIcon[typeAmmount];
-        int k = 0;
-        for (int i = 0; i < PartSlot.values().length; ++i)
-        {
-        	for (int j = 0; j < PartType.getSize(); j++) {
-        		if(j != PartType.EMPTY.ordinal())
-        		{
-        			this.partIcon[k] = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+PartSlot.values()[i]+"."+PartType.values()[j]);
-        			k++;
-        		}
-			}
-        }*/
-    }
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister par1IconRegister)
+	{
+		this.partIcon = new IIcon[typeAmmount];
+		for (int i = 0; i < typeAmmount; ++i)
+		{
+			this.partIcon[i] = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+partList.get(i).toString());
+		}
+	}
+	public void populateParts()
+	{
+		for (Object list : ReploidCraftEnv.proxy.partRegistry.getMap().values()) {
+			if(((PartList) list).getPartCategory() != "EMPTY")
+				for (Object part : ((PartList) list).getPartList().values()) {
+					
+					partList.add((PartBase) part);
+					if(((PartBase)part).getRecipe() != null)
+					{
+						GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.rideArmorPart, 1, ((PartBase)part).getPartNumber()), ((PartBase)part).getRecipe() );
+					}
+				}
+		}
+		typeAmmount = partList.size();
+	}
+	public String getPartByMetadata(int meta)
+	{
+		return partList.get(meta) != null ? partList.get(meta).toString() : "";
+	}
 }
