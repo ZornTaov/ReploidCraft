@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import zornco.reploidcraftenv.utils.PlayerUtils;
 import cpw.mods.fml.common.network.ByteBufUtils;
 
-public class PacketItemHolder extends AbstractPacket {
+public class PacketReploidCraftGui extends AbstractPacket {
 	public int windowId;
 	public String name;
 	public int xPos;
@@ -16,8 +16,8 @@ public class PacketItemHolder extends AbstractPacket {
     int[] items = null;
     boolean hasStacks = (items != null);
 	
-	public PacketItemHolder() { }
-	public PacketItemHolder(int windowId, String name, int columns, int rows, String title) {
+	public PacketReploidCraftGui() { }
+	public PacketReploidCraftGui(int windowId, String name, int columns, int rows, String title) {
 		this.windowId = windowId;
 		this.name = name;
 		this.xPos = columns;

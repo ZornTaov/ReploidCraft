@@ -2,7 +2,6 @@ package zornco.reploidcraftenv.blocks;
 
 import java.util.List;
 
-import zornco.reploidcraftenv.entities.EntityRideArmor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,12 +12,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import zornco.reploidcraftenv.entities.EntityRideArmor;
+import cofh.api.energy.EnergyStorage;
 
 public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public ItemStack[] inv = new ItemStack[11];
 	Container eventHandler;
+	protected EnergyStorage storage = new EnergyStorage(320000);
 	private int direction = 0;
-	private int[][] sideOffset = {{0,0,-1},{0,0,1},{-1,0,0},{1,0,0}};
+	private int[][][] sideOffset = {
+			{{0,-1}, {0,0}}, 
+			{{0,0}, {0,1}}, 
+			{{-1,0}, {0,0}},
+			{{0,0}, {1,0}}
+			
+	};
 	private int[] rotations = {0, 180, -90, 90};
 	private EntityRideArmor myRide;
 	private boolean hasRide = false;
@@ -70,7 +78,9 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	private static final int[][] backCheck = new int [][] {
 		{ 0, 2, -2 }, { 0, 2, 2 }, { -2, 2, 0 }, { 2, 2, 0 }
 	};
-
+	/*
+	 * Inventory
+	 */
 	@Override
 	public int getSizeInventory() {
 		return inv.length;
@@ -164,7 +174,16 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {
 		return (var1 != 10) || (var2 == null);
 	}
+	
+	public void populateInventory(EntityRideArmor rideArmor)
+	{
+		
+		
+	}
 
+	/*
+	 * Multiblock
+	 */
 	@Override
 	public void doMultiBlockStuff() {
 
@@ -322,26 +341,50 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		}
 	}
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() 
-	{
-		return AxisAlignedBB.getBoundingBox(xCoord-2, yCoord, zCoord-2, xCoord+3, yCoord+4, zCoord+3);
-	}
-	@Override
 	public void masterWriteToNBT(NBTTagCompound tag) {
 		tag.setByte("direction", (byte)getDirection());
+		tag.setBoolean("hasMech", hasRide);
+		if(hasRide)
+			tag.setInteger("MechID", myRide.getEntityId());
 	}
 
 	@Override
 	public void masterReadFromNBT(NBTTagCompound tag) {
 		setDirection(tag.getByte("direction"));
+		this.hasRide = tag.getBoolean("hasMech");
+		if(hasRide)
+			myRide = (EntityRideArmor) this.worldObj.getEntityByID(tag.getInteger("MechID"));	
+		
 	}
 
+	/*
+	 * Mech Bay 
+	 */
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() 
+	{
+		return AxisAlignedBB.getBoundingBox(
+				xCoord-2 + sideOffset[direction][0][0], 
+				yCoord, 
+				zCoord-2 + sideOffset[direction][0][1], 
+				xCoord+3 + sideOffset[direction][1][0], 
+				yCoord+4, 
+				zCoord+3 + sideOffset[direction][1][1]);
+	}
 	public int getDirection() {
 		return direction;
 	}
 
 	public void setDirection(int direction) {
 		this.direction = direction;
+	}
+
+	public EntityRideArmor getMyRide() {
+		return myRide;
+	}
+
+	public boolean hasRide() {
+		return hasRide;
 	}
 
 }

@@ -2,12 +2,10 @@ package zornco.reploidcraftenv.blocks;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 
 public class TileEntityMechBayEnergy extends TileEntityMechBay implements IEnergyHandler{
 
-	protected EnergyStorage storage = new EnergyStorage(320000);
 	@Override
 	public boolean canConnectEnergy(ForgeDirection arg0) {
 		// TODO Auto-generated method stub

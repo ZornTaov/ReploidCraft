@@ -65,6 +65,7 @@ public class ReploidCraftEnv {
 
 	public static Item platformPlacer;
 	public static Item rideArmorPlacer;
+	public static Item rideArmorPart;
 	public static Item doorBossItem;
 
 	public static Block spikes;

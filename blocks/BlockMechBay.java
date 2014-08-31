@@ -10,11 +10,13 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockMechBay extends Block implements ITileEntityProvider {
 
@@ -65,6 +67,25 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
 				return false;
 			}
 		}
+		return true;
+	}
+	@Override
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int i1, float f1, float f2, float f3)
+	{
+		TileEntity te = world.getTileEntity(i, j, k);
+
+		if (te == null || !(te instanceof TileEntityMechBayController))
+		{
+			return false;
+		}
+
+		if (world.isRemote)
+		{
+			return true;
+		}
+		if(((TileMultiBlock) te).hasMaster())
+			player.openGui(ReploidCraftEnv.instance, 1, world, i, j, k);
+		else return false;
 		return true;
 	}
 	public boolean isOpaqueCube()

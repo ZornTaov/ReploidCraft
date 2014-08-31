@@ -13,7 +13,10 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
+import zornco.reploidcraftenv.blocks.TileEntityMechBayController;
 import zornco.reploidcraftenv.bullets.EntityMetBullet;
+import zornco.reploidcraftenv.client.gui.GUIItemHolder;
+import zornco.reploidcraftenv.client.gui.GuiMechBayController;
 import zornco.reploidcraftenv.client.renderers.BlockBossDoorRenderer;
 import zornco.reploidcraftenv.client.renderers.BlockSpikesRenderer;
 import zornco.reploidcraftenv.client.renderers.ItemItemHolderRenderer;
@@ -79,9 +82,13 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(x, y, z);
-        if (te != null && te instanceof TileEntityItemHolder)
+		if (te != null && te instanceof TileEntityItemHolder)
         {
             return new GUIItemHolder(player.inventory, (TileEntityItemHolder) te);
+        }
+        else if (te != null && te instanceof TileEntityMechBayController)
+        {
+            return new GuiMechBayController(player.inventory, (TileEntityMechBayController) te);
         }
         else
         {

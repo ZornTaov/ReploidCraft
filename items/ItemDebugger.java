@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 import zornco.reploidcraftenv.blocks.TileEntityMechBayEnergy;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,8 +35,11 @@ public class ItemDebugger extends Item {
 		 * BedCraftBeyond.logger.info(""+(par3World.getClass().toString()));
 		 * BedCraftBeyond.logger.info(""+par3World.getBlockId(par4, par5, par6));
 		 */
+		ReploidCraftEnv.logger.info(FMLCommonHandler.instance().getEffectiveSide());
 		ReploidCraftEnv.logger.info("" + par3World.getBlockMetadata(par4, par5, par6));
 		TileEntity tile = par3World.getTileEntity(par4, par5, par6);
+
+		ReploidCraftEnv.logger.info("" + tile.getClass());
 		if (tile != null) {
 			if (tile instanceof TileEntityMechBayEnergy) {
 				TileEntityMechBay tilebed = (TileEntityMechBay) tile;
@@ -45,6 +50,7 @@ public class ItemDebugger extends Item {
 				TileEntityMechBay tilebed = (TileEntityMechBay) tile;
 				ReploidCraftEnv.logger.info(tilebed.hasMaster() + "1");
 				ReploidCraftEnv.logger.info(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ());
+				ReploidCraftEnv.logger.info(tilebed.hasRide());
 			}
 		} else {
 			return false;

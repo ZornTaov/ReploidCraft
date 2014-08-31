@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.parts.PartSlot;
+import zornco.reploidcraftenv.entities.ArmorParts.PartSlot;
 
 public class EntityRideArmorPart extends EntityDragonPart {
 

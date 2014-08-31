@@ -9,85 +9,85 @@ import net.minecraft.item.ItemStack;
 public class ContainerItemHolder extends Container {
 
 	private EntityPlayer player;
-    private IInventory chest;
+	private IInventory chest;
 
-    public ContainerItemHolder(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize)
-    {
-        chest = chestInventory;
-        player = ((InventoryPlayer) playerInventory).player;
-        chestInventory.openInventory();
-        layoutContainer(playerInventory, chestInventory, xSize, ySize);
-    }
+	public ContainerItemHolder(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize)
+	{
+		chest = chestInventory;
+		player = ((InventoryPlayer) playerInventory).player;
+		chestInventory.openInventory();
+		layoutContainer(playerInventory, chestInventory, xSize, ySize);
+	}
 
-    @Override
-    public boolean canInteractWith(EntityPlayer player)
-    {
-        return chest.isUseableByPlayer(player);
-    }
+	@Override
+	public boolean canInteractWith(EntityPlayer player)
+	{
+		return chest.isUseableByPlayer(player);
+	}
 
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer p, int i)
-    {
-        ItemStack itemstack = null;
-        Slot slot = (Slot) inventorySlots.get(i);
-        if (slot != null && slot.getHasStack())
-        {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-            if (i < 1)
-            {
-                if (!mergeItemStack(itemstack1, 1, inventorySlots.size(), true))
-                {
-                    return null;
-                }
-            }
-            else if (!mergeItemStack(itemstack1, 0, 1, false))
-            {
-                return null;
-            }
-            if (itemstack1.stackSize == 0)
-            {
-                slot.putStack(null);
-            }
-            else
-            {
-                slot.onSlotChanged();
-            }
-        }
-        return itemstack;
-    }
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer p, int i)
+	{
+		ItemStack itemstack = null;
+		Slot slot = (Slot) inventorySlots.get(i);
+		if (slot != null && slot.getHasStack())
+		{
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (i < 1)
+			{
+				if (!mergeItemStack(itemstack1, 1, inventorySlots.size(), true))
+				{
+					return null;
+				}
+			}
+			else if (!mergeItemStack(itemstack1, 0, 1, false))
+			{
+				return null;
+			}
+			if (itemstack1.stackSize == 0)
+			{
+				slot.putStack(null);
+			}
+			else
+			{
+				slot.onSlotChanged();
+			}
+		}
+		return itemstack;
+	}
 
-    @Override
-    public void onContainerClosed(EntityPlayer entityplayer)
-    {
-        super.onContainerClosed(entityplayer);
-        chest.closeInventory();
-    }
+	@Override
+	public void onContainerClosed(EntityPlayer entityplayer)
+	{
+		super.onContainerClosed(entityplayer);
+		chest.closeInventory();
+	}
 
-    protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize)
-    {
-        addSlotToContainer(new Slot(chestInventory, 0, 12 + 4 * 18, 8 + 2 * 18));
-     
-        int leftCol = (xSize - 162) / 2 + 1;
-        for (int playerInvRow = 0; playerInvRow < 3; playerInvRow++)
-        {
-            for (int playerInvCol = 0; playerInvCol < 9; playerInvCol++)
-            {
-                addSlotToContainer(new Slot(playerInventory, playerInvCol + playerInvRow * 9 + 9, leftCol + playerInvCol * 18, ySize - (4 - playerInvRow) * 18
-                        - 10));
-            }
+	protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize)
+	{
+		addSlotToContainer(new Slot(chestInventory, 0, 12 + 4 * 18, 8 + 2 * 18));
 
-        }
+		int leftCol = (xSize - 162) / 2 + 1;
+		for (int playerInvRow = 0; playerInvRow < 3; playerInvRow++)
+		{
+			for (int playerInvCol = 0; playerInvCol < 9; playerInvCol++)
+			{
+				addSlotToContainer(new Slot(playerInventory, playerInvCol + playerInvRow * 9 + 9, leftCol + playerInvCol * 18, ySize - (4 - playerInvRow) * 18
+						- 10));
+			}
 
-        for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++)
-        {
-            addSlotToContainer(new Slot(playerInventory, hotbarSlot, leftCol + hotbarSlot * 18, ySize - 24));
-        }
-    }
+		}
 
-    public EntityPlayer getPlayer()
-    {
-        return player;
-    }
+		for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++)
+		{
+			addSlotToContainer(new Slot(playerInventory, hotbarSlot, leftCol + hotbarSlot * 18, ySize - 24));
+		}
+	}
+
+	public EntityPlayer getPlayer()
+	{
+		return player;
+	}
 
 }

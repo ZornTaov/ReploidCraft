@@ -9,11 +9,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.ContainerItemHolder;
+import zornco.reploidcraftenv.blocks.ContainerMechBay;
 import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
+import zornco.reploidcraftenv.blocks.TileEntityMechBayController;
+import zornco.reploidcraftenv.blocks.TileMultiBlock;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.parts.PartList;
-import zornco.reploidcraftenv.entities.parts.PartSlot;
-import zornco.reploidcraftenv.entities.parts.PartsRegistry;
+import zornco.reploidcraftenv.entities.ArmorParts.PartList;
+import zornco.reploidcraftenv.entities.ArmorParts.PartSlot;
+import zornco.reploidcraftenv.entities.ArmorParts.PartsRegistry;
 import zornco.reploidcraftenv.entities.parts.green.GreenArm;
 import zornco.reploidcraftenv.entities.parts.green.GreenBack;
 import zornco.reploidcraftenv.entities.parts.green.GreenBody;
@@ -34,6 +37,11 @@ public class CommonProxy implements IGuiHandler {
 		{
 			TileEntityItemHolder icte = (TileEntityItemHolder) te;
 			return new ContainerItemHolder(player.inventory, icte, 0, 0);
+		}
+		else if (te != null && te instanceof TileEntityMechBayController)
+		{
+			TileEntityMechBayController icte = (TileEntityMechBayController) te;
+			return new ContainerMechBay(icte, player.inventory);
 		}
 		else
 		{

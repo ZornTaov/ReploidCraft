@@ -11,7 +11,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.parts.PartSlot;
+import zornco.reploidcraftenv.entities.ArmorParts.PartSlot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -63,12 +63,12 @@ public class ItemRideArmorPlacer extends Item {
 			{
 				par3World.spawnEntityInWorld(rideArmor);
 			}
-			rideArmor.setPart(PartSlot.HEAD, "GREEN");
-			rideArmor.setPart(PartSlot.BODY, "GREEN");
-			rideArmor.setPart(PartSlot.BACK, "GREEN");
-			rideArmor.setPart(PartSlot.LEGS, "GREEN");
-			rideArmor.setPart(PartSlot.ARMLEFT, "GREEN");
-			rideArmor.setPart(PartSlot.ARMRIGHT, "GREEN");
+			rideArmor.setPart(PartSlot.HEAD, "RED");
+			rideArmor.setPart(PartSlot.BODY, "RED");
+			rideArmor.setPart(PartSlot.BACK, "RED");
+			rideArmor.setPart(PartSlot.LEGS, "RED");
+			rideArmor.setPart(PartSlot.ARMLEFT, "RED");
+			rideArmor.setPart(PartSlot.ARMRIGHT, "RED");
 			if (!par2EntityPlayer.capabilities.isCreativeMode)
 			{
 				//--par1ItemStack.stackSize;

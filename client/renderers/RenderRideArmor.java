@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.entities.EntityRideArmorPart;
-import zornco.reploidcraftenv.entities.parts.PartSlot;
+import zornco.reploidcraftenv.entities.ArmorParts.PartSlot;
 
 public class RenderRideArmor extends Render {
 

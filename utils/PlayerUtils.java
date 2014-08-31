@@ -1,8 +1,9 @@
 package zornco.reploidcraftenv.utils;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.client.GUIItemHolder;
-import zornco.reploidcraftenv.network.PacketItemHolder;
+import zornco.reploidcraftenv.client.gui.GUIItemHolder;
+import zornco.reploidcraftenv.client.gui.GuiMechBayController;
+import zornco.reploidcraftenv.network.PacketReploidCraftGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,7 @@ public final class PlayerUtils {
 		player.closeContainer();
 		player.getNextWindowId();
 		
-		ReploidCraftEnv.packetPipeline.sendTo(new PacketItemHolder(player.currentWindowId, name, columns, rows, title), player);
+		ReploidCraftEnv.packetPipeline.sendTo(new PacketReploidCraftGui(player.currentWindowId, name, columns, rows, title), player);
 		
 		player.openContainer = container;
 		player.openContainer.windowId = player.currentWindowId;
@@ -50,6 +51,8 @@ public final class PlayerUtils {
 		
 		if (name.equals("ItemHolder")) {
 			return new GUIItemHolder(player, title, localized);
+		} else if (name.equals("MechBay")) {
+			return new GuiMechBayController(player, title, localized);
 		} else 
 		{
 			ReploidCraftEnv.logger.warn("Error, attempted to create a gui that isn't set up yet!");
