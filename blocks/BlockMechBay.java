@@ -77,13 +77,14 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
 		{
 			return false;
 		}
-
 		if (world.isRemote)
 		{
 			return true;
 		}
 		if(((TileMultiBlock) te).hasMaster())
+		{
 			player.openGui(ReploidCraftEnv.instance, 1, world, i, j, k);
+		}
 		else return false;
 		return true;
 	}

@@ -35,6 +35,25 @@ public enum PartSlot
 	{
 	    return getEnumFromString(PartSlot.class, name);
 	}
+	public static PartSlot getSlot(int i)
+	{
+		switch (i) {
+		default:
+		case 0:
+			return HEAD;
+		case 1:
+			return BODY;
+		case 2:
+			return BACK;
+		case 3:
+			return LEGS;
+		case 4:
+			return ARMLEFT;
+		case 5:
+			return ARMRIGHT;
+		}
+	}
+	
 	public static int getSize()
 	{
 		return values().length;

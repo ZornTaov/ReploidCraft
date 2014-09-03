@@ -1,5 +1,6 @@
 package zornco.reploidcraftenv.blocks;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -7,9 +8,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import zornco.reploidcraftenv.ReploidCraftEnv;
@@ -21,6 +25,7 @@ import cofh.api.energy.EnergyStorage;
 
 public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public ItemStack[] inv = new ItemStack[11];
+	public int numPlayersUsing = 0;
 	Container eventHandler;
 	protected EnergyStorage storage = new EnergyStorage(320000);
 	private int direction = 0;
@@ -29,11 +34,12 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 			{{0,0}, {0,1}}, 
 			{{-1,0}, {0,0}},
 			{{0,0}, {1,0}}
-			
+
 	};
 	private int[] rotations = {0, 180, -90, 90};
 	private EntityRideArmor myRide;
 	private boolean hasRide = false;
+	private int ticksSinceSync;
 	private static final int[][] baseBlocks = new int[][] {
 		{ 0, 0, 0 }, { -1, 0, 0 }, { 1, 0, 0 }, { 0, 0, -1 }, { 0, 0, 1 }, { -1, 0, -1 }, { -1, 0, 1 }, { 1, 0, -1 }, { 1, 0, 1 }
 	};
@@ -163,42 +169,57 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return true;
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override
 	public void openInventory() {
-		if(hasRide())
-		{
-			int i = 0, j = -1;
-			for (Entity part : this.myRide.getParts()) {
-				j = ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) part).getType(), PartSlot.values()[i]).getPartNumber();
-				if(j != -1)
-					inv[i] = new ItemStack(ReploidCraftEnv.rideArmorPart, 1, j);
-				i++;
-				j = -1;
-			}
-			
-		}
+
+        if (this.numPlayersUsing < 0)
+        {
+            this.numPlayersUsing = 0;
+        }
+        ++this.numPlayersUsing;
+        this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numPlayersUsing);
 	}
 
 	@Override
 	public void closeInventory() {
-		if(hasRide())
+
+        --this.numPlayersUsing;
+        this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numPlayersUsing);
+	}
+
+	public void populateInventory(EntityRideArmor rideArmor, TileEntityMechBay bay)
+	{
+		if(bay.hasRide())
 		{
-			String[] s;
-			for (int i = 0; i < myRide.getParts().length; i++) {
-				if(inv[i] == null) 
-				{
-					this.myRide.setPart(PartSlot.values()[i], "EMPTY");
-					continue;
-				}
-				s = ((ItemRideArmorPart)inv[i].getItem()).getPartByMetadata(inv[i].getItemDamage()).split("\\.");
-				this.myRide.setPart(PartSlot.getSlot(s[0]), s[1]);
+			for (int i = 0; i < rideArmor.getParts().length; i++)
+			{
+				if(((EntityRideArmorPart) rideArmor.getParts()[i]).getType() != "EMPTY")
+					bay.inv[i] = new ItemStack(ReploidCraftEnv.rideArmorPart, 1, ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) rideArmor.getParts()[i]).getType(), PartSlot.getSlot(i)).getPartNumber());
 			}
+			bay.inv[4] = new ItemStack(ReploidCraftEnv.healthBit);
+
 		}
 	}
 
+	public static void setPartsToArmor(EntityRideArmor rideArmor, TileEntityMechBay bay)
+	{
+		if(bay.hasRide())
+		{
+			String[] s;
+			for (int i = 0; i < rideArmor.getParts().length; i++) {
+				if(bay.inv[i] == null) 
+				{
+					rideArmor.setPart(PartSlot.values()[i], "EMPTY");
+					continue;
+				}
+				s = ((ItemRideArmorPart)bay.inv[i].getItem()).getPartByMetadata(bay.inv[i].getItemDamage()).split("\\.");
+				rideArmor.setPart(PartSlot.getSlot(s[0]), s[1]);
+			}
+		}
+	}
 	@Override
 	public boolean isItemValidForSlot(int var1, ItemStack var2) {
 		return (var1 != 10) || (var2 == null);
@@ -207,13 +228,39 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	/*
 	 * Multiblock
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void doMultiBlockStuff() {
 
+		++this.ticksSinceSync;
+		float f;
+		if (this.numPlayersUsing != 0 && (this.ticksSinceSync + this.xCoord + this.yCoord + this.zCoord) % 200 == 0)
+		{
+			this.numPlayersUsing = 0;
+			f = 5.0F;
+			List<Entity> list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, getRenderBoundingBox().expand(f, f, f));
+			Iterator<Entity> iterator = list.iterator();
+
+			while (iterator.hasNext())
+			{
+				EntityPlayer entityplayer = (EntityPlayer)iterator.next();
+
+				if (entityplayer.openContainer instanceof ContainerMechBay)
+				{
+					IInventory iinventory = ((ContainerMechBay)entityplayer.openContainer).getMechBay();
+
+					if (iinventory == this)
+					{
+						++this.numPlayersUsing;
+					}
+				}
+			}
+			System.out.println(numPlayersUsing);
+		}
 		List<Entity> list = this.worldObj.getEntitiesWithinAABB(EntityRideArmor.class, getRenderBoundingBox());
 		if(!hasRide)
 		{
-			
+
 			for (Entity entity : list) {
 				if(entity instanceof EntityRideArmor && entity.riddenByEntity == null)
 				{
@@ -228,11 +275,14 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 			if((list.isEmpty() || myRide == null || myRide.riddenByEntity != null) && hasRide) 
 			{
 				hasRide = false;
+				this.inv = new ItemStack[11];
 				return;
 			}
 			myRide.setLocationAndAngles(this.xCoord + 0.5F, this.yCoord + 1F, this.zCoord + 0.5F, rotations[direction], 0);
+			if(numPlayersUsing == 0)
+				this.populateInventory(myRide, this);
 		}
-		
+
 	}
 
 	@Override
@@ -266,7 +316,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				return false;
 			}
 		}
-		
+
 		for (int[] sides : sideRotations[dir / 2])
 		{
 			tile = worldObj.getTileEntity(this.xCoord + sides[0], this.yCoord + sides[1]+1, this.zCoord + sides[2]);
@@ -288,7 +338,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		this.setDirection(dir);
 		return true;
 	}
-	
+
 	@Override
 	public void setupStructure() {
 
@@ -369,20 +419,59 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		tag.setByte("direction", (byte)getDirection());
 		tag.setBoolean("hasMech", hasRide);
 		if(hasRide)
-			tag.setInteger("MechID", myRide.getEntityId());
-	}
-
-	@Override
-	public void masterReadFromNBT(NBTTagCompound tag) {
-		setDirection(tag.getByte("direction"));
-		this.hasRide = tag.getBoolean("hasMech");
-		if(hasRide && this.worldObj != null)
 		{
-			Entity ent = this.worldObj.getEntityByID(tag.getInteger("MechID"));
-			if(ent != null) myRide = (EntityRideArmor) ent; 	
+			tag.setInteger("MechID", myRide.getEntityId());
+			NBTTagList list = new NBTTagList();
+			for (int i = 0; i < inv.length; i++) {
+				if(this.inv[i] == null)
+					continue;
+				NBTTagCompound compound = new NBTTagCompound();
+				compound.setByte("Slot", (byte)i);
+				this.inv[i].writeToNBT(compound);
+				list.appendTag(compound);
+			}
+
+			tag.setTag("Inventory", list);
 		}
 	}
 
+	@Override
+	public void masterReadFromNBT(NBTTagCompound compound) {
+		setDirection(compound.getByte("direction"));
+		this.hasRide = compound.getBoolean("hasMech");
+		if(hasRide && this.worldObj != null)
+		{
+			Entity ent = this.worldObj.getEntityByID(compound.getInteger("MechID"));
+			if(ent != null) myRide = (EntityRideArmor) ent; 	
+			NBTTagList list = compound.getTagList("Inventory", 10);
+			this.inv = new ItemStack[getSizeInventory()];
+
+			for (int i = 0; i < list.tagCount(); i++) {
+				NBTTagCompound tag = list.getCompoundTagAt(i);
+				int slot = tag.getByte("Slot") & 0xFF;
+
+				if ((slot < 0) || slot >= this.inv.length)
+					continue;
+				this.inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+			}
+		}
+	}
+	public TileEntityMechBay getMaster()
+	{
+		return (TileEntityMechBay) this.worldObj.getTileEntity(this.getMasterX(), this.getMasterY(), this.getMasterZ());
+	}
+	@Override
+	public boolean receiveClientEvent(int p_145842_1_, int p_145842_2_) {
+		if (p_145842_1_ == 1)
+        {
+            this.numPlayersUsing = p_145842_2_;
+            return true;
+        }
+        else
+        {
+            return super.receiveClientEvent(p_145842_1_, p_145842_2_);
+        }
+	}
 	/*
 	 * Mech Bay 
 	 */

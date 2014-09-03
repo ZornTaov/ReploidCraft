@@ -49,7 +49,7 @@ public class ContainerMechBay extends Container {
 	}
 	@Override
 	public boolean canInteractWith(EntityPlayer var1) {
-		return this.mechBay.getWorldObj().getTileEntity(this.mechBay.xCoord, this.mechBay.yCoord, this.mechBay.zCoord) == this.mechBay;
+		return this.mechBay.isUseableByPlayer(var1);
 	}
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer p, int i)
@@ -88,9 +88,12 @@ public class ContainerMechBay extends Container {
 		
 		if(!this.mechBay.getWorldObj().isRemote)
 		{
-			this.mechBay.closeInventory();
+			//this.mechBay.closeInventory();
 			this.mechBay.eventHandler = null;
 		}
+	}
+	public TileEntityMechBay getMechBay() {
+		return mechBay;
 	}
 
 }
