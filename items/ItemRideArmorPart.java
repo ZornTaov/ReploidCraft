@@ -24,7 +24,7 @@ public class ItemRideArmorPart extends Item
 	@SideOnly(Side.CLIENT)
 	private IIcon[] partIcon;
 	private int typeAmmount = PartSlot.values().length;// * PartType.values().length;
-	private List<PartBase> partList = new ArrayList<PartBase>();;
+	private static List<PartBase> partList = new ArrayList<PartBase>();;
 	public ItemRideArmorPart()
 	{
 		super();
@@ -54,7 +54,7 @@ public class ItemRideArmorPart extends Item
 	 */
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		String t = partList.get(par1ItemStack.getItemDamage()).toString();
+		String t = getPartList().get(par1ItemStack.getItemDamage()).toString();
 		String[] s = t.split("\\.");
 		if(!s.equals(""))
 		{
@@ -102,26 +102,19 @@ public class ItemRideArmorPart extends Item
 		this.partIcon = new IIcon[typeAmmount];
 		for (int i = 0; i < typeAmmount; ++i)
 		{
-			this.partIcon[i] = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+partList.get(i).toString());
+			this.partIcon[i] = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+getPartList().get(i).toString());
 		}
 	}
 	public void populateParts()
 	{
-		for (Object list : ReploidCraftEnv.proxy.partRegistry.getMap().values()) {
-			if(((PartList) list).getPartCategory() != "EMPTY")
-				for (Object part : ((PartList) list).getPartList().values()) {
-					
-					partList.add((PartBase) part);
-					if(((PartBase)part).getRecipe() != null)
-					{
-						GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.rideArmorPart, 1, ((PartBase)part).getPartNumber()), ((PartBase)part).getRecipe() );
-					}
-				}
-		}
-		typeAmmount = partList.size();
+		typeAmmount = getPartList().size();
 	}
-	public String getPartByMetadata(int meta)
+	public static List<PartBase> getPartList() {
+		return partList;
+	}
+
+	public static String getPartByMetadata(int meta)
 	{
-		return partList.get(meta) != null ? partList.get(meta).toString() : "";
+		return getPartList().get(meta) != null ? getPartList().get(meta).toString() : "";
 	}
 }

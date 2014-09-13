@@ -109,35 +109,31 @@ public class CommonProxy implements IGuiHandler {
 
 	public void registerParts()
 	{
-		this.partRegistry.registerPart("GREEN", PartSlot.HEAD, 		20, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
+		this.partRegistry.registerPart("EMPTY", PartSlot.HEAD, 		0, new float[] {0.0F, 3.0F, 0.0F}, new float[] {0.5F, 1.5F});
+		this.partRegistry.registerPart("EMPTY", PartSlot.BODY, 		0, new float[] {0.0F, 1.5F, 0.0F}, new float[] {1.5F, 1.5F});
+		this.partRegistry.registerPart("EMPTY", PartSlot.BACK, 		0, new float[] {0.0F, 1.5F, 0.0F}, new float[] {1.0F, 1.0F});
+		this.partRegistry.registerPart("EMPTY", PartSlot.LEGS, 		0, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.5F, 1.0F});
+		this.partRegistry.registerPart("EMPTY", PartSlot.ARMLEFT, 	0, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.0F, 1.0F});  
+		this.partRegistry.registerPart("EMPTY", PartSlot.ARMRIGHT, 	0, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.0F, 1.0F});
+		
+		this.partRegistry.registerPart("GREEN", PartSlot.HEAD, 		20, new float[] {0.0F, 3.0F, 0.0F}, new float[] {0.5F, 1.5F});
 		this.partRegistry.registerPart("GREEN", PartSlot.BODY, 		new GreenBody());
 		this.partRegistry.registerPart("GREEN", PartSlot.BACK, 		new GreenBack());
 		this.partRegistry.registerPart("GREEN", PartSlot.LEGS, 		new GreenLegs());
 		this.partRegistry.registerPart("GREEN", PartSlot.ARMLEFT, 	new GreenArm());
 		this.partRegistry.registerPart("GREEN", PartSlot.ARMRIGHT, 	new GreenArm());
 		
-		this.partRegistry.registerPart("RED", PartSlot.HEAD,		20, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
-		this.partRegistry.registerPart("RED", PartSlot.BODY, 		40, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
+		this.partRegistry.registerPart("RED", PartSlot.HEAD,		20, new float[] {0.0F, 3.0F, 0.0F}, new float[] {0.5F, 1.5F});
+		this.partRegistry.registerPart("RED", PartSlot.BODY, 		40, new float[] {0.0F, 1.5F, 0.0F}, new float[] {1.5F, 1.5F});
 		this.partRegistry.registerPart("RED", PartSlot.BACK, 		new RedBack());
-		this.partRegistry.registerPart("RED", PartSlot.LEGS, 		20, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
-		this.partRegistry.registerPart("RED", PartSlot.ARMLEFT, 	20, makeFloatArray(1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
-		this.partRegistry.registerPart("RED", PartSlot.ARMRIGHT, 	20, makeFloatArray(-1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		this.partRegistry.registerPart("RED", PartSlot.LEGS, 		20, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.5F, 1.0F});
+		this.partRegistry.registerPart("RED", PartSlot.ARMLEFT, 	20, new float[] {1.25F, 1.0F, 0.0F}, new float[] {1.0F, 1.0F});
+		this.partRegistry.registerPart("RED", PartSlot.ARMRIGHT, 	20, new float[] {-1.25F, 1.0F, 0.0F}, new float[] {1.0F, 1.0F});
 		
-		this.partRegistry.registerPart("EMPTY", PartSlot.HEAD, 		0, makeFloatArray(0.0F, 3.0F, 0.0F), makeFloatArray(0.5F, 1.5F));
-		this.partRegistry.registerPart("EMPTY", PartSlot.BODY, 		0, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
-		this.partRegistry.registerPart("EMPTY", PartSlot.BACK, 		0, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.0F, 1.0F));
-		this.partRegistry.registerPart("EMPTY", PartSlot.LEGS, 		0, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
-		this.partRegistry.registerPart("EMPTY", PartSlot.ARMLEFT, 	0, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));  
-		this.partRegistry.registerPart("EMPTY", PartSlot.ARMRIGHT, 	0, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
 		int s = 0;
 		for (Object list : this.partRegistry.getMap().values()) {
 			s += ((PartList) list).getPartList().size();
 		}
 		ReploidCraftEnv.logger.info("Registered " + s + " parts!");
-	}
-
-	public float[] makeFloatArray(float ... args)
-	{
-		return args;
 	}
 }

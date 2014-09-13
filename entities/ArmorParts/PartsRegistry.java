@@ -3,12 +3,15 @@ package zornco.reploidcraftenv.entities.armorParts;
 import java.util.Map;
 import java.util.Properties;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.RegistrySimple;
+import net.minecraft.util.ResourceLocation;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.items.ItemRideArmorPart;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.util.RegistrySimple;
-import net.minecraft.util.ResourceLocation;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class PartsRegistry extends RegistrySimple
 {
@@ -41,7 +44,7 @@ public class PartsRegistry extends RegistrySimple
 		if(this.containsKey(type))
 		{
 			PartBase entry = (PartBase) ((PartList)this.getObject(type)).getPartList().get(slot);
-			
+
 			return entry != null? entry : emptyPart;
 		}
 		else 
@@ -82,6 +85,11 @@ public class PartsRegistry extends RegistrySimple
 		part.setPartNumber(partNumber++);
 		part.setString(type+"."+slot);
 		((PartList)this.getObject(type)).getPartList().put(slot, part);
+		ItemRideArmorPart.getPartList().add((PartBase) part);
+		if(part.getRecipe() != null)
+		{
+			GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.rideArmorPart, 1, part.getPartNumber()), part.getRecipe() );
+		}
 		ReploidCraftEnv.logger.info("registered " + type + ":" + slot);
 	}
 

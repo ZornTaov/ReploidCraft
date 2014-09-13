@@ -20,7 +20,7 @@ public class RenderRideArmor extends Render {
 
 	public RenderRideArmor()
 	{
-		this.shadowSize = 2.5F;
+		this.shadowSize = 1.5F;
 	}
 	/**
 	 * Args: entity, x, y, z, yaw,

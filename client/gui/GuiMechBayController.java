@@ -7,12 +7,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.ContainerMechBay;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 import zornco.reploidcraftenv.blocks.TileMultiBlock;
@@ -21,11 +21,15 @@ public class GuiMechBayController extends GuiContainer {
 	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraftenv", "textures/gui/mechBay.png");
 
 	TileEntityMechBay mechBay;
+
+	private float field_147033_y;
+
+	private float field_147032_z;
 	public GuiMechBayController(IInventory player, IInventory mechBay) {
 		super(new ContainerMechBay(mechBay, player));
-		if(((TileMultiBlock) mechBay).hasMaster() && !((TileMultiBlock) mechBay).isMaster())
+		if(((TileMultiBlock) mechBay).hasMaster() && !((TileMultiBlock) mechBay).isMaster() && ((TileEntity) mechBay).hasWorldObj())
 		{
-			this.mechBay = (TileEntityMechBay) ReploidCraftEnv.proxy.getClientWorld().getTileEntity(((TileMultiBlock) mechBay).getMasterX(), ((TileMultiBlock) mechBay).getMasterY(), ((TileMultiBlock) mechBay).getMasterZ());
+			this.mechBay = (TileEntityMechBay) ((TileEntityMechBay) mechBay).getWorldObj().getTileEntity(((TileEntityMechBay) mechBay).getMasterX(), ((TileMultiBlock) mechBay).getMasterY(), ((TileMultiBlock) mechBay).getMasterZ());
 		}
 		else
 		{
@@ -38,6 +42,16 @@ public class GuiMechBayController extends GuiContainer {
 		this((IInventory) player, new InventoryBasic(title, localized, 1));
 	}
 
+    /**
+     * Draws the screen and all the components in it.
+     */
+    public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
+    {
+        this.field_147033_y = (float)p_73863_1_;
+        this.field_147032_z = (float)p_73863_2_;
+        super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+    }
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
 	{
@@ -49,9 +63,9 @@ public class GuiMechBayController extends GuiContainer {
 		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 		if(mechBay != null)
 		{
-			
+
 			if(mechBay.hasRide() && this.mechBay.getMyRide() != null)
-				func_147046_a(this.guiLeft + this.xSize - this.xSize/4, this.guiTop + 70, 20, 0, 0, mechBay.getMyRide());
+				func_147046_a(this.guiLeft + this.xSize - this.xSize/4, this.guiTop + 70, 20, (float)(x + 51) - this.field_147033_y, (float)(y + 75 - 50) - this.field_147032_z, mechBay.getMyRide());
 		}
 
 	}
@@ -65,8 +79,8 @@ public class GuiMechBayController extends GuiContainer {
 		float f2 = p_147046_5_.renderYawOffset;
 		float f3 = p_147046_5_.rotationYaw;
 		float f4 = p_147046_5_.rotationPitch;
-		float f5 = p_147046_5_.prevRotationYawHead;
-		float f6 = p_147046_5_.rotationYawHead;
+		float f5 = p_147046_5_.prevRotationYaw;
+		float f6 = p_147046_5_.rotationYaw;
 		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
 		//RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
@@ -74,16 +88,16 @@ public class GuiMechBayController extends GuiContainer {
 		p_147046_5_.renderYawOffset = (float)Math.atan((double)(p_147046_3_ / 40.0F)) * 20.0F;
 		p_147046_5_.rotationYaw = (float)Math.atan((double)(p_147046_3_ / 40.0F)) * 40.0F;
 		p_147046_5_.rotationPitch = -((float)Math.atan((double)(p_147046_4_ / 40.0F))) * 20.0F;
-		p_147046_5_.rotationYawHead = p_147046_5_.rotationYaw;
-		p_147046_5_.prevRotationYawHead = p_147046_5_.rotationYaw;
+		p_147046_5_.rotationYaw = p_147046_5_.rotationYaw;
+		p_147046_5_.prevRotationYaw = p_147046_5_.rotationYaw;
 		GL11.glTranslatef(0.0F, p_147046_5_.yOffset, 0.0F);
 		RenderManager.instance.playerViewY = 180.0F;
 		RenderManager.instance.renderEntityWithPosYaw(p_147046_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 		p_147046_5_.renderYawOffset = f2;
 		p_147046_5_.rotationYaw = f3;
 		p_147046_5_.rotationPitch = f4;
-		p_147046_5_.prevRotationYawHead = f5;
-		p_147046_5_.rotationYawHead = f6;
+		p_147046_5_.prevRotationYaw = f5;
+		p_147046_5_.rotationYaw = f6;
 		GL11.glPopMatrix();
 		//RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
