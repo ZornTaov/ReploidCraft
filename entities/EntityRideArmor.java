@@ -762,8 +762,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		}*/
 		if(isMechFireResistant())
 			this.fireResistance = 1;
-		if(this.fallDistance > 1)
-			this.fallDistance = 1.0F;
+		if(this.fallDistance > 2)
+			this.fallDistance = 2.0F;
 		if (this.isRearing() && this.onGround)
 		{
 			this.setRearing(false);

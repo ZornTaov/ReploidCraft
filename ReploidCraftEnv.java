@@ -15,7 +15,7 @@ import zornco.reploidcraftenv.core.CommonProxy;
 import zornco.reploidcraftenv.core.Config;
 import zornco.reploidcraftenv.core.EventBus;
 import zornco.reploidcraftenv.core.TabReploid;
-import zornco.reploidcraftenv.network.PacketPipeline;
+import zornco.reploidcraftenv.network.PacketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -35,7 +35,7 @@ public class ReploidCraftEnv {
 	@Instance(ReploidCraftEnv.MOD_ID)
 	public static ReploidCraftEnv instance;
 
-	public static final PacketPipeline packetPipeline = new PacketPipeline();
+	//public static final PacketPipeline packetPipeline = new PacketPipeline();
 	
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide="zornco.reploidcraftenv.client.ClientProxy", serverSide="zornco.reploidcraftenv.core.CommonProxy")
@@ -88,12 +88,12 @@ public class ReploidCraftEnv {
 		proxy.registerRenderInformation();
 		events = new EventBus();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-		packetPipeline.initialise();
+        PacketHandler.init();
 		config.registerEntities();
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		packetPipeline.postInitialise();
+		//packetPipeline.postInitialise();
 	}
 }

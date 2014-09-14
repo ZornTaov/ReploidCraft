@@ -6,7 +6,7 @@ import zornco.reploidcraftenv.entities.armorParts.PartBase;
 public class GreenLegs extends PartBase implements IPartLegs {
 
 	public GreenLegs() {
-		super(20, makeFloatArray(0.0F, 0.0F, 0.0F), makeFloatArray(1.5F, 1.0F));
+		super(20, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.5F, 1.0F});
 		// TODO Auto-generated constructor stub
 	}
 

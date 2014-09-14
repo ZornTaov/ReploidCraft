@@ -1,19 +1,19 @@
 package zornco.reploidcraftenv.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.utils.RiderState;
+import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 
-
-public class PacketRideArmor extends AbstractPacket {
+public class MessageRideArmor implements IMessage, IMessageHandler<MessageRideArmor, IMessage> {
 	public float moveForward = 0.0F;
 	public float moveStrafe = 0.0F;
 	public boolean jump = false;
@@ -22,9 +22,9 @@ public class PacketRideArmor extends AbstractPacket {
 	public boolean punch = false;
 	public int ID = 0;
 	public int dimension = 0;
-	
-	public PacketRideArmor(){}
-	public PacketRideArmor(EntityRideArmor rideArmor, Entity entity) {
+
+	public MessageRideArmor() {}
+	public MessageRideArmor(EntityRideArmor rideArmor, Entity entity) {
 		if(rideArmor != null && entity != null){
 			RiderState rs = ReploidCraftEnv.proxy.getRiderState(entity);
 			if (null != rs)
@@ -38,49 +38,47 @@ public class PacketRideArmor extends AbstractPacket {
 			dimension = rideArmor.dimension;
 		}
 	}
-	@Override
-	public void encodeInto(ChannelHandlerContext context, ByteBuf buffer) {
-		buffer.writeFloat(moveForward);
-		buffer.writeFloat(moveStrafe);
-		buffer.writeBoolean(jump);
-		buffer.writeBoolean(sneak);
-		buffer.writeBoolean(dash);
-		buffer.writeBoolean(punch);
-		buffer.writeInt(ID);
-		buffer.writeInt(dimension);
-	}
 
 	@Override
-	public void decodeInto(ChannelHandlerContext context, ByteBuf buffer) {
-		moveForward = buffer.readFloat();
-		moveStrafe = buffer.readFloat();
-		jump = buffer.readBoolean();
-		sneak = buffer.readBoolean();
-		dash = buffer.readBoolean();
-		punch = buffer.readBoolean();
-		ID = buffer.readInt();
-		dimension = buffer.readInt();
-	}
-
-	@Override
-	public void handleClientSide(EntityPlayer player) {
-		
-	}
-	
-	@Override
-	public void handleServerSide(EntityPlayer player) {
+	public IMessage onMessage(MessageRideArmor message, MessageContext ctx) {
 		RiderState rs = new RiderState();
 		
-		rs.setMoveForward(moveForward);
-		rs.setMoveStrafe(moveStrafe);
-		rs.setJump(jump);
-		rs.setSneak(sneak);
-		Entity armor = getEntityByID(ID, dimension);
+		rs.setMoveForward(message.moveForward);
+		rs.setMoveStrafe(message.moveStrafe);
+		rs.setJump(message.jump);
+		rs.setSneak(message.sneak);
+		Entity armor = getEntityByID(message.ID, message.dimension);
 		
 		if( armor != null && armor instanceof EntityRideArmor)
 		{
 			((EntityRideArmor)armor).setRiderState(rs);
 		}
+		return null;
+	}
+
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		moveForward = buf.readFloat();
+		moveStrafe = buf.readFloat();
+		jump = buf.readBoolean();
+		sneak = buf.readBoolean();
+		dash = buf.readBoolean();
+		punch = buf.readBoolean();
+		ID = buf.readInt();
+		dimension = buf.readInt();
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeFloat(moveForward);
+		buf.writeFloat(moveStrafe);
+		buf.writeBoolean(jump);
+		buf.writeBoolean(sneak);
+		buf.writeBoolean(dash);
+		buf.writeBoolean(punch);
+		buf.writeInt(ID);
+		buf.writeInt(dimension);
+		
 	}
 	public Entity getEntityByID(int entityId, int dimension)
 	{
@@ -98,4 +96,5 @@ public class PacketRideArmor extends AbstractPacket {
 
 		return null;
 	}
+
 }

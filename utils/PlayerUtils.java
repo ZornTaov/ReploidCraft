@@ -1,14 +1,15 @@
 package zornco.reploidcraftenv.utils;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.client.gui.GUIItemHolder;
-import zornco.reploidcraftenv.client.gui.GuiMechBayController;
-import zornco.reploidcraftenv.network.PacketReploidCraftGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.client.gui.GUIItemHolder;
+import zornco.reploidcraftenv.client.gui.GuiMechBayController;
+import zornco.reploidcraftenv.network.MessageReploidCraftGui;
+import zornco.reploidcraftenv.network.PacketHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,7 +31,7 @@ public final class PlayerUtils {
 		player.closeContainer();
 		player.getNextWindowId();
 		
-		ReploidCraftEnv.packetPipeline.sendTo(new PacketReploidCraftGui(player.currentWindowId, name, columns, rows, title), player);
+		PacketHandler.INSTANCE.sendTo(new MessageReploidCraftGui(player.currentWindowId, name, columns, rows, title), player);
 		
 		player.openContainer = container;
 		player.openContainer.windowId = player.currentWindowId;

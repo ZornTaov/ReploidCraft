@@ -50,14 +50,10 @@ public class PartBase {
 		return null;
 	}
 	
-	
 	public float getMaxHealth() {
 		return maxHealth;
 	}
-	public static float[] makeFloatArray(float ... args)
-	{
-		return args;
-	}
+	
 	protected MovingObjectPosition getMovingObjectPositionFromMech(EntityRideArmor mech)
     {
 		float f = 1.0F;

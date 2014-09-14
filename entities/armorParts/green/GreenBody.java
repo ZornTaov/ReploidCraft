@@ -9,7 +9,7 @@ import zornco.reploidcraftenv.entities.armorParts.PartBase;
 public class GreenBody extends PartBase implements IPartBody {
 
 	public GreenBody() {
-		super(40, makeFloatArray(0.0F, 1.5F, 0.0F), makeFloatArray(1.5F, 1.5F));
+		super(40, new float[] {0.0F, 1.5F, 0.0F}, new float[] {1.5F, 1.5F});
 		// TODO Auto-generated constructor stub
 	}
 

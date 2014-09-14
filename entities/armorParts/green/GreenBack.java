@@ -9,7 +9,7 @@ import zornco.reploidcraftenv.entities.armorParts.PartBase;
 public class GreenBack extends PartBase implements IPartBack {
 
 	public GreenBack() {
-		super(10,  makeFloatArray(0.0F, 1.5F, 1.5F), makeFloatArray(1.0F, 1.0F));
+		super(10,  new float[] {0.0F, 1.5F, 1.5F}, new float[] {1.0F, 1.0F});
 	}
 
 	@Override

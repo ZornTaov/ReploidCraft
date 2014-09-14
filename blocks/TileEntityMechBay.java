@@ -517,6 +517,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		tag.setBoolean("hasMech", hasRide);
 		if(hasRide)
 		{
+			if(myRide != null)
 			tag.setInteger("MechID", myRide.getEntityId());
 			NBTTagList list = new NBTTagList();
 			for (int i = 0; i < inv.length; i++) {

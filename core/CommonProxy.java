@@ -21,6 +21,7 @@ import zornco.reploidcraftenv.entities.armorParts.green.GreenArm;
 import zornco.reploidcraftenv.entities.armorParts.green.GreenBack;
 import zornco.reploidcraftenv.entities.armorParts.green.GreenBody;
 import zornco.reploidcraftenv.entities.armorParts.green.GreenLegs;
+import zornco.reploidcraftenv.entities.armorParts.hawk.HawkBack;
 import zornco.reploidcraftenv.entities.armorParts.red.RedBack;
 import zornco.reploidcraftenv.entities.armorParts.red.RedBody;
 import zornco.reploidcraftenv.utils.RiderState;
@@ -132,6 +133,8 @@ public class CommonProxy implements IGuiHandler {
 		this.partRegistry.registerPart("RED", PartSlot.ARMRIGHT, 	20, new float[] {-1.25F, 1.0F, 0.0F}, new float[] {1.0F, 1.0F});
 		
 		this.partRegistry.registerPart("FROG", PartSlot.HEAD, 		new FrogHead());
+		
+		this.partRegistry.registerPart("HAWK", PartSlot.BACK, 		new HawkBack());
 		
 		int s = 0;
 		for (Object list : this.partRegistry.getMap().values()) {

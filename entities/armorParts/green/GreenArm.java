@@ -18,7 +18,7 @@ public class GreenArm extends PartBase implements IPartArm{
 
 	ItemStack[] tools = {new ItemStack(Items.iron_pickaxe), new ItemStack(Items.iron_shovel), new ItemStack(Items.iron_axe)};
 	public GreenArm() {
-		super(20, makeFloatArray(1.25F, 1.0F, 0.0F), makeFloatArray(1.0F, 1.0F));
+		super(20, new float[] {1.25F, 1.0F, 0.0F}, new float[] {1.0F, 1.0F});
 	}
 
 	@Override

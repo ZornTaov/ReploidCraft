@@ -1,6 +1,5 @@
 package zornco.reploidcraftenv.client.renderers;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -8,6 +7,13 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorArmLeft;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorArmRight;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBack;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBase;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorHead;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorLegs;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorTorso;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.entities.EntityRideArmorPart;
 import zornco.reploidcraftenv.entities.armorParts.PartSlot;
@@ -15,7 +21,12 @@ import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 public class RenderRideArmor extends Render {
 
 	private int nagged = -1;
-	private ModelBase modelRideArmor;
+	private ModelRideArmorBase modelHead;
+	private ModelRideArmorBase modelChest;
+	private ModelRideArmorBase modelBack;
+	private ModelRideArmorBase modelLegs;
+	private ModelRideArmorBase modelArmLeft;
+	private ModelRideArmorBase modelArmRight;
 	public ResourceLocation defaultTexture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorGreen.png");
 
 	public RenderRideArmor()
@@ -38,7 +49,12 @@ public class RenderRideArmor extends Render {
 	{
 		if (this.nagged != 1)
 		{
-			this.modelRideArmor = new ModelrideArmor();
+			this.modelHead = new ModelRideArmorHead();
+			this.modelChest = new ModelRideArmorTorso();
+			this.modelBack = new ModelRideArmorBack();
+			this.modelLegs = new ModelRideArmorLegs();
+			this.modelArmLeft = new ModelRideArmorArmLeft();
+			this.modelArmRight = new ModelRideArmorArmRight();
 			this.nagged = 1;
 		}
 
@@ -52,29 +68,38 @@ public class RenderRideArmor extends Render {
 
 		GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);
+		float f9 = (float)(Math.cos((double)(f7 * (float)Math.PI * 0.4F )))/4f * f6;
+		float f10 = (float)(Math.sin((double)(f8 * (float)Math.PI +0.75F)))*0.7375F-0.5F;
+		//System.out.println(f10);
+		GL11.glTranslatef(0.0F, -f9/5F-(f10*0.6325F)-0.01F, 0F);
 		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BODY.ordinal()]).getType()));
-        ((ModelrideArmor) this.modelRideArmor).renderTorso(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+        this.modelChest.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
         if(entity.rideArmorParts != null)
         {
+        	if (entity.hasPart(PartSlot.HEAD))
+        	{
+        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.HEAD.ordinal()]).getType()));
+        		this.modelHead.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+        	}
         	if (entity.hasPart(PartSlot.ARMLEFT))
         	{
         		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMLEFT.ordinal()]).getType()));
-        		((ModelrideArmor) this.modelRideArmor).renderArmLeftA(0.0625F);
+        		this.modelArmLeft.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
         	}
         	if (entity.hasPart(PartSlot.ARMRIGHT))
         	{
         		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMRIGHT.ordinal()]).getType()));
-        		((ModelrideArmor) this.modelRideArmor).renderArmRightA((0.0625F));
+        		this.modelArmRight.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
         	}
         	if (entity.hasPart(PartSlot.BACK))
         	{
         		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BACK.ordinal()]).getType()));
-        		((ModelrideArmor) this.modelRideArmor).renderBackPackA((0.0625F));
+        		this.modelBack.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
         	}
         	if (entity.hasPart(PartSlot.LEGS))
         	{
         		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.LEGS.ordinal()]).getType()));
-        		((ModelrideArmor) this.modelRideArmor).renderHips((0.0625F));
+        		this.modelLegs.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
         	}/*
         	((ModelrideArmor)modelRideArmor).upperArmLeftA.isHidden = !entity.hasPart(PartSlot.ARMLEFT);
         	((ModelrideArmor)modelRideArmor).upperArmRightA.isHidden = !entity.hasPart(PartSlot.ARMRIGHT);

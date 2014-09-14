@@ -33,7 +33,8 @@ import zornco.reploidcraftenv.core.Config;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityMet;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.network.PacketRideArmor;
+import zornco.reploidcraftenv.network.MessageRideArmor;
+import zornco.reploidcraftenv.network.PacketHandler;
 import zornco.reploidcraftenv.sounds.Sounds;
 import zornco.reploidcraftenv.utils.RiderState;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -128,8 +129,8 @@ public class ClientProxy extends CommonProxy {
 
 			if (rideArmor.riderState.isChanged())
 			{
-				PacketRideArmor packet = new PacketRideArmor(rideArmor, entity);
-				ReploidCraftEnv.packetPipeline.sendToServer(packet);
+				MessageRideArmor packet = new MessageRideArmor(rideArmor, entity);
+				PacketHandler.INSTANCE.sendToServer(packet);
 			}
 
 			rideArmor.riderState.resetChanged();
