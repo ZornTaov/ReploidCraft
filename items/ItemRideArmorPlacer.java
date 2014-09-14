@@ -63,7 +63,6 @@ public class ItemRideArmorPlacer extends Item {
 			{
 				par3World.spawnEntityInWorld(rideArmor);
 			}
-			rideArmor.setPart(PartSlot.HEAD, "RED");
 			rideArmor.setPart(PartSlot.BODY, "RED");
 			rideArmor.setPart(PartSlot.BACK, "RED");
 			rideArmor.setPart(PartSlot.LEGS, "RED");

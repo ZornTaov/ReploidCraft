@@ -13,9 +13,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.armorParts.PartBase;
-import zornco.reploidcraftenv.entities.armorParts.PartList;
 import zornco.reploidcraftenv.entities.armorParts.PartSlot;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -78,7 +76,7 @@ public class ItemRideArmorPart extends Item
 	 */
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		for (int var4 = 0; var4 < typeAmmount; ++var4)
+		for (int var4 = 6; var4 < typeAmmount; ++var4)
 		{
 			par3List.add(new ItemStack(par1, 1, var4));
 		}

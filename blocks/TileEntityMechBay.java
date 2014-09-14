@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
@@ -173,10 +174,6 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public boolean isUseableByPlayer(EntityPlayer var1) {
 		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
-	public World getWorld()
-	{
-		return this.worldObj;
-	}
 	@Override
 	public void openInventory() {
 
@@ -200,7 +197,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		{
 			for (int i = 0; i < rideArmor.getParts().length; i++)
 			{
-				if(((EntityRideArmorPart) rideArmor.getParts()[i]).getType() != "EMPTY")
+				if(((EntityRideArmorPart) rideArmor.getParts()[i]).getType() != "EMPTY" && ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) rideArmor.getParts()[i]).getType(), PartSlot.getSlot(i)) != null)
 					bay.inv[i] = new ItemStack(ReploidCraftEnv.rideArmorPart, 1, ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) rideArmor.getParts()[i]).getType(), PartSlot.getSlot(i)).getPartNumber());
 			}
 		}
@@ -214,6 +211,13 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 			for (int i = 0; i < rideArmor.getParts().length; i++) {
 				if(bay.inv[i] == null) 
 				{
+					if(i == 1)
+					{
+						//going to assume that the chest has been removed
+						bay.myRide.setDead();
+						dropContent(0, bay.getMaster(), bay.getWorldObj(), bay.xCoord, bay.xCoord, bay.yCoord, -1);
+						break;
+					}
 					rideArmor.setPart(PartSlot.getSlot(i), "EMPTY");
 					continue;
 				}
@@ -258,9 +262,9 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				{
 					entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
 				}
-
 				if(!world.isRemote)
 					world.spawnEntityInWorld(entityitem);
+
 			}
 		}
 	}
@@ -303,7 +307,6 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		List<Entity> list = this.worldObj.getEntitiesWithinAABB(EntityRideArmor.class, getRenderBoundingBox());
 		if(!hasRide)
 		{
-
 			for (Entity entity : list) {
 				if(entity instanceof EntityRideArmor && entity.riddenByEntity == null)
 				{
@@ -312,30 +315,73 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				}
 				break; //only need the one
 			}
+
+			if(inv[1] != null && list.isEmpty())
+			{
+				//spawn a new ride armor with the new chest
+				myRide = new EntityRideArmor(getWorldObj(), xCoord, yCoord+1, zCoord);
+				myRide.rotationYaw = (float)(MathHelper.floor_double((double)this.rotations[direction]));//par2EntityPlayer.rotationYawHead - 180;
+
+				if (!this.getWorldObj().getCollidingBoundingBoxes(myRide, myRide.boundingBox.expand(-0.1D, -0.1D, -0.1D)).isEmpty())
+				{
+					return;
+				}
+
+				if (!this.getWorldObj().isRemote)
+				{
+					this.getWorldObj().spawnEntityInWorld(myRide);
+				}
+				myRide.setPart(PartSlot.BODY, ItemRideArmorPart.getPartByMetadata(inv[1].getItemDamage()).split("\\.")[0]);
+				hasRide = true;
+				return;
+			}
 		}
 		else
 		{
 			if((list.isEmpty() || myRide == null || myRide.riddenByEntity != null) && hasRide) 
 			{
 				hasRide = false;
-				this.inv = new ItemStack[11];
+				this.inv = new ItemStack[6];
 				return;
 			}
 			myRide.setLocationAndAngles(this.xCoord + 0.5F, this.yCoord + 1F, this.zCoord + 0.5F, rotations[direction], 0);
-			if(numPlayersUsing == 0)
-			{
-				if(this.hasMaster() && this.isMaster() && this.hasRide)
-					this.populateInventory(myRide, this);
-			}
-			else
-			{
-				if(this.hasMaster() && this.isMaster() && this.hasRide)
-					setPartsToArmor(myRide, getMaster());
-			}
+
 		}
 
 	}
+	@Override
+	public void updateEntity() {
+		if(hasMaster() && isMaster())
+			if(hasRide && myRide != null){
 
+				if(numPlayersUsing == 0)
+				{
+					if(this.hasRide)
+						this.populateInventory(myRide, this);
+				}
+				else
+				{
+					if(myRide.riddenByEntity != null)
+					{
+						myRide.riddenByEntity.mountEntity(null);
+						return;
+					}
+					if(inv[1] == null )
+					{
+						//going to assume that the chest has been removed
+						myRide.setDead();
+						hasRide = false;
+						dropContent(0, getMaster(), getWorldObj(), xCoord, yCoord+3, zCoord, -1);
+						this.inv = new ItemStack[6];
+						return;
+					}
+					if( this.hasRide)
+						setPartsToArmor(myRide, getMaster());
+				}
+
+			}
+		super.updateEntity();
+	}
 	@Override
 	public boolean checkMultiBlockForm() {
 		int dir = -1;
@@ -526,31 +572,31 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	/*
 	 * Mech Bay 
 	 */
-	 @Override
-	 public AxisAlignedBB getRenderBoundingBox() 
-	 {
-		 return AxisAlignedBB.getBoundingBox(
-				 xCoord-2 + sideOffset[direction][0][0], 
-				 yCoord, 
-				 zCoord-2 + sideOffset[direction][0][1], 
-				 xCoord+3 + sideOffset[direction][1][0], 
-				 yCoord+4, 
-				 zCoord+3 + sideOffset[direction][1][1]);
-	 }
-	 public int getDirection() {
-		 return direction;
-	 }
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() 
+	{
+		return AxisAlignedBB.getBoundingBox(
+				xCoord-2 + sideOffset[direction][0][0], 
+				yCoord, 
+				zCoord-2 + sideOffset[direction][0][1], 
+				xCoord+3 + sideOffset[direction][1][0], 
+				yCoord+4, 
+				zCoord+3 + sideOffset[direction][1][1]);
+	}
+	public int getDirection() {
+		return direction;
+	}
 
-	 public void setDirection(int direction) {
-		 this.direction = direction;
-	 }
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
 
-	 public EntityRideArmor getMyRide() {
-		 return myRide;
-	 }
+	public EntityRideArmor getMyRide() {
+		return myRide;
+	}
 
-	 public boolean hasRide() {
-		 return hasRide;
-	 }
+	public boolean hasRide() {
+		return hasRide;
+	}
 
 }

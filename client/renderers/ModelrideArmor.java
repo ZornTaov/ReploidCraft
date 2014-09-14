@@ -396,9 +396,10 @@ public class ModelrideArmor extends ModelBase
 			//System.out.println(f10);
 			GL11.glTranslatef(0.0F, -f9/5F-(f10*0.6325F)-0.01F, 0F);
 			setRotation(chest, 0F, f7/2, 0F);
-			setRotation(upperArmRightA, f7, 0F, 0.2F);
+			setRotation(backPackA, 0F, f7/2, 0F);
+			setRotation(upperArmRightA, f7, f7/2, 0.2F);
 			setRotation(lowerArmRight, -f7, 0F, 0F);
-			setRotation(upperArmLeftA, -f7, 0F, -0.2F);
+			setRotation(upperArmLeftA, -f7, f7/2, -0.2F);
 			setRotation(lowerArmLeft, f7, 0F, 0F);
 			float f11 = (float)(Math.sin((double)(f1 * (float)Math.PI * 0.2F )))/4f * f;
 			setRotation(upperLegRight, 30F*DEG_TO_RAD-(f2*160F*DEG_TO_RAD), 0F, 0F);

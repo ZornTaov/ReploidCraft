@@ -34,6 +34,8 @@ import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.entities.armorParts.IPartArm;
 import zornco.reploidcraftenv.entities.armorParts.IPartBack;
+import zornco.reploidcraftenv.entities.armorParts.IPartBody;
+import zornco.reploidcraftenv.entities.armorParts.IPartHead;
 import zornco.reploidcraftenv.entities.armorParts.IPartLegs;
 import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 import zornco.reploidcraftenv.utils.RiderState;
@@ -86,7 +88,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		this.setSize(1.4F, 2.5F);
 		this.isImmuneToFire = false;
 		this.setChested(false);
-		this.getNavigator().setAvoidsWater(true);
+		//this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIPanic(this, 1.2D));
 		this.tasks.addTask(6, new EntityAIWander(this, 0.7D));
@@ -400,7 +402,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		}
 		else return 0.4F;
 	}
-	
+
 	public boolean doMechAttackLeft()
 	{
 		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT) instanceof IPartArm)
@@ -419,12 +421,12 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			}
 		return false;
 	}
-	
+
 	public void doMechParticle(Entity mech, PartSlot slot)
 	{
 		ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(slot.ordinal()).getType(), slot).doParticle(mech);
 	}
-	
+
 	public float getMechSpeed()
 	{
 		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(LEGS.ordinal()).getType(), LEGS) instanceof IPartLegs)
@@ -433,7 +435,22 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		}
 		else return 0.2F;
 	}
-
+	public boolean canMechWaterBreathe()
+	{
+		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(HEAD.ordinal()).getType(), HEAD) instanceof IPartHead)
+		{
+			return ((IPartHead)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(HEAD.ordinal()).getType(), HEAD)).isSealed();
+		}
+		else return false;
+	}
+	public boolean isMechFireResistant()
+	{
+		if(ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY) instanceof IPartBody)
+		{
+			return ((IPartBody)ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY)).isLavaResistant();
+		}
+		else return false;
+	}
 	/**
 	 * Returns the sound this mob makes on death.
 	 */
@@ -730,7 +747,6 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	public void onUpdate()
 	{
 		super.onUpdate();
-
 		//TODO: setdead
 		//this.setDead();
 		/*if (this.worldObj.isRemote && this.dataWatcher.hasChanges())
@@ -744,6 +760,10 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			this.jumpRearingCounter = 0;
 			this.setRearing(false);
 		}*/
+		if(isMechFireResistant())
+			this.fireResistance = 1;
+		if(this.fallDistance > 1)
+			this.fallDistance = 1.0F;
 		if (this.isRearing() && this.onGround)
 		{
 			this.setRearing(false);
@@ -774,7 +794,10 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				this.field_110279_bq = 0;
 			}
 		}
-
+		if(riddenByEntity != null && canMechWaterBreathe())
+		{
+			riddenByEntity.setAir(300);
+		}
 		//this.prevHeadLean = this.headLean;
 
 		/*if (this.isEatingHaystack())
@@ -1324,7 +1347,10 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		this.riderState.setJump(riderState.isJump());
 		this.riderState.setSneak(riderState.isSneak());
 	}
-
+	public boolean shouldDismountInWater(Entity rider)
+	{
+		return canMechWaterBreathe();
+	}
 	@Override
 	public World func_82194_d() {
 		return this.worldObj;
@@ -1337,30 +1363,30 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	@Override
 	public boolean attackEntityFromPart(EntityDragonPart var1, DamageSource var2, float var3) {
-		
+
 		EntityRideArmorPart part = (EntityRideArmorPart)var1;
 		if (part.getHealth() <= 0.0F)
-        {
-            return false;
-        }
+		{
+			return false;
+		}
 		if ((float)part.hurtResistantTime > (float)part.maxHurtResistantTime / 2.0F)
-        {
-            if (var3 <= part.lastDamage)
-            {
-                return false;
-            }
+		{
+			if (var3 <= part.lastDamage)
+			{
+				return false;
+			}
 
-            part.damageEntity(var2, var3 - part.lastDamage);
-            part.lastDamage = var3;
-        }
-        else
-        {
-        	part.lastDamage = var3;
-        	part.prevHealth = part.getHealth();
-        	part.hurtResistantTime = part.maxHurtResistantTime;
-        	part.damageEntity(var2, var3);
-        	part.hurtTime = this.maxHurtTime = 10;
-        }
+			part.damageEntity(var2, var3 - part.lastDamage);
+			part.lastDamage = var3;
+		}
+		else
+		{
+			part.lastDamage = var3;
+			part.prevHealth = part.getHealth();
+			part.hurtResistantTime = part.maxHurtResistantTime;
+			part.damageEntity(var2, var3);
+			part.hurtTime = this.maxHurtTime = 10;
+		}
 		//System.out.println("hit on the " + part.getName() + FMLCommonHandler.instance().getEffectiveSide());
 		if(part.getHealth() <= 0.0F)
 		{
@@ -1410,7 +1436,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				//return this.attackEntityFrom2(var2, var3);
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -1456,7 +1482,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			if(((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot)).isMirrored())
 				offsets = ((IPartArm)ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot)).getArmPos(ARMRIGHT);
 		}
-		
+
 		double X = this.posX + offsets[0] * f2 + offsets[2] * f1;
 		double Z = this.posZ + offsets[0] * f1 - offsets[2] * f2;
 		part.onUpdate();

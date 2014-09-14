@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL12;
 import zornco.reploidcraftenv.blocks.ContainerMechBay;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 import zornco.reploidcraftenv.blocks.TileMultiBlock;
+import zornco.reploidcraftenv.entities.EntityRideArmor;
 
 public class GuiMechBayController extends GuiContainer {
 	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraftenv", "textures/gui/mechBay.png");
@@ -92,7 +93,11 @@ public class GuiMechBayController extends GuiContainer {
 		p_147046_5_.prevRotationYaw = p_147046_5_.rotationYaw;
 		GL11.glTranslatef(0.0F, p_147046_5_.yOffset, 0.0F);
 		RenderManager.instance.playerViewY = 180.0F;
+		float sit = ((EntityRideArmor)p_147046_5_).sitAngle;
+		((EntityRideArmor)p_147046_5_).sitAngle = 0;
 		RenderManager.instance.renderEntityWithPosYaw(p_147046_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+		((EntityRideArmor)p_147046_5_).sitAngle = sit;
+		
 		p_147046_5_.renderYawOffset = f2;
 		p_147046_5_.rotationYaw = f3;
 		p_147046_5_.rotationPitch = f4;

@@ -7,6 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import zornco.reploidcraftenv.client.gui.SlotMechBay;
+import zornco.reploidcraftenv.client.gui.SlotMechBayBody;
 import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 
 public class ContainerMechBay extends Container {
@@ -28,7 +29,7 @@ public class ContainerMechBay extends Container {
 
 
 		this.addSlotToContainer(new SlotMechBay(this.mechBay, 0, 8 + 1 * 18, 17 + 0 * 18, PartSlot.HEAD));//HEAD,
-		this.addSlotToContainer(new SlotMechBay(this.mechBay, 1, 8 + 1 * 18, 17 + 1 * 18, PartSlot.BODY));//BODY
+		this.addSlotToContainer(new SlotMechBayBody(this.mechBay, 1, 8 + 1 * 18, 17 + 1 * 18, PartSlot.BODY));//BODY
 		this.addSlotToContainer(new SlotMechBay(this.mechBay, 2, 8 + 2 * 18, 17 + 0 * 18, PartSlot.BACK));//BACK
 		this.addSlotToContainer(new SlotMechBay(this.mechBay, 3, 8 + 1 * 18, 17 + 2 * 18, PartSlot.LEGS));//LEGS
 		this.addSlotToContainer(new SlotMechBay(this.mechBay, 4, 8 + 2 * 18, 17 + 1 * 18, PartSlot.ARMLEFT));//ARMLEFT

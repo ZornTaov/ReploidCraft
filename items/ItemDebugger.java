@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
@@ -34,22 +35,25 @@ public class ItemDebugger extends Item {
 		 * BedCraftBeyond.logger.info(""+(par3World.getClass().toString()));
 		 * BedCraftBeyond.logger.info(""+par3World.getBlockId(par4, par5, par6));
 		 */
-		ReploidCraftEnv.logger.info(FMLCommonHandler.instance().getEffectiveSide());
-		ReploidCraftEnv.logger.info("" + par3World.getBlockMetadata(par4, par5, par6));
+		par2EntityPlayer.addChatMessage(new ChatComponentText(FMLCommonHandler.instance().getEffectiveSide()+""));
+		par2EntityPlayer.addChatMessage(new ChatComponentText("" + par3World.getBlockMetadata(par4, par5, par6)));
 		TileEntity tile = par3World.getTileEntity(par4, par5, par6);
 
 		ReploidCraftEnv.logger.info("" + tile.getClass());
 		if (tile != null) {
 			if (tile instanceof TileEntityMechBayEnergy) {
 				TileEntityMechBay tilebed = (TileEntityMechBay) tile;
-				ReploidCraftEnv.logger.info(tilebed.hasMaster() + "2");
-				ReploidCraftEnv.logger.info(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ());
+				par2EntityPlayer.addChatMessage(new ChatComponentText(tilebed.hasMaster() + "2"));
+				par2EntityPlayer.addChatMessage(new ChatComponentText(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ()));
 			}
 			if (tile instanceof TileEntityMechBay) {
 				TileEntityMechBay tilebed = (TileEntityMechBay) tile;
-				ReploidCraftEnv.logger.info(tilebed.hasMaster() + "1");
-				ReploidCraftEnv.logger.info(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ());
-				ReploidCraftEnv.logger.info(tilebed.hasRide());
+				par2EntityPlayer.addChatMessage(new ChatComponentText(tilebed.hasMaster() + "1"));
+				par2EntityPlayer.addChatMessage(new ChatComponentText(tilebed.getMasterX() + " " + tilebed.getMasterY() + " " + tilebed.getMasterZ()));
+				if(tilebed.hasMaster()&&tilebed.isMaster())
+					par2EntityPlayer.addChatMessage(new ChatComponentText(tilebed.hasRide()+""));
+				else if(tilebed.hasMaster())
+					par2EntityPlayer.addChatMessage(new ChatComponentText(tilebed.getMaster().hasRide()+""));
 			}
 		}
 
