@@ -7,11 +7,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBase;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PartBase {
 
+	@SideOnly(Side.CLIENT)
+	protected ModelRideArmorBase model;
+
+	@SideOnly(Side.CLIENT)
+	protected ResourceLocation texture;
 
 	private final float[] offsetXYZ;
 
@@ -19,13 +28,13 @@ public class PartBase {
 	 * 0 = width, 1 = height
 	 */
 	private final float[] size;
-	
+
 	private final float maxHealth;
-	
+
 	protected Random rand;
 
 	private int partNumber;
-	
+
 	private String partTypeSlot;
 
 	public PartBase(float health, float[] offsetXYZ, float[] size)
@@ -45,83 +54,97 @@ public class PartBase {
 	public float[] getSize() {
 		return size;
 	}
-	
+
 	public Object[] getRecipe() {
 		return null;
 	}
-	
+
 	public float getMaxHealth() {
 		return maxHealth;
 	}
-	
+
 	protected MovingObjectPosition getMovingObjectPositionFromMech(EntityRideArmor mech)
-    {
+	{
 		float f = 1.0F;
-        float f1 = mech.prevRotationPitch + (mech.rotationPitch - mech.prevRotationPitch) * f;
-        float f2 = mech.prevRotationYaw + (mech.rotationYaw - mech.prevRotationYaw) * f;
-        double d0 = mech.prevPosX + (mech.posX - mech.prevPosX) * (double)f;
-        double d1 = mech.prevPosY + (mech.posY - mech.prevPosY) * (double)f + 1.62D - (double)mech.yOffset;
-        double d2 = mech.prevPosZ + (mech.posZ - mech.prevPosZ) * (double)f;
-        Vec3 vec3 = Vec3.createVectorHelper(d0, d1, d2);
-        float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
-        float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
-        float f5 = -MathHelper.cos(-f1 * 0.017453292F);
-        float f6 = MathHelper.sin(-f1 * 0.017453292F);
-        float f7 = f4 * f5;
-        float f8 = f3 * f5;
-        double d3 = 5.0D;
-        Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-        MovingObjectPosition movingobjectposition = mech.worldObj.rayTraceBlocks(vec3, vec31, true);
+		float f1 = mech.prevRotationPitch + (mech.rotationPitch - mech.prevRotationPitch) * f;
+		float f2 = mech.prevRotationYaw + (mech.rotationYaw - mech.prevRotationYaw) * f;
+		double d0 = mech.prevPosX + (mech.posX - mech.prevPosX) * (double)f;
+		double d1 = mech.prevPosY + (mech.posY - mech.prevPosY) * (double)f + 1.62D - (double)mech.yOffset;
+		double d2 = mech.prevPosZ + (mech.posZ - mech.prevPosZ) * (double)f;
+		Vec3 vec3 = Vec3.createVectorHelper(d0, d1, d2);
+		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
+		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
+		float f5 = -MathHelper.cos(-f1 * 0.017453292F);
+		float f6 = MathHelper.sin(-f1 * 0.017453292F);
+		float f7 = f4 * f5;
+		float f8 = f3 * f5;
+		double d3 = 5.0D;
+		Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
+		MovingObjectPosition movingobjectposition = mech.worldObj.rayTraceBlocks(vec3, vec31, true);
 
-        if (movingobjectposition != null)
-        {
-            return movingobjectposition;
-        }
-        else
-        {
-            Vec3 vec32 = mech.getLook(f);
-            //boolean flag = false;
-            float f9 = 1.0F;
-            List<?> list = mech.worldObj.getEntitiesWithinAABBExcludingEntity(mech, mech.boundingBox.addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand((double)f9, (double)f9, (double)f9));
-            int i;
-            Entity entity = null;
-            for (i = 0; i < list.size(); ++i)
-            {
-                Entity entity1 = (Entity)list.get(i);
+		if (movingobjectposition != null)
+		{
+			return movingobjectposition;
+		}
+		else
+		{
+			Vec3 vec32 = mech.getLook(f);
+			//boolean flag = false;
+			float f9 = 1.0F;
+			List<?> list = mech.worldObj.getEntitiesWithinAABBExcludingEntity(mech, mech.boundingBox.addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand((double)f9, (double)f9, (double)f9));
+			int i;
+			Entity entity = null;
+			for (i = 0; i < list.size(); ++i)
+			{
+				Entity entity1 = (Entity)list.get(i);
 
-                if (entity1.canBeCollidedWith())
-                {
-                    float f10 = entity1.getCollisionBorderSize();
-                    AxisAlignedBB axisalignedbb = entity1.boundingBox.expand((double)f10, (double)f10, (double)f10);
+				if (entity1.canBeCollidedWith())
+				{
+					float f10 = entity1.getCollisionBorderSize();
+					AxisAlignedBB axisalignedbb = entity1.boundingBox.expand((double)f10, (double)f10, (double)f10);
 
-                    if (axisalignedbb.isVecInside(vec3))
-                    {
-                        entity = entity1;
-                    }
-                }
-            }
-            if(entity != null)
-            {
-            	return new MovingObjectPosition(entity);
-            }
-        }
+					if (axisalignedbb.isVecInside(vec3))
+					{
+						entity = entity1;
+					}
+				}
+			}
+			if(entity != null)
+			{
+				return new MovingObjectPosition(entity);
+			}
+		}
 		return null;
-    }
+	}
 	public void doParticle(Entity mech) {}
-	
+
 	public int getPartNumber() {
 		return partNumber;
 	}
+
 	public void setPartNumber(int partNumber) {
 		this.partNumber = partNumber;
 	}
+
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return this.partTypeSlot;
 	}
+
 	public void setString(String string) {
-		// TODO Auto-generated method stub
 		this.partTypeSlot = string;
 	}
+
+	@SideOnly(Side.CLIENT)
+	public ModelRideArmorBase getModel()
+	{
+		return null;
+	}
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture()
+	{
+		return null;
+	}
+	@SideOnly(Side.CLIENT)
+	public void initModel() {}
 }

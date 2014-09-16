@@ -11,7 +11,9 @@ import zornco.reploidcraftenv.items.ItemRideArmorPart;
 
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class PartsRegistry extends RegistrySimple
 {
@@ -84,6 +86,9 @@ public class PartsRegistry extends RegistrySimple
 		}
 		part.setPartNumber(partNumber++);
 		part.setString(type+"."+slot);
+
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+			part.initModel();
 		((PartList)this.getObject(type)).getPartList().put(slot, part);
 		ItemRideArmorPart.getPartList().add((PartBase) part);
 		if(part.getRecipe() != null)

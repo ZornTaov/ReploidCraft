@@ -4,16 +4,16 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 
-public class ModelRideArmorHead extends ModelRideArmorBase {
+public class ModelRideArmorHeadFrog extends ModelRideArmorBase {
     
-	public ModelRideArmorHead() {
+	public ModelRideArmorHeadFrog() {
 
 		super();
-		setTextureOffset("head.headTop", 92, 63);
-		setTextureOffset("head.headFront", 104, 88);
-		setTextureOffset("head.headBack", 104, 104);
-		setTextureOffset("head.headLeft", 154, 88);
-		setTextureOffset("head.headRight", 166, 50);
+		setTextureOffset("head.headTop", 0, 0);
+		setTextureOffset("head.headFront", 46, 41);
+		setTextureOffset("head.headBack", 24, 25);
+		setTextureOffset("head.headLeft", 0, 25);
+		setTextureOffset("head.headRight", 74, 3);
 
 		head = new ModelRenderer(this, "head");
 		head.setRotationPoint(0F, -24F, 0F);

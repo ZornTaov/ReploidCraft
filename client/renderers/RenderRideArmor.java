@@ -59,10 +59,10 @@ public class RenderRideArmor extends Render {
 		}
 
 		float f6 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * par9;
-        float f7 = entity.limbSwing - entity.limbSwingAmount * (1.0F - par9);
-        float f8 = entity.prevSitAngle + (entity.sitAngle - entity.prevSitAngle) * par9;
-        
-        GL11.glPushMatrix();
+		float f7 = entity.limbSwing - entity.limbSwingAmount * (1.0F - par9);
+		float f8 = entity.prevSitAngle + (entity.sitAngle - entity.prevSitAngle) * par9;
+
+		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		GL11.glTranslatef(0.0F, 1.25F, 0.0F);
 
@@ -72,46 +72,60 @@ public class RenderRideArmor extends Render {
 		float f10 = (float)(Math.sin((double)(f8 * (float)Math.PI +0.75F)))*0.7375F-0.5F;
 		//System.out.println(f10);
 		GL11.glTranslatef(0.0F, -f9/5F-(f10*0.6325F)-0.01F, 0F);
+		ModelRideArmorBase temp;
 		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BODY.ordinal()]).getType()));
-        this.modelChest.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
-        if(entity.rideArmorParts != null)
-        {
-        	if (entity.hasPart(PartSlot.HEAD))
-        	{
-        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.HEAD.ordinal()]).getType()));
-        		this.modelHead.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
-        	}
-        	if (entity.hasPart(PartSlot.ARMLEFT))
-        	{
-        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMLEFT.ordinal()]).getType()));
-        		this.modelArmLeft.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
-        	}
-        	if (entity.hasPart(PartSlot.ARMRIGHT))
-        	{
-        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMRIGHT.ordinal()]).getType()));
-        		this.modelArmRight.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
-        	}
-        	if (entity.hasPart(PartSlot.BACK))
-        	{
-        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BACK.ordinal()]).getType()));
-        		this.modelBack.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
-        	}
-        	if (entity.hasPart(PartSlot.LEGS))
-        	{
-        		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.LEGS.ordinal()]).getType()));
-        		this.modelLegs.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
-        	}/*
+		this.modelChest.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+		if(entity.rideArmorParts != null)
+		{
+			if (entity.hasPart(PartSlot.HEAD))
+			{
+				this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.HEAD.ordinal()]).getType()));
+				this.modelHead.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+			}
+			if (entity.hasPart(PartSlot.ARMLEFT))
+			{
+				this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMLEFT.ordinal()]).getType()));
+				this.modelArmLeft.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+			}
+			if (entity.hasPart(PartSlot.ARMRIGHT))
+			{
+				this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.ARMRIGHT.ordinal()]).getType()));
+				this.modelArmRight.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+			}
+			if (entity.hasPart(PartSlot.BACK))
+			{
+				this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[PartSlot.BACK.ordinal()]).getType(), PartSlot.BACK).getTexture() != null
+						?ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[PartSlot.BACK.ordinal()]).getType(), PartSlot.BACK).getTexture()
+								:ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BACK.ordinal()]).getType()));
+				if(ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[2]).getType(), PartSlot.BACK).getModel()!=null)
+				{
+					temp = this.modelBack;
+					this.modelBack = ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[2]).getType(), PartSlot.BACK).getModel();
+					this.modelBack.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+					this.modelBack = temp;
+				}
+				else
+				{
+					this.modelBack.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+				}
+				
+			}
+			if (entity.hasPart(PartSlot.LEGS))
+			{
+				this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.LEGS.ordinal()]).getType()));
+				this.modelLegs.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+			}/*
         	((ModelrideArmor)modelRideArmor).upperArmLeftA.isHidden = !entity.hasPart(PartSlot.ARMLEFT);
         	((ModelrideArmor)modelRideArmor).upperArmRightA.isHidden = !entity.hasPart(PartSlot.ARMRIGHT);
         	((ModelrideArmor)modelRideArmor).backPackA.isHidden = !entity.hasPart(PartSlot.BACK);*/
-        }
+		}
 
 		GL11.glPopMatrix();
 	}
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		
-		
+
+
 		return defaultTexture;
 	}
 

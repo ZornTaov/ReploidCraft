@@ -4,6 +4,7 @@ import static zornco.reploidcraftenv.entities.armorParts.PartSlot.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
@@ -17,6 +18,13 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySilverfish;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -265,7 +273,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	 */
 	public boolean canBePushed()
 	{
-		return this.riddenByEntity != null && this.hasPart(LEGS);
+		return this.riddenByEntity == null && this.hasPart(LEGS);
 	}
 
 	public boolean prepareChunkForSpawn()
@@ -682,7 +690,23 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			par1EntityPlayer.mountEntity(this);
 		}
 	}
-
+	@Override
+	public void applyEntityCollision(Entity p_70108_1_) {
+		if (!this.worldObj.isRemote)
+		{
+			if (p_70108_1_ != this.riddenByEntity)
+			{
+				if (p_70108_1_ instanceof EntityLivingBase && !(p_70108_1_ instanceof EntityRideArmor || p_70108_1_ instanceof EntityRideArmorPart) 
+						&& !(p_70108_1_ instanceof EntityPlayer) && !(p_70108_1_ instanceof EntityIronGolem) 
+						&& !(p_70108_1_ instanceof EntityMob && !(p_70108_1_ instanceof EntityZombie) && !(p_70108_1_ instanceof EntitySkeleton))
+						&& !(p_70108_1_ instanceof EntityAgeable && !(p_70108_1_ instanceof EntityVillager)) 
+						&& this.motionX * this.motionX + this.motionZ * this.motionZ > 0.01D && this.riddenByEntity == null && p_70108_1_.ridingEntity == null)
+				{
+					p_70108_1_.mountEntity(this);
+				}
+			}
+		}
+	}
 	/**
 	 * Dead and sleeping entities cannot move
 	 */
