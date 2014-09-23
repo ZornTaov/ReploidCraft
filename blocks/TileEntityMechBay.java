@@ -92,7 +92,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		{ 0, 2, -2 }, { 0, 2, 2 }, { -2, 2, 0 }, { 2, 2, 0 }
 	};
 	/*
-	 * Inventory
+	 * SECTION: Inventory
 	 */
 	@Override
 	public int getSizeInventory() {
@@ -274,7 +274,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	}
 
 	/*
-	 * Multiblock
+	 * SECTION: Multiblock
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -571,7 +571,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		}
 	}
 	/*
-	 * Mech Bay 
+	 * SECTION: Mech Bay 
 	 */
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() 

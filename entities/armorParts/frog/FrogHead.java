@@ -3,7 +3,7 @@ package zornco.reploidcraftenv.entities.armorParts.frog;
 import net.minecraft.util.ResourceLocation;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBase;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorHead;
+import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorHeadFrog;
 import zornco.reploidcraftenv.entities.armorParts.IPartHead;
 import zornco.reploidcraftenv.entities.armorParts.PartBase;
 import cpw.mods.fml.relauncher.Side;
@@ -34,7 +34,7 @@ public class FrogHead extends PartBase implements IPartHead {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void initModel() {
-		model = new ModelRideArmorHead();
+		model = new ModelRideArmorHeadFrog();
 		texture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorHeadFrog.png");
 	}
 
