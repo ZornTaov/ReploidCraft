@@ -20,7 +20,7 @@ public class RabbitBack extends PartBase implements IPartBack {
 
 	@Override
 	public float getJumpHeight() {
-		return 0.7F;
+		return 0.6F;
 	}
 
 	@Override

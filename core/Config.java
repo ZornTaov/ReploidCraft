@@ -43,7 +43,7 @@ public class Config {
 		
 		EntityRegistry.registerGlobalEntityID(EntityMet.class, "Met", EntityRegistry.findGlobalUniqueEntityId(), 0xFFFF00, 0x0F0000);
 		EntityRegistry.registerModEntity(EntityMet.class, "Met", 2, ReploidCraftEnv.instance, 80, 3, true);
-		EntityRegistry.addSpawn("Met", 30, 2, 40, EnumCreatureType.monster, BiomeGenBase.beach, BiomeGenBase.swampland);
+		EntityRegistry.addSpawn("Met", 30, 2, 4, EnumCreatureType.monster, BiomeGenBase.beach, BiomeGenBase.swampland);
 		EntityRegistry.registerGlobalEntityID(EntityFloatingPlatform.class, "FloatingPlatform", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFloatingPlatform.class, "FloatingPlatform", 3, ReploidCraftEnv.instance, 80, 1, true);
 		EntityRegistry.registerGlobalEntityID(EntityMetBullet.class, "metBullet", EntityRegistry.findGlobalUniqueEntityId());

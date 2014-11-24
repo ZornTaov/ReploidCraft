@@ -68,10 +68,10 @@ public class ModelMechBay extends ModelBase
 		setRotation(base, 0F, 0F, 0F);
 
 		floor1 = new ModelRenderer(this, 0, 74);
+		floor1.mirror = true;
 		floor1.addBox(0F, 23F, -24F, 40, 1, 56);
 		floor1.setRotationPoint(0F, 0F, 0F);
 		floor1.setTextureSize(256, 256);
-		floor1.mirror = true;
 		setRotation(floor1, 0F, 0F, 0F);
 
 		floor2 = new ModelRenderer(this, 0, 74);

@@ -1,10 +1,10 @@
 package zornco.reploidcraftenv.entities.AIs;
 
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.entities.EntityMet;
 
-public class EntityAIMetHide extends EntityAIBase {
+public class EntityAIMetHide extends EntityAISit {
 
 	private EntityMet theEntity;
 
@@ -18,9 +18,9 @@ public class EntityAIMetHide extends EntityAIBase {
 
     public EntityAIMetHide(EntityMet par1EntityMet)
     {
+    	super(par1EntityMet);
         this.theEntity = par1EntityMet;
         this.theWorld = par1EntityMet.worldObj;
-        this.setMutexBits(5);
     	this.enable(true);
     }
 
@@ -33,7 +33,7 @@ public class EntityAIMetHide extends EntityAIBase {
         		||this.theEntity.isInWater()
         		||!this.theEntity.onGround
         		||this.theEntity.getRNG().nextInt(50) != 0
-        		||this.theEntity.getIsHatNotWorn()
+        		//||this.theEntity.getIsHatNotWorn()
         	)
         {
             return false;

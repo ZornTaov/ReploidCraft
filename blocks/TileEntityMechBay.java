@@ -326,6 +326,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				{
 					return;
 				}
+				myRide.setPlayerCreated(true);
 
 				if (!this.getWorldObj().isRemote)
 				{

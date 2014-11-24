@@ -4,12 +4,20 @@ package zornco.reploidcraftenv.entities.armorParts;
 
 public enum PartSlot
 {
-	HEAD,
-	BODY,
-	BACK,
-	LEGS,
-	ARMLEFT,
-	ARMRIGHT;
+	HEAD(0),
+	BODY(1),
+	BACK(2),
+	LEGS(3),
+	ARMLEFT(4),
+	ARMRIGHT(5);
+	
+	private final int index;
+	
+	private PartSlot(int index)
+	{
+		this.index = index;
+	}
+	
 	/**
 	 * A common method for all enums since they can't have another base class
 	 * @param <T> Enum type
@@ -57,5 +65,10 @@ public enum PartSlot
 	public static int getSize()
 	{
 		return values().length;
+	}
+
+	public int getIndex()
+	{
+		return index;
 	}
 }

@@ -11,17 +11,39 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
+import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIArrowAttack;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAIFleeSun;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAIMoveTowardsTarget;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.EntityAIRestrictSun;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -33,11 +55,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
+import net.minecraft.village.Village;
 import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraftenv.entities.AIs.EntityAICreeperSwellRA;
+import zornco.reploidcraftenv.entities.AIs.EntityAIDefendVillageRA;
+import zornco.reploidcraftenv.entities.AIs.EntityAILookAtVillagerRA;
 import zornco.reploidcraftenv.entities.armorParts.IPartArm;
 import zornco.reploidcraftenv.entities.armorParts.IPartBack;
 import zornco.reploidcraftenv.entities.armorParts.IPartBody;
@@ -46,10 +73,11 @@ import zornco.reploidcraftenv.entities.armorParts.IPartHead;
 import zornco.reploidcraftenv.entities.armorParts.IPartLegs;
 import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 import zornco.reploidcraftenv.utils.RiderState;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntityMultiPart
+public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntityMultiPart, IRangedAttackMob
 {
 
 	public float prevSitAngle;
@@ -64,6 +92,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	public EntityRideArmorPart rideArmorArmLeft;
 	public EntityRideArmorPart rideArmorArmRight;
 	public RiderState riderState;
+	private EnumMobType mobType;
 
 	private static final IAttribute mechJumpStrength = (new RangedAttribute("mech.jumpStrength", 0.7D, 0.0D, 2.0D)).setDescription("Jump Strength").setShouldWatch(
 			true);
@@ -80,6 +109,33 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	// "textures/entity/mech/mech_gray.png",
 	// "textures/entity/mech/mech_darkbrown.png"};
 
+	protected EntityAIBase swimming = new EntityAISwimming(this);
+	protected EntityAIBase panic = new EntityAIPanic(this, 1.2D);
+	protected EntityAIBase wander = new EntityAIWander(this, 0.7D);
+	protected EntityAIBase watchClosest = new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F);
+	protected EntityAIBase lookIdle = new EntityAILookIdle(this);
+	protected EntityAIBase attackOnCollide = new EntityAIAttackOnCollide(this, 1.0D, true);
+	protected EntityAIBase moveTowardsTarget = new EntityAIMoveTowardsTarget(this, 0.9D, 32.0F);
+	protected EntityAIBase moveThroughVillage = new EntityAIMoveThroughVillage(this, 0.6D, true); //ig
+	protected EntityAIBase moveTowardsRestriction = new EntityAIMoveTowardsRestriction(this, 1.0D); //ig
+	protected EntityAIBase lookAtVillager = new EntityAILookAtVillagerRA(this); //ig
+	protected EntityAIBase defendVillage = new EntityAIDefendVillageRA(this); //ig
+	protected EntityAIBase creeperSwell = new EntityAICreeperSwellRA(this);
+	protected EntityAIBase avoidEntity = new EntityAIAvoidEntity(this, EntityOcelot.class, 6.0F, 1.0D, 1.2D);
+	protected EntityAIBase restrictSun = new EntityAIRestrictSun(this);
+	protected EntityAIBase fleeSun = new EntityAIFleeSun(this, 1.0D);
+	protected EntityAIBase hurtByTarget = new EntityAIHurtByTarget(this, false);
+	protected EntityAIBase nearestAttackableTarget = new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, false, true, IMob.mobSelector);
+	protected EntityAIBase aiArrowAttack = new EntityAIArrowAttack(this, 1.0D, 20, 60, 15.0F);
+
+    /** deincrements, and a distance-to-home check is done at 0 */
+    private int homeCheckTimer;
+    Village villageObj;
+    private int holdRoseTick;
+    
+    /**flip flop for switching with arm atacks for non-player mobs **/
+    public boolean mobAlternateAttack = true;
+    
 	public int field_110278_bp;
 	public int field_110279_bq;
 	protected boolean mechJumping;
@@ -101,8 +157,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		// this.tasks.addTask(0, new EntityAISwimming(this));
 		// this.tasks.addTask(1, new EntityAIPanic(this, 1.2D));
 		// this.tasks.addTask(6, new EntityAIWander(this, 0.7D));
-		// this.tasks.addTask(7, new EntityAIWatchClosest(this,
-		// EntityPlayer.class, 6.0F));
+		// this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		// this.tasks.addTask(8, new EntityAILookIdle(this));
 		this.chestSetup();
 		this.riderState = new RiderState();
@@ -131,6 +186,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		super.entityInit();
 		this.dataWatcher.addObject(16, Integer.valueOf(0));
 		this.dataWatcher.addObject(21, String.valueOf(""));
+        this.dataWatcher.addObject(17, Byte.valueOf((byte) - 1));
 	}
 
 	protected void applyEntityAttributes()
@@ -189,7 +245,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	public boolean isJumping()
 	{
-		return this.getMechWatchableBoolean(64);
+		return this.getMechWatchableBoolean(64) || isJumping;
 	}
 
 	public void setJumping(boolean par1)
@@ -242,6 +298,32 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		return s;
 	}
 
+    /**
+     * Returns the current state of creeper, -1 is idle, 1 is 'in fuse'
+     */
+    public int getCreeperState()
+    {
+        return this.dataWatcher.getWatchableObjectByte(17);
+    }
+
+    /**
+     * Sets the state of creeper, -1 to idle and 1 to be 'in fuse'
+     */
+    public void setCreeperState(int p_70829_1_)
+    {
+        this.dataWatcher.updateObject(17, Byte.valueOf((byte)p_70829_1_));
+    }
+
+    public boolean isPlayerCreated()
+    {
+        return getMechWatchableBoolean(32);
+    }
+
+    public void setPlayerCreated(boolean p_70849_1_)
+    {
+    	setMechWatchableBoolean(32, p_70849_1_);
+    }
+
 	/*
 	 * SECTION: Spawn
 	 */
@@ -270,7 +352,13 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		this.prepareChunkForSpawn();
 		return super.getCanSpawnHere();
 	}
-
+	/**
+	 * Determines if an entity can be despawned, used on idle far away entities
+	 */
+	protected boolean canDespawn()
+	{
+		return !(this.riddenByEntity != null && !(this.riddenByEntity instanceof IMob)) && !this.isPlayerCreated();
+	}
 	/*
 	 * SECTION: Sounds
 	 */
@@ -304,7 +392,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	 */
 	protected String getHurtSound()
 	{
-		return "mob.mech.hit";
+		return "mob.irongolem.hit";
 	}
 
 	/**
@@ -312,7 +400,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	 */
 	protected String getDeathSound()
 	{
-		return "mob.mech.death";
+		return "mob.irongolem.death";
 	}
 
 	/**
@@ -345,6 +433,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		 * soundtype.getPitch()); } else { this.playSound("mob.mech.soft",
 		 * soundtype.getVolume() * 0.15F, soundtype.getPitch()); } }
 		 */
+		if(this.hasPart(PartSlot.LEGS))
+			this.playSound("mob.irongolem.walk", 1.0F, 1.0F);
 	}
 
 	/**
@@ -477,6 +567,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		if (!this.worldObj.isRemote)
 		{
 			par1EntityPlayer.mountEntity(this);
+			updateRideArmorAITasks(par1EntityPlayer);
 		}
 	}
 
@@ -503,14 +594,18 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			this.fireResistance = 1;
 		if (this.fallDistance > 2)
 			this.fallDistance = 2.0F;
+
+		if (this.riddenByEntity != null)
+			ReploidCraftEnv.proxy.updateRiderState(this, this.riddenByEntity);
+		this.updateParts();
 		if (this.isJumping() && this.onGround)
 		{
 			this.makeMechLandWithSound();
-			// System.out.println("I'm jumping!");
-
+			//System.out.println("I'm landing!");
 		}
-		if (!this.onGround && !this.mechJumping) this.mechJumping = true;
-		
+		if (!this.onGround && !this.mechJumping)
+			this.mechJumping = true;
+
 		if (this.worldObj.isRemote && this.onGround && this.mechJumping)
 		{
 			this.mechJumping = false;
@@ -529,11 +624,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		{
 			riddenByEntity.setAir(300);
 		}
-		
-		if (this.riddenByEntity != null)
-			ReploidCraftEnv.proxy.updateRiderState(this, this.riddenByEntity);
-		this.updateParts();
-		
+
+
 		this.prevSitAngle = this.sitAngle;
 		float sitStep = 0.1F;
 
@@ -570,6 +662,14 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				this.worldObj.playSoundEffect(d5, (double) this.posY + 0.5D, d6, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 			}
 		}
+		if (getMobType() != EnumMobType.empty && riddenByEntity == null)
+		{
+			updateRideArmorAITasks(null);
+		}
+		if (getMobType() == EnumMobType.empty && riddenByEntity != null)
+		{
+			updateRideArmorAITasks(riddenByEntity);
+		}
 	}
 
 	/**
@@ -590,7 +690,146 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			}
 		}
 	}
+	@Override
+	protected void updateAITick()
+	{
+		if (getMobType() == EnumMobType.villager)
+		{
+			if (--this.homeCheckTimer <= 0)
+			{
+				this.homeCheckTimer = 70 + this.rand.nextInt(50);
+				this.villageObj = this.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY),
+						MathHelper.floor_double(this.posZ), 32);
 
+				if (this.villageObj == null)
+				{
+					this.detachHome();
+				}
+				else
+				{
+					ChunkCoordinates chunkcoordinates = this.villageObj.getCenter();
+					this.setHomeArea(chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ,
+							(int) ((float) this.villageObj.getVillageRadius() * 0.6F));
+				}
+			}
+		}
+		super.updateAITick();
+	}
+	private void updateRideArmorAITasks(Entity p_70108_1_)
+	{
+		if (p_70108_1_ != null && !(p_70108_1_ instanceof EntityPlayer))
+		{
+			if (p_70108_1_ instanceof EntityPig)
+			{
+				this.getNavigator().setAvoidsWater(true);
+				this.tasks.addTask(0, swimming);
+				this.tasks.addTask(1, panic);
+				this.tasks.addTask(6, wander);
+				this.tasks.addTask(7, watchClosest);
+				this.tasks.addTask(8, lookIdle);
+				setMobType(EnumMobType.pig);
+			}
+			else if (p_70108_1_ instanceof EntityMob)
+			{
+				if (p_70108_1_ instanceof EntityZombie)
+				{
+					this.getNavigator().setBreakDoors(true);
+					this.tasks.addTask(0, swimming);
+					this.tasks.addTask(2, attackOnCollide);
+					this.tasks.addTask(5, moveTowardsRestriction);
+					this.tasks.addTask(6, moveThroughVillage);
+					this.tasks.addTask(7, wander);
+					this.tasks.addTask(8, watchClosest);
+					this.tasks.addTask(8, lookIdle);
+					this.targetTasks.addTask(1, hurtByTarget);
+					this.targetTasks.addTask(2, nearestAttackableTarget);
+					setMobType(EnumMobType.zombie);
+
+				}
+				else if (p_70108_1_ instanceof EntitySkeleton)
+				{
+					this.tasks.addTask(1, swimming);
+					this.tasks.addTask(2, restrictSun);
+					this.tasks.addTask(3, fleeSun);
+					this.tasks.addTask(4, aiArrowAttack);
+					this.tasks.addTask(5, wander);
+					this.tasks.addTask(6, watchClosest);
+					this.tasks.addTask(6, lookIdle);
+					this.targetTasks.addTask(1, hurtByTarget);
+					this.targetTasks.addTask(2, nearestAttackableTarget);
+					setMobType(EnumMobType.skeleton);
+
+				}
+				else if (p_70108_1_ instanceof EntityCreeper)
+				{
+					this.tasks.addTask(1, swimming);
+					this.tasks.addTask(2, creeperSwell);
+					this.tasks.addTask(3, avoidEntity);
+					this.tasks.addTask(4, attackOnCollide);
+					this.tasks.addTask(5, wander);
+					this.tasks.addTask(6, watchClosest);
+					this.tasks.addTask(6, lookIdle);
+					this.targetTasks.addTask(1, nearestAttackableTarget);
+					this.targetTasks.addTask(2, hurtByTarget);
+					setMobType(EnumMobType.creeper);
+				}
+			}
+			else if (p_70108_1_ instanceof EntityVillager)
+			{
+				this.getNavigator().setAvoidsWater(true);
+				this.tasks.addTask(1, attackOnCollide);
+				this.tasks.addTask(2, moveTowardsTarget);
+				this.tasks.addTask(3, moveThroughVillage);
+				this.tasks.addTask(4, moveTowardsRestriction);
+				this.tasks.addTask(5, lookAtVillager);
+				this.tasks.addTask(6, wander);
+				this.tasks.addTask(7, watchClosest);
+				this.tasks.addTask(8, lookIdle);
+				this.targetTasks.addTask(1, defendVillage);
+				this.targetTasks.addTask(2, hurtByTarget);
+				this.targetTasks.addTask(3, nearestAttackableTarget);
+				setMobType(EnumMobType.villager);
+			}
+			else
+			{
+				this.getNavigator().setAvoidsWater(true);
+				this.tasks.addTask(0, swimming);
+				this.tasks.addTask(1, panic);
+				this.tasks.addTask(6, wander);
+				this.tasks.addTask(7, watchClosest);
+				this.tasks.addTask(8, lookIdle);
+				setMobType(EnumMobType.unknown);
+			}
+		}
+		else
+		{
+			this.getNavigator().setAvoidsWater(false);
+			this.getNavigator().setBreakDoors(false);
+
+			this.tasks.removeTask(swimming);
+			this.tasks.removeTask(panic);
+			this.tasks.removeTask(wander);
+			this.tasks.removeTask(watchClosest);
+			this.tasks.removeTask(lookIdle);
+			this.tasks.removeTask(attackOnCollide);
+			this.tasks.removeTask(moveTowardsTarget);
+			this.tasks.removeTask(moveThroughVillage);
+			this.tasks.removeTask(moveTowardsRestriction);
+			this.tasks.removeTask(lookAtVillager);
+			this.targetTasks.removeTask(defendVillage);
+			this.tasks.removeTask(creeperSwell);
+			this.tasks.removeTask(avoidEntity);
+			this.tasks.removeTask(restrictSun);
+			this.tasks.removeTask(fleeSun);
+			this.tasks.removeTask(aiArrowAttack);
+			this.targetTasks.removeTask(hurtByTarget);
+			this.targetTasks.removeTask(nearestAttackableTarget);
+
+			setMobType(p_70108_1_ instanceof EntityPlayer ? EnumMobType.player : EnumMobType.empty);
+		}
+		ReploidCraftEnv.logger.info(getMobType());
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public void handleHealthUpdate(byte par1)
 	{
@@ -601,6 +840,10 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		else if (par1 == 6)
 		{
 			this.spawnMechParticles(false);
+		}
+		else if (par1 == 11)
+		{
+			this.holdRoseTick = 400;
 		}
 		else
 		{
@@ -634,53 +877,66 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		{
 			if (this.hasPart(LEGS))
 			{
-				this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
-				this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
-				this.setRotation(this.rotationYaw, this.rotationPitch);
-				this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-				par1 = ((EntityLivingBase) this.riddenByEntity).moveStrafing * 0.5F;
-				par2 = ((EntityLivingBase) this.riddenByEntity).moveForward;
+				if (this.riddenByEntity instanceof EntityPlayer)
+				{
+					this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
+					this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
+					this.setRotation(this.rotationYaw, this.rotationPitch);
+					this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
+					par1 = ((EntityLivingBase) this.riddenByEntity).moveStrafing * 0.5F;
+					par2 = ((EntityLivingBase) this.riddenByEntity).moveForward;
 
-				if (par2 <= 0.0F)
-				{
-					par2 *= 0.5F;
-				}
-				
-				if ((this.riddenByEntity instanceof EntityPlayer))
-				{
-					if (this.riderState.isJump() && !this.isJumping() && this.onGround)
+					if (par2 <= 0.0F)
 					{
-
-						this.motionY = this.getMechJumpStrength();
-						this.makeMechJumpWithSound();
-						this.isAirBorne = true;
-						doMechParticle(this, BACK);
-						this.playSound("mob.mech.jump", 0.4F, 1.0F);
+						par2 *= 0.5F;
 					}
-				}
-				setStepHeight(1.0F);
-				this.setAIMoveSpeed(getMechSpeed());
-				super.moveEntityWithHeading(par1, par2);
-				
-				this.prevLimbSwingAmount = this.limbSwingAmount;
-				double d1 = this.posX - this.prevPosX;
-				double d0 = this.posZ - this.prevPosZ;
-				float f4 = MathHelper.sqrt_double(d1 * d1 + d0 * d0) * 4.0F;
 
-				if (f4 > 1.0F)
+					if ((this.riddenByEntity instanceof EntityPlayer))
+					{
+						if (this.riderState.isJump() && !this.isJumping() && this.onGround)
+						{
+
+							this.motionY = this.getMechJumpStrength();
+							this.makeMechJumpWithSound();
+							//System.out.println("I'm jumping!");
+							this.isAirBorne = true;
+							doMechParticle(this, BACK);
+						}
+					}
+					setStepHeight(1.0F);
+					this.setAIMoveSpeed(getMechSpeed());
+					super.moveEntityWithHeading(par1, par2);
+
+					this.prevLimbSwingAmount = this.limbSwingAmount;
+					double d1 = this.posX - this.prevPosX;
+					double d0 = this.posZ - this.prevPosZ;
+					float f4 = MathHelper.sqrt_double(d1 * d1 + d0 * d0) * 4.0F;
+
+					if (f4 > 1.0F)
+					{
+						f4 = 1.0F;
+					}
+
+					this.limbSwingAmount += (f4 - this.limbSwingAmount) * 0.4F;
+					this.limbSwing += this.limbSwingAmount;
+				}
+				else
 				{
-					f4 = 1.0F;
+					this.riddenByEntity.rotationYaw = this.prevRotationYaw = this.rotationYaw;
+					setStepHeight(1.0F);
+					super.moveEntityWithHeading(par1, par2);
 				}
 
-				this.limbSwingAmount += (f4 - this.limbSwingAmount) * 0.4F;
-				this.limbSwing += this.limbSwingAmount;
-				
-
+			}
+			else
+			{
+				setStepHeight(1.0F);
+				super.moveEntityWithHeading(0.0F, 0.0F);
 			}
 		}
 		else
 		{
-			setStepHeight(0.5F);
+			setStepHeight(1.0F);
 			super.moveEntityWithHeading(0.0F, 0.0F);
 		}
 	}
@@ -695,11 +951,12 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 				if (p_70108_1_ instanceof EntityLivingBase //
 						&& !(p_70108_1_ instanceof EntityRideArmor || p_70108_1_ instanceof EntityRideArmorPart) //
 						&& !(p_70108_1_ instanceof EntityPlayer) && !(p_70108_1_ instanceof EntityIronGolem) //
-						&& !(p_70108_1_ instanceof EntityMob && !(p_70108_1_ instanceof EntityZombie) && !(p_70108_1_ instanceof EntitySkeleton)) //
-						&& !(p_70108_1_ instanceof EntityAgeable && !(p_70108_1_ instanceof EntityVillager))//
+						&& !(p_70108_1_ instanceof EntityMob && !(p_70108_1_ instanceof EntityZombie) && !(p_70108_1_ instanceof EntityCreeper) && !(p_70108_1_ instanceof EntitySkeleton && !(((EntitySkeleton)p_70108_1_).getSkeletonType() != 0))) //
+						&& !(p_70108_1_ instanceof EntityAgeable && !(p_70108_1_ instanceof EntityVillager) && !(p_70108_1_ instanceof EntityPig))//
 						&& this.riddenByEntity == null && p_70108_1_.ridingEntity == null)
 				{
 					p_70108_1_.mountEntity(this);
+					updateRideArmorAITasks(p_70108_1_);
 				}
 			}
 		}
@@ -740,7 +997,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	public void makeMechJumpWithSound()
 	{
 		this.setJumping(true);
-		
+
 		String s = this.getJumpSound();
 
 		if (s != null)
@@ -753,8 +1010,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	public void makeMechLandWithSound()
 	{
 		this.setJumping(false);
-		
-		String s = this.getJumpSound();
+
+		String s = this.getLandSound();
 
 		if (s != null)
 		{
@@ -765,7 +1022,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	public void setStepHeight(float step)
 	{
-		this.stepHeight = this.hasPart(LEGS) ? step : 0.0F;
+		this.stepHeight = this.hasPart(LEGS) ? step : 0.5F;
 	}
 
 	public void updateRiderPosition()
@@ -775,7 +1032,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		float f = MathHelper.sin(this.renderYawOffset * (float) Math.PI / 180.0F);
 		float f1 = MathHelper.cos(this.renderYawOffset * (float) Math.PI / 180.0F);
 		float f2 = 0.2F;
-		
+
 		this.riddenByEntity.setPosition(this.posX + (double) (f2 * f), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ - (double) (f2 * f1));
 
 		if (this.riddenByEntity instanceof EntityLivingBase)
@@ -792,7 +1049,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	public float getSitOffset()
 	{
-		return (float) (Math.sin((double) (this.sitAngle * (float) Math.PI + 0.75F))) * 0.7375F - 0.5F;
+		return (float) (Math.sin((double) (this.sitAngle * (float) Math.PI + 0.75F))) * 0.7375F - 0.5F - (this.hasPart(LEGS) ? 0.0F : 1.0F);
 	}
 
 	/**
@@ -859,17 +1116,17 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	public boolean shouldDismountInWater(Entity rider)
 	{
-		return canMechWaterBreathe();
+		return false;//!canMechWaterBreathe();
 	}
 
 	@Override
 	public boolean attackEntityFromPart(EntityDragonPart var1, DamageSource var2, float var3)
 	{
 		EntityRideArmorPart part = (EntityRideArmorPart) var1;
-		if (part.getHealth() <= 0.0F)
+		/*if (part.getHealth() <= 0.0F)
 		{
 			return false;
-		}
+		}*/
 		if ((float) part.hurtResistantTime > (float) part.maxHurtResistantTime / 2.0F)
 		{
 			if (var3 <= part.lastDamage)
@@ -888,7 +1145,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			part.damageEntity(var2, var3);
 			part.hurtTime = this.maxHurtTime = 10;
 		}
-		// System.out.println("hit on the " + part.getName() + FMLCommonHandler.instance().getEffectiveSide());
+		ReploidCraftEnv.logger.info("hit on the " + part.getName() + " Health: " + part.getHealth() + "/" + var3 + FMLCommonHandler.instance().getEffectiveSide());
 
 		//doesn't seem like this is working
 		if (part.getHealth() <= 0.0F)
@@ -1088,13 +1345,12 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		return false;
 	}
 
-	public boolean doMechAttackRight(Entity par1)
+	public boolean doMechAttackRight()
 	{
-		if (par1 == this.riddenByEntity)
-			if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT) instanceof IPartArm)
-			{
-				return ((IPartArm) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT)).doAttack(this);
-			}
+		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT) instanceof IPartArm)
+		{
+			return ((IPartArm) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT)).doAttack(this);
+		}
 		return false;
 	}
 
@@ -1130,6 +1386,33 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		return false;
 	}
 
+	@Override
+	public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_)
+	{
+		// TODO Attack with ranged attack
+		if(mobAlternateAttack)
+		{
+			doMechAttackRight();
+		}
+		else
+		{
+			doMechAttackLeft();
+		}
+		mobAlternateAttack = !mobAlternateAttack;
+	}
+	public boolean attackEntityAsMob(Entity p_70652_1_)
+	{
+		return p_70652_1_.attackEntityFrom(DamageSource.causeMobDamage(this), (float)5);
+	}
+	
+	private boolean doMechExplode(DamageSource source)
+	{
+		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY) instanceof IPartBody)
+		{
+			return ((IPartBody) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY)).doExplode(this, source);
+		}
+		return false;
+	}
 	/*
 	 * SECTION: Inventory
 	 */
@@ -1212,7 +1495,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		ItemStack[] inv = populateInventory();
 		for (ItemStack item : inv)
 		{
-			if (item.getItem() != null)
+			if (item != null && item.getItem() != null)
 			{
 				this.dropItem(item.getItem(), rand.nextInt(1));
 			}
@@ -1251,6 +1534,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		super.writeEntityToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setBoolean("ChestedMech", this.isChested());
+		par1NBTTagCompound.setBoolean("PlayerCreated", this.isPlayerCreated());
 
 		if (this.isChested())
 		{
@@ -1303,6 +1587,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		super.readEntityFromNBT(par1NBTTagCompound);
 		this.setChested(par1NBTTagCompound.getBoolean("ChestedMech"));
+        this.setPlayerCreated(par1NBTTagCompound.getBoolean("PlayerCreated"));
 
 		IAttributeInstance iattributeinstance = this.getAttributeMap().getAttributeInstanceByName("Speed");
 
@@ -1379,4 +1664,45 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		return part.getType().toString() != "" ? part : null;
 	}
 
+	/*
+	 * SECTION: Logic
+	 */
+	public enum EnumMobType
+	{
+		empty(),
+		unknown(),
+		creeper(),
+		skeleton(),
+		zombie(),
+		pig(),
+		villager(),
+		player();
+
+	}
+
+    public Village getVillage()
+    {
+        return this.villageObj;
+    }
+
+    public void setHoldingRose(boolean p_70851_1_)
+    {
+        this.holdRoseTick = p_70851_1_ ? 400 : 0;
+        this.worldObj.setEntityState(this, (byte)11);
+    }
+    
+    public int getHoldRoseTick()
+    {
+        return this.holdRoseTick;
+    }
+
+	public EnumMobType getMobType()
+	{
+		return mobType;
+	}
+
+	private void setMobType(EnumMobType mobType)
+	{
+		this.mobType = mobType;
+	}
 }

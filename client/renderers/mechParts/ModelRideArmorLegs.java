@@ -15,31 +15,31 @@ public class ModelRideArmorLegs extends ModelRideArmorBase {
 	public ModelRideArmorLegs() {
 		super();
 	    
-	    setTextureOffset("hips.waist", 58, 24);
-	    setTextureOffset("hips.hip1", 186, 0);
-	    setTextureOffset("hips.hip2", 186, 25);
-	    setTextureOffset("upperLegRight.upperLeg1Right", 32, 38);
-	    setTextureOffset("upperLegRight.upperLeg2Right", 36, 38);
-	    setTextureOffset("lowerLegRight.lowerLeg1Right", 64, 40);
-	    setTextureOffset("lowerLegRight.lowerLeg2Right", 116, 53);
-	    setTextureOffset("lowerLegRight.lowerLeg3Right", 120, 41);
-	    setTextureOffset("lowerLegRight.lowerLeg4Right", 120, 41);
-	    setTextureOffset("footRight.foot1Right", 76, 41);
-	    setTextureOffset("footRight.foot2Right", 120, 43);
-	    setTextureOffset("footRight.foot3Right", 150, 43);
-	    setTextureOffset("footRight.foot4Right", 174, 43);
-	    setTextureOffset("footRight.foot5Right", 174, 43);
-	    setTextureOffset("upperLegLeft.upperLeg1Left", 32, 38);
-	    setTextureOffset("upperLegLeft.upperLeg2Left", 36, 38);
-	    setTextureOffset("lowerLegLeft.lowerLeg1Left", 64, 40);
-	    setTextureOffset("lowerLegLeft.lowerLeg2Left", 116, 53);
-	    setTextureOffset("lowerLegLeft.lowerLeg3Left", 120, 41);
-	    setTextureOffset("lowerLegLeft.lowerLeg4Left", 120, 41);
-	    setTextureOffset("footLeft.foot1Left", 76, 41);
-	    setTextureOffset("footLeft.foot2Left", 120, 43);
-	    setTextureOffset("footLeft.foot3Left", 150, 43);
-	    setTextureOffset("footLeft.foot4Left", 174, 43);
-	    setTextureOffset("footLeft.foot5Left", 174, 43);
+		setTextureOffset("hips.waist", 70, 0);
+	    setTextureOffset("hips.hip1", 0, 0);
+	    setTextureOffset("hips.hip2", 64, 16);
+	    setTextureOffset("upperLegRight.upperLeg1Right", 0, 25);
+	    setTextureOffset("upperLegRight.upperLeg2Right", 4, 25);
+	    setTextureOffset("lowerLegRight.lowerLeg1Right", 32, 25);
+	    setTextureOffset("lowerLegRight.lowerLeg2Right", 0, 0);
+	    setTextureOffset("lowerLegRight.lowerLeg3Right", 0, 41);
+	    setTextureOffset("lowerLegRight.lowerLeg4Right", 0, 41);
+	    setTextureOffset("footRight.foot1Right", 46, 38);
+	    setTextureOffset("footRight.foot2Right", 0, 42);
+	    setTextureOffset("footRight.foot3Right", 31, 43);
+	    setTextureOffset("footRight.foot4Right", 0, 6);
+	    setTextureOffset("footRight.foot5Right", 0, 6);
+	    setTextureOffset("upperLegLeft.upperLeg1Left", 0, 25);
+	    setTextureOffset("upperLegLeft.upperLeg2Left", 4, 25);
+	    setTextureOffset("lowerLegLeft.lowerLeg1Left", 32, 25);
+	    setTextureOffset("lowerLegLeft.lowerLeg2Left", 0, 0);
+	    setTextureOffset("lowerLegLeft.lowerLeg3Left", 0, 41);
+	    setTextureOffset("lowerLegLeft.lowerLeg4Left", 0, 41);
+	    setTextureOffset("footLeft.foot1Left", 46, 38);
+	    setTextureOffset("footLeft.foot2Left", 0, 42);
+	    setTextureOffset("footLeft.foot3Left", 31, 43);
+	    setTextureOffset("footLeft.foot4Left", 0, 6);
+	    setTextureOffset("footLeft.foot5Left", 0, 6);
 		hips = new ModelRenderer(this, "hips");
 		hips.setRotationPoint(0F, 0F, 0F);
 		setRotation(hips, 0F, 0F, 0F);
@@ -108,10 +108,6 @@ public class ModelRideArmorLegs extends ModelRideArmorBase {
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		float inOut = (float)(Math.cos((double)(f1 * (float)Math.PI / 128F ))*4F + 4F);
-		if(inOut > 1F) inOut = 1F;
-		if(inOut < 0F) inOut = 0F;
-		//System.out.println(f);
 		float DEG_TO_RAD = (float)Math.PI/180F;
 
 		float f8 = (float)(Math.cos((double)(f1 * (float)Math.PI * 0.2F )))/4f * f;

@@ -1,6 +1,7 @@
 package zornco.reploidcraftenv.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,6 +11,7 @@ import net.minecraft.world.World;
 import zornco.reploidcraftenv.ReploidCraftEnv;
 import zornco.reploidcraftenv.blocks.TileEntityMechBay;
 import zornco.reploidcraftenv.blocks.TileEntityMechBayEnergy;
+import zornco.reploidcraftenv.entities.EntityRideArmor;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -60,7 +62,18 @@ public class ItemDebugger extends Item {
 		return true;
 
 	}
+	@Override
+	public boolean itemInteractionForEntity(ItemStack par1, EntityPlayer par2, EntityLivingBase par3)
+	{
+		if(par3 instanceof EntityRideArmor)
+		{
+			EntityRideArmor ride = (EntityRideArmor)par3;
 
+			par2.addChatMessage(new ChatComponentText(FMLCommonHandler.instance().getEffectiveSide()+""));
+			par2.addChatMessage(new ChatComponentText(ride.getMobType() + (ride.riddenByEntity != null?" " + ride.riddenByEntity.getClass().toString().substring(ride.riddenByEntity.getClass().toString().indexOf("Entity")) + " " + ride.getHealth():" ")));
+		}
+		return true;
+	}
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {

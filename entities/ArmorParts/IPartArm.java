@@ -8,4 +8,5 @@ public interface IPartArm {
 	public float[] getArmPos(PartSlot slot);
 	public boolean doAttack(EntityRideArmor mech);
 	public ItemStack[] harvestEquivilent();
+	public double getDamage();
 }

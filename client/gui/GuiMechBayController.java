@@ -2,6 +2,7 @@ package zornco.reploidcraftenv.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -83,7 +84,7 @@ public class GuiMechBayController extends GuiContainer {
 		float f5 = p_147046_5_.prevRotationYaw;
 		float f6 = p_147046_5_.rotationYaw;
 		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
-		//RenderHelper.enableStandardItemLighting();
+		RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-((float)Math.atan((double)(p_147046_4_ / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 		p_147046_5_.renderYawOffset = (float)Math.atan((double)(p_147046_3_ / 40.0F)) * 20.0F;
@@ -95,7 +96,8 @@ public class GuiMechBayController extends GuiContainer {
 		RenderManager.instance.playerViewY = 180.0F;
 		float sit = ((EntityRideArmor)p_147046_5_).sitAngle;
 		((EntityRideArmor)p_147046_5_).sitAngle = 0;
-		RenderManager.instance.renderEntityWithPosYaw(p_147046_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+		RenderManager.instance.renderEntityWithPosYaw(p_147046_5_, 0.0D, 0.0D, 0.0D, p_147046_5_.rotationYaw, 1.0F);
+		//RenderManager.instance.renderEntitySimple(p_147046_5_, 1.0F);
 		((EntityRideArmor)p_147046_5_).sitAngle = sit;
 		
 		p_147046_5_.renderYawOffset = f2;
@@ -104,7 +106,7 @@ public class GuiMechBayController extends GuiContainer {
 		p_147046_5_.prevRotationYaw = f5;
 		p_147046_5_.rotationYaw = f6;
 		GL11.glPopMatrix();
-		//RenderHelper.disableStandardItemLighting();
+		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);

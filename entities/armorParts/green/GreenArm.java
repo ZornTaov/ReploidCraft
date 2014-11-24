@@ -98,4 +98,11 @@ public class GreenArm extends PartBase implements IPartArm{
 	public ItemStack[] harvestEquivilent() {
 		return tools;
 	}
+
+	@Override
+	public double getDamage()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

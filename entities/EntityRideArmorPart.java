@@ -77,6 +77,15 @@ public class EntityRideArmorPart extends EntityDragonPart {
 				this.height = size[1];
 			}
 		}
+		if (this.hurtTime > 0)
+        {
+            --this.hurtTime;
+        }
+
+        if (this.hurtResistantTime > 0)
+        {
+            --this.hurtResistantTime;
+        }
 
 	}
 	/**
@@ -201,7 +210,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 		}
 		if (flag)
 		{
-			((EntityRideArmor) this.entityDragonObj).doMechAttackRight(par1EntityPlayer);
+			((EntityRideArmor) this.entityDragonObj).doMechAttackRight();
 		}
 		return flag && ((Entity) entityDragonObj).interactFirst(par1EntityPlayer);
 

@@ -1,6 +1,7 @@
 package zornco.reploidcraftenv.entities.armorParts.green;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.entities.armorParts.IPartBody;
@@ -10,12 +11,10 @@ public class GreenBody extends PartBase implements IPartBody {
 
 	public GreenBody() {
 		super(40, new float[] {0.0F, 1.5F, 0.0F}, new float[] {1.5F, 1.5F});
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean isLavaResistant() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -36,6 +35,12 @@ public class GreenBody extends PartBase implements IPartBody {
 					mech.posY + 1.8D + ((EntityRideArmor)mech).getSitOffset(), 
 					Z, d0, d1, d2);
 		}
+	}
+
+	@Override
+	public boolean doExplode(EntityRideArmor ride, DamageSource source)
+	{
+		return false;
 	}
 
 }
