@@ -1,5 +1,6 @@
 package zornco.reploidcraftenv.client.renderers;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -22,12 +23,23 @@ import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 public class RenderRideArmor extends Render {
 
 	private int nagged = -1;
-	private ModelRideArmorBase modelHead;
-	private ModelRideArmorBase modelChest;
-	private ModelRideArmorBase modelBack;
-	private ModelRideArmorBase modelLegs;
-	private ModelRideArmorBase modelArmLeft;
-	private ModelRideArmorBase modelArmRight;
+	private ModelBase modelHead;
+	private ModelBase modelChest;
+	private ModelBase modelBack;
+	private ModelBase modelLegs;
+	private ModelBase modelArmLeft;
+	private ModelBase modelArmRight;
+	
+	/**
+	 * for tabula
+	 */
+	private ModelBase greenHead 	= new ModelRideArmorHead();    
+	private ModelBase greenChest    = new ModelRideArmorTorso();   
+	private ModelBase greenBack     = new ModelRideArmorBack();    
+	private ModelBase greenLegs     = new ModelRideArmorLegs();    
+	private ModelBase greenArmLeft  = new ModelRideArmorArmLeft(); 
+	private ModelBase greenArmRight = new ModelRideArmorArmRight();
+	
 	public ResourceLocation defaultTexture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorGreen.png");
 
 	public RenderRideArmor()
@@ -50,12 +62,12 @@ public class RenderRideArmor extends Render {
 	{
 		if (this.nagged != 1)
 		{
-			this.modelHead = new ModelRideArmorHead();
-			this.modelChest = new ModelRideArmorTorso();
-			this.modelBack = new ModelRideArmorBack();
-			this.modelLegs = new ModelRideArmorLegs();
-			this.modelArmLeft = new ModelRideArmorArmLeft();
-			this.modelArmRight = new ModelRideArmorArmRight();
+			this.modelHead 		= new ModelRideArmorHead();
+			this.modelChest 	= new ModelRideArmorTorso();
+			this.modelBack 		= new ModelRideArmorBack();
+			this.modelLegs 		= new ModelRideArmorLegs();
+			this.modelArmLeft 	= new ModelRideArmorArmLeft();
+			this.modelArmRight 	= new ModelRideArmorArmRight();
 			this.nagged = 1;
 		}
 
@@ -75,34 +87,34 @@ public class RenderRideArmor extends Render {
 		GL11.glTranslatef(0.0F, -f9/5F-(f10*0.6325F)-0.01F + (entity.hasPart(PartSlot.LEGS)?0.0F:1F), 0F);
 		//ModelRideArmorBase temp;
 		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BODY.ordinal()]).getType()));
-		this.modelChest.renderPart(entity, f6, f7, f8, 0.0F, 0.0F, 0.0625F);
+		renderPart((ModelRideArmorBase) modelChest, entity, PartSlot.BODY, f6, f7, f8, 0.0F);
 		if(entity.rideArmorParts != null)
 		{
 			if (entity.hasPart(PartSlot.HEAD))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.HEAD));
-				renderPart(modelHead, entity, PartSlot.HEAD, f6, f7, f8, 0.0F);
+				renderPart((ModelRideArmorBase) modelHead, entity, PartSlot.HEAD, f6, f7, f8, 0.0F);
 			}
 			if (entity.hasPart(PartSlot.ARMLEFT))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.ARMLEFT));
-				renderPart(modelArmLeft, entity, PartSlot.ARMLEFT, f6, f7, f8, entity.hasPart(PartSlot.LEGS)?1.0F:5F);
+				renderPart((ModelRideArmorBase) modelArmLeft, entity, PartSlot.ARMLEFT, f6, f7, f8, entity.hasPart(PartSlot.LEGS)?1.0F:5F);
 			}
 			if (entity.hasPart(PartSlot.ARMRIGHT))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.ARMRIGHT));
-				renderPart(modelArmRight, entity, PartSlot.ARMRIGHT, f6, f7, f8, entity.hasPart(PartSlot.LEGS)?1.0F:5F);
+				renderPart((ModelRideArmorBase) modelArmRight, entity, PartSlot.ARMRIGHT, f6, f7, f8, entity.hasPart(PartSlot.LEGS)?1.0F:5F);
 			}
 			if (entity.hasPart(PartSlot.BACK))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.BACK));
-				renderPart(modelBack, entity, PartSlot.BACK, f6, f7, f8, 0.0F);
+				renderPart((ModelRideArmorBase) modelBack, entity, PartSlot.BACK, f6, f7, f8, 0.0F);
 				
 			}
 			if (entity.hasPart(PartSlot.LEGS))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.LEGS));
-				renderPart(modelLegs, entity, PartSlot.LEGS, f6, f7, f8, 0.0F);
+				renderPart((ModelRideArmorBase) modelLegs, entity, PartSlot.LEGS, f6, f7, f8, 0.0F);
 			}/*
         	((ModelrideArmor)modelRideArmor).upperArmLeftA.isHidden = !entity.hasPart(PartSlot.ARMLEFT);
         	((ModelrideArmor)modelRideArmor).upperArmRightA.isHidden = !entity.hasPart(PartSlot.ARMRIGHT);

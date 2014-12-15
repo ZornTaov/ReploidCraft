@@ -12,8 +12,7 @@ import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 
 public class RenderFloatingPlatform extends Render {
 
-	private int nagged = -1;
-	private ModelBase modelPlatform;
+	private ModelBase modelPlatform = new ModelFloatingPlatform();
 	private static final ResourceLocation platform = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/FloatingPlatform.png");
 
 	public RenderFloatingPlatform()
@@ -34,11 +33,6 @@ public class RenderFloatingPlatform extends Render {
 	private void doRenderFloatingPlatform(EntityFloatingPlatform entity, 
 			double par2, double par4, double par6, float par8, float par9)
 	{
-		if (this.nagged != 1)
-		{
-			this.modelPlatform = new ModelFloatingPlatform();
-			this.nagged = 1;
-		}
 
 		float var10 = ((float)entity.innerRotation + par9)/5.0F;
 		GL11.glPushMatrix();
