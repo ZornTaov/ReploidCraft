@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 
 
@@ -15,7 +15,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.core.Config;
+import zornco.reploidcraft.core.Config;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

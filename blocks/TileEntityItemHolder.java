@@ -1,11 +1,11 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -288,7 +288,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 
 		if (worldObj != null && !worldObj.isRemote && ticksSinceSync < 0)
 		{
-			worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 3, ((numUsingPlayers << 3) & 0xF8) | (facing & 0x7));
+			worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraft.blockItemHolder, 3, ((numUsingPlayers << 3) & 0xF8) | (facing & 0x7));
 		}
 		if (!worldObj.isRemote && inventoryTouched)
 		{
@@ -362,7 +362,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	{
 		if (worldObj == null) return;
 		numUsingPlayers++;
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 1, numUsingPlayers);
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraft.blockItemHolder, 1, numUsingPlayers);
 	}
 
 	@Override
@@ -370,7 +370,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	{
 		if (worldObj == null) return;
 		numUsingPlayers--;
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 1, numUsingPlayers);
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraft.blockItemHolder, 1, numUsingPlayers);
 	}
 
 	public void setFacing(byte chestFacing)
@@ -481,7 +481,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory {
 	void rotateAround(ForgeDirection axis)
 	{
 		setFacing((byte)ForgeDirection.getOrientation(facing).getRotation(axis).ordinal());
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraftEnv.blockItemHolder, 2, getFacing());
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, ReploidCraft.blockItemHolder, 2, getFacing());
 	}
 	
 	public void removeAdornments()

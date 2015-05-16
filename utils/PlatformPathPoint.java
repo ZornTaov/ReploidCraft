@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.utils;
+package zornco.reploidcraft.utils;
 
 import net.minecraft.nbt.NBTTagCompound;
 

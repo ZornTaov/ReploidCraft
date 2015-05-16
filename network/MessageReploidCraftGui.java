@@ -1,6 +1,6 @@
-package zornco.reploidcraftenv.network;
+package zornco.reploidcraft.network;
 
-import zornco.reploidcraftenv.utils.PlayerUtils;
+import zornco.reploidcraft.utils.PlayerUtils;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;

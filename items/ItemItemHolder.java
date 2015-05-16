@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;

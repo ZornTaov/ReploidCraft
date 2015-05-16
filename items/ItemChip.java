@@ -1,8 +1,8 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import java.util.List;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -25,7 +25,7 @@ public class ItemChip extends Item {
 		super();
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 	}
 	@SideOnly(Side.CLIENT)
 	/**

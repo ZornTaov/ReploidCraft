@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.utils;
+package zornco.reploidcraft.utils;
 
 public class RiderState
 {

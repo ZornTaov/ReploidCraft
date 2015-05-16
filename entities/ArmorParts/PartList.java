@@ -1,9 +1,9 @@
-package zornco.reploidcraftenv.entities.armorParts;
+package zornco.reploidcraft.entities.armorParts;
 
 import java.util.HashMap;
 
 import net.minecraft.util.ResourceLocation;
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 
 import com.google.common.collect.Maps;
 
@@ -35,8 +35,8 @@ public class PartList
 	}
 
 	public PartList setTexture(String tex) {
-		this.texture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmor"+tex+".png");
-		ReploidCraftEnv.logger.info("registered Texture for " + tex);
+		this.texture = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/rideArmor"+tex+".png");
+		ReploidCraft.logger.info("registered Texture for " + tex);
 		return this;
 	}
 

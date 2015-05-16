@@ -1,8 +1,8 @@
-package zornco.reploidcraftenv.core;
+package zornco.reploidcraft.core;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 
 public class TabReploid extends CreativeTabs
 {
@@ -14,6 +14,6 @@ public class TabReploid extends CreativeTabs
 	@Override
 	public Item getTabIconItem() {
 		// TODO Auto-generated method stub
-		return ReploidCraftEnv.component;
+		return ReploidCraft.component;
 	}
 }

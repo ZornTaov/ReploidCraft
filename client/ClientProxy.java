@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client;
+package zornco.reploidcraft.client;
 
 
 import java.util.HashMap;
@@ -14,42 +14,42 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
-import zornco.reploidcraftenv.blocks.TileEntityMechBay;
-import zornco.reploidcraftenv.blocks.TileEntityMechBayController;
-import zornco.reploidcraftenv.bullets.EntityMetBullet;
-import zornco.reploidcraftenv.client.gui.GUIItemHolder;
-import zornco.reploidcraftenv.client.gui.GuiArmorInventory;
-import zornco.reploidcraftenv.client.gui.GuiBusterInventory;
-import zornco.reploidcraftenv.client.gui.GuiMechBayController;
-import zornco.reploidcraftenv.client.renderers.BlockBossDoorRenderer;
-import zornco.reploidcraftenv.client.renderers.BlockSpikesRenderer;
-import zornco.reploidcraftenv.client.renderers.ItemItemHolderRenderer;
-import zornco.reploidcraftenv.client.renderers.ModelMet;
-import zornco.reploidcraftenv.client.renderers.ModelMetHat;
-import zornco.reploidcraftenv.client.renderers.ModelReploidBlue;
-import zornco.reploidcraftenv.client.renderers.RenderBulletBase;
-import zornco.reploidcraftenv.client.renderers.RenderFloatingPlatform;
-import zornco.reploidcraftenv.client.renderers.RenderMet;
-import zornco.reploidcraftenv.client.renderers.RenderRideArmor;
-import zornco.reploidcraftenv.client.renderers.TileEntityItemHolderRenderer;
-import zornco.reploidcraftenv.client.renderers.TileEntityMechBayRenderer;
-import zornco.reploidcraftenv.core.CommonProxy;
-import zornco.reploidcraftenv.core.Config;
-import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
-import zornco.reploidcraftenv.entities.EntityMet;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.items.ContainerReploidArmor;
-import zornco.reploidcraftenv.items.ContainerReploidBuster;
-import zornco.reploidcraftenv.items.InventoryArmor;
-import zornco.reploidcraftenv.items.InventoryBuster;
-import zornco.reploidcraftenv.network.MessageRideArmor;
-import zornco.reploidcraftenv.network.PacketHandler;
-import zornco.reploidcraftenv.sounds.BusterChargeContMoving;
-import zornco.reploidcraftenv.sounds.BusterChargeUpMoving;
-import zornco.reploidcraftenv.sounds.Sounds;
-import zornco.reploidcraftenv.utils.RiderState;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.blocks.TileEntityItemHolder;
+import zornco.reploidcraft.blocks.TileEntityMechBay;
+import zornco.reploidcraft.blocks.TileEntityMechBayController;
+import zornco.reploidcraft.bullets.EntityMetBullet;
+import zornco.reploidcraft.client.gui.GUIItemHolder;
+import zornco.reploidcraft.client.gui.GuiArmorInventory;
+import zornco.reploidcraft.client.gui.GuiBusterInventory;
+import zornco.reploidcraft.client.gui.GuiMechBayController;
+import zornco.reploidcraft.client.renderers.BlockBossDoorRenderer;
+import zornco.reploidcraft.client.renderers.BlockSpikesRenderer;
+import zornco.reploidcraft.client.renderers.ItemItemHolderRenderer;
+import zornco.reploidcraft.client.renderers.ModelMet;
+import zornco.reploidcraft.client.renderers.ModelMetHat;
+import zornco.reploidcraft.client.renderers.ModelReploidBlue;
+import zornco.reploidcraft.client.renderers.RenderBulletBase;
+import zornco.reploidcraft.client.renderers.RenderFloatingPlatform;
+import zornco.reploidcraft.client.renderers.RenderMet;
+import zornco.reploidcraft.client.renderers.RenderRideArmor;
+import zornco.reploidcraft.client.renderers.TileEntityItemHolderRenderer;
+import zornco.reploidcraft.client.renderers.TileEntityMechBayRenderer;
+import zornco.reploidcraft.core.CommonProxy;
+import zornco.reploidcraft.core.Config;
+import zornco.reploidcraft.entities.EntityFloatingPlatform;
+import zornco.reploidcraft.entities.EntityMet;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.items.ContainerReploidArmor;
+import zornco.reploidcraft.items.ContainerReploidBuster;
+import zornco.reploidcraft.items.InventoryArmor;
+import zornco.reploidcraft.items.InventoryBuster;
+import zornco.reploidcraft.network.MessageRideArmor;
+import zornco.reploidcraft.network.PacketHandler;
+import zornco.reploidcraft.sounds.BusterChargeContMoving;
+import zornco.reploidcraft.sounds.BusterChargeUpMoving;
+import zornco.reploidcraft.sounds.Sounds;
+import zornco.reploidcraft.utils.RiderState;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -91,17 +91,17 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockBossDoorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new TileEntityItemHolderRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechBay.class, new TileEntityMechBayRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ReploidCraftEnv.blockItemHolder), new ItemItemHolderRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ReploidCraft.blockItemHolder), new ItemItemHolderRenderer());
 
 	}
 	@Override
 	public void registerArmors(){ 
 		ModelReploidBlue reploidArmor = new ModelReploidBlue(0.1F);
 		ModelReploidBlue reploidLegs = new ModelReploidBlue(0.05F);
-		armorModels.put(ReploidCraftEnv.reploidHelm, reploidArmor);
-		armorModels.put(ReploidCraftEnv.reploidChest, reploidArmor);
-		armorModels.put(ReploidCraftEnv.reploidLegs, reploidLegs);
-		armorModels.put(ReploidCraftEnv.reploidBoots, reploidArmor);
+		armorModels.put(ReploidCraft.reploidHelm, reploidArmor);
+		armorModels.put(ReploidCraft.reploidChest, reploidArmor);
+		armorModels.put(ReploidCraft.reploidLegs, reploidLegs);
+		armorModels.put(ReploidCraft.reploidBoots, reploidArmor);
 	}
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

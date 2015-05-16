@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

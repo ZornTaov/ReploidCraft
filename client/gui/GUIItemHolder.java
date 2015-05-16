@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.gui;
+package zornco.reploidcraft.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,10 +8,10 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import zornco.reploidcraftenv.blocks.ContainerItemHolder;
+import zornco.reploidcraft.blocks.ContainerItemHolder;
 
 public class GUIItemHolder extends GuiContainer {
-	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraftenv", "textures/gui/itemHolder.png");
+	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraft", "textures/gui/itemHolder.png");
 
 	public GUIItemHolder(IInventory player, IInventory chest)
     {

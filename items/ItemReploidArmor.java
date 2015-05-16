@@ -1,10 +1,10 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.client.ClientProxy;
-import zornco.reploidcraftenv.core.Config;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.client.ClientProxy;
+import zornco.reploidcraft.core.Config;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -22,7 +22,7 @@ public class ItemReploidArmor extends ItemArmor
 	{
 		super(material, render_idx, type);
 
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 		// ItemStacks that store an NBT Tag Compound are limited to stack size of 1
 		setMaxStackSize(1);
 	}
@@ -40,7 +40,7 @@ public class ItemReploidArmor extends ItemArmor
 			// you may or may not want to check if the player is sneaking - up to you
 			if (player.isSneaking()) {
 				// open the inventory:
-				player.openGui(ReploidCraftEnv.instance, Config.GUI_ARMOR_INV, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
+				player.openGui(ReploidCraft.instance, Config.GUI_ARMOR_INV, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
 			}
 		}
 		return stack;
@@ -89,6 +89,6 @@ public class ItemReploidArmor extends ItemArmor
 		//TODO: make this have different armor colors, go all 16 maybe?
 		String name = this.getUnlocalizedName().substring(5);
 		name = name.substring(0, name.indexOf('_'));
-		return ReploidCraftEnv.MOD_ID + ":textures/armor/" + name + "_layer_" + (slot == 2 ? 2 : 1) + ".png";
+		return ReploidCraft.MOD_ID + ":textures/armor/" + name + "_layer_" + (slot == 2 ? 2 : 1) + ".png";
 	}
 }	

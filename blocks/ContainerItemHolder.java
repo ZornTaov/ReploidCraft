@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

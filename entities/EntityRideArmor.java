@@ -1,11 +1,11 @@
-package zornco.reploidcraftenv.entities;
+package zornco.reploidcraft.entities;
 
-import static zornco.reploidcraftenv.entities.armorParts.PartSlot.ARMLEFT;
-import static zornco.reploidcraftenv.entities.armorParts.PartSlot.ARMRIGHT;
-import static zornco.reploidcraftenv.entities.armorParts.PartSlot.BACK;
-import static zornco.reploidcraftenv.entities.armorParts.PartSlot.BODY;
-import static zornco.reploidcraftenv.entities.armorParts.PartSlot.HEAD;
-import static zornco.reploidcraftenv.entities.armorParts.PartSlot.LEGS;
+import static zornco.reploidcraft.entities.armorParts.PartSlot.ARMLEFT;
+import static zornco.reploidcraft.entities.armorParts.PartSlot.ARMRIGHT;
+import static zornco.reploidcraft.entities.armorParts.PartSlot.BACK;
+import static zornco.reploidcraft.entities.armorParts.PartSlot.BODY;
+import static zornco.reploidcraft.entities.armorParts.PartSlot.HEAD;
+import static zornco.reploidcraft.entities.armorParts.PartSlot.LEGS;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -61,18 +61,18 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.village.Village;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.AIs.EntityAICreeperSwellRA;
-import zornco.reploidcraftenv.entities.AIs.EntityAIDefendVillageRA;
-import zornco.reploidcraftenv.entities.AIs.EntityAILookAtVillagerRA;
-import zornco.reploidcraftenv.entities.armorParts.IPartArm;
-import zornco.reploidcraftenv.entities.armorParts.IPartBack;
-import zornco.reploidcraftenv.entities.armorParts.IPartBody;
-import zornco.reploidcraftenv.entities.armorParts.IPartChest;
-import zornco.reploidcraftenv.entities.armorParts.IPartHead;
-import zornco.reploidcraftenv.entities.armorParts.IPartLegs;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
-import zornco.reploidcraftenv.utils.RiderState;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.AIs.EntityAICreeperSwellRA;
+import zornco.reploidcraft.entities.AIs.EntityAIDefendVillageRA;
+import zornco.reploidcraft.entities.AIs.EntityAILookAtVillagerRA;
+import zornco.reploidcraft.entities.armorParts.IPartArm;
+import zornco.reploidcraft.entities.armorParts.IPartBack;
+import zornco.reploidcraft.entities.armorParts.IPartBody;
+import zornco.reploidcraft.entities.armorParts.IPartChest;
+import zornco.reploidcraft.entities.armorParts.IPartHead;
+import zornco.reploidcraft.entities.armorParts.IPartLegs;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
+import zornco.reploidcraft.utils.RiderState;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -596,7 +596,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			this.fallDistance = 2.0F;
 
 		if (this.riddenByEntity != null)
-			ReploidCraftEnv.proxy.updateRiderState(this, this.riddenByEntity);
+			ReploidCraft.proxy.updateRiderState(this, this.riddenByEntity);
 		this.updateParts();
 		if (this.isJumping() && this.onGround)
 		{
@@ -827,7 +827,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 			setMobType(p_70108_1_ instanceof EntityPlayer ? EnumMobType.player : EnumMobType.empty);
 		}
-		ReploidCraftEnv.logger.info(getMobType());
+		ReploidCraft.logger.info(getMobType());
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -1145,7 +1145,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			part.damageEntity(var2, var3);
 			part.hurtTime = this.maxHurtTime = 10;
 		}
-		ReploidCraftEnv.logger.info("hit on the " + part.getName() + " Health: " + part.getHealth() + "/" + var3 + FMLCommonHandler.instance().getEffectiveSide());
+		ReploidCraft.logger.info("hit on the " + part.getName() + " Health: " + part.getHealth() + "/" + var3 + FMLCommonHandler.instance().getEffectiveSide());
 		
 		//doesn't seem like this is working
 		if (part.getHealth() <= 0.0F)
@@ -1239,10 +1239,10 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		float f1 = MathHelper.sin(rotation);
 		float f2 = MathHelper.cos(rotation);
 		float[] offsets = part.getOffsetsPos();
-		if (this.hasPart(ARMRIGHT) && part.slot == ARMRIGHT && ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot) instanceof IPartArm)
+		if (this.hasPart(ARMRIGHT) && part.slot == ARMRIGHT && ReploidCraft.proxy.partRegistry.getPart(part.getType(), part.slot) instanceof IPartArm)
 		{
-			if (((IPartArm) ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot)).isMirrored())
-				offsets = ((IPartArm) ReploidCraftEnv.proxy.partRegistry.getPart(part.getType(), part.slot)).getArmPos(ARMRIGHT);
+			if (((IPartArm) ReploidCraft.proxy.partRegistry.getPart(part.getType(), part.slot)).isMirrored())
+				offsets = ((IPartArm) ReploidCraft.proxy.partRegistry.getPart(part.getType(), part.slot)).getArmPos(ARMRIGHT);
 		}
 
 		double X = this.posX + offsets[0] * f2 + offsets[2] * f1;
@@ -1316,73 +1316,73 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	public double getMechJumpStrength()
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK) instanceof IPartBack)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK) instanceof IPartBack)
 		{
-			return ((IPartBack) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK)).getJumpHeight();
+			return ((IPartBack) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK)).getJumpHeight();
 		}
 		return 0.4F;
 	}
 
 	public double getMechJumpDuration()
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK) instanceof IPartBack)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK) instanceof IPartBack)
 		{
-			return ((IPartBack) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK)).getJumpDuration();
+			return ((IPartBack) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BACK.ordinal()).getType(), BACK)).getJumpDuration();
 		}
 		return 0.0F;
 	}
 
 	public boolean doesMechHaveChest(PartSlot slot)
 	{
-		return ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(slot.ordinal()).getType(), slot) instanceof IPartChest;
+		return ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(slot.ordinal()).getType(), slot) instanceof IPartChest;
 	}
 
 	public boolean doMechAttackLeft()
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT) instanceof IPartArm)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT) instanceof IPartArm)
 		{
-			return ((IPartArm) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT)).doAttack(this);
+			return ((IPartArm) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT)).doAttack(this);
 		}
 		return false;
 	}
 
 	public boolean doMechAttackRight()
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT) instanceof IPartArm)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT) instanceof IPartArm)
 		{
-			return ((IPartArm) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT)).doAttack(this);
+			return ((IPartArm) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(ARMRIGHT.ordinal()).getType(), ARMRIGHT)).doAttack(this);
 		}
 		return false;
 	}
 
 	public void doMechParticle(Entity mech, PartSlot slot)
 	{
-		ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(slot.ordinal()).getType(), slot).doParticle(mech);
+		ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(slot.ordinal()).getType(), slot).doParticle(mech);
 	}
 
 	public float getMechSpeed()
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(LEGS.ordinal()).getType(), LEGS) instanceof IPartLegs)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(LEGS.ordinal()).getType(), LEGS) instanceof IPartLegs)
 		{
-			return ((IPartLegs) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(LEGS.ordinal()).getType(), LEGS)).getSpeed();
+			return ((IPartLegs) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(LEGS.ordinal()).getType(), LEGS)).getSpeed();
 		}
 		return 0.2F;
 	}
 
 	public boolean canMechWaterBreathe()
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(HEAD.ordinal()).getType(), HEAD) instanceof IPartHead)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(HEAD.ordinal()).getType(), HEAD) instanceof IPartHead)
 		{
-			return ((IPartHead) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(HEAD.ordinal()).getType(), HEAD)).isSealed();
+			return ((IPartHead) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(HEAD.ordinal()).getType(), HEAD)).isSealed();
 		}
 		return false;
 	}
 
 	public boolean isMechFireResistant()
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY) instanceof IPartBody)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY) instanceof IPartBody)
 		{
-			return ((IPartBody) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY)).isLavaResistant();
+			return ((IPartBody) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY)).isLavaResistant();
 		}
 		return false;
 	}
@@ -1408,9 +1408,9 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	
 	private boolean doMechExplode(DamageSource source)
 	{
-		if (ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY) instanceof IPartBody)
+		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY) instanceof IPartBody)
 		{
-			return ((IPartBody) ReploidCraftEnv.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY)).doExplode(this, source);
+			return ((IPartBody) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(BODY.ordinal()).getType(), BODY)).doExplode(this, source);
 		}
 		return false;
 	}
@@ -1475,7 +1475,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	protected Item getDropItem()
 	{
-		return ReploidCraftEnv.rideArmorPlacer;
+		return ReploidCraft.rideArmorPlacer;
 	}
 
 	public ItemStack[] populateInventory()
@@ -1483,8 +1483,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 		ItemStack[] inv = new ItemStack[6];
 		for (int i = 0; i < getParts().length; i++)
 		{
-			if(((EntityRideArmorPart) this.getParts()[i]).getType() != "EMPTY" && ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) this.getParts()[i]).getType(), PartSlot.getSlot(i)) != null)
-				inv[i] = new ItemStack(ReploidCraftEnv.rideArmorPart, 1, ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) this.getParts()[i]).getType(), PartSlot.getSlot(i)).getPartNumber());
+			if(((EntityRideArmorPart) this.getParts()[i]).getType() != "EMPTY" && ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) this.getParts()[i]).getType(), PartSlot.getSlot(i)) != null)
+				inv[i] = new ItemStack(ReploidCraft.rideArmorPart, 1, ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) this.getParts()[i]).getType(), PartSlot.getSlot(i)).getPartNumber());
 		}
 		return inv;
 	}

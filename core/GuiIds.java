@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.core;
+package zornco.reploidcraft.core;
 
 public class GuiIds {
 

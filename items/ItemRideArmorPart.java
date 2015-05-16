@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,7 +29,7 @@ public class ItemRideArmorPart extends Item
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.maxStackSize = 1;
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class ItemRideArmorPart extends Item
 		this.partIcon = new IIcon[typeAmmount];
 		for (int i = 0; i < typeAmmount; ++i)
 		{
-			this.partIcon[i] = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+getPartList().get(i).toString());
+			this.partIcon[i] = par1IconRegister.registerIcon(ReploidCraft.MOD_ID+":"+getPartList().get(i).toString());
 		}
 	}
 	public void populateParts()

@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,7 +24,7 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
 	public static String[] names = {"basic", "controller", "power"};
 	public BlockMechBay() {
 		super(Material.iron);
-		setCreativeTab(ReploidCraftEnv.reploidTab);
+		setCreativeTab(ReploidCraft.reploidTab);
 	}
 	@Override
 	public int damageDropped (int metadata) {
@@ -83,7 +83,7 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
 		}
 		if(((TileMultiBlock) te).hasMaster())
 		{
-			player.openGui(ReploidCraftEnv.instance, 1, world, i, j, k);
+			player.openGui(ReploidCraft.instance, 1, world, i, j, k);
 		}
 		else return false;
 		return true;
@@ -102,7 +102,7 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
 	 */
 	public void registerBlockIcons(IIconRegister par1IconRegister)
 	{
-		this.blockIcons = new IIcon[] {par1IconRegister.registerIcon("reploidcraftenv:mechBay"), par1IconRegister.registerIcon("reploidcraftenv:mechBayController"), par1IconRegister.registerIcon("reploidcraftenv:mechBayEnergy")};
+		this.blockIcons = new IIcon[] {par1IconRegister.registerIcon("reploidcraft:mechBay"), par1IconRegister.registerIcon("reploidcraft:mechBayController"), par1IconRegister.registerIcon("reploidcraft:mechBayEnergy")};
 	}
 	@Override
 	public IIcon getIcon(int side, int metadata) {

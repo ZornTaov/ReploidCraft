@@ -1,11 +1,11 @@
-package zornco.reploidcraftenv.entities.armorParts.creeper;
+package zornco.reploidcraft.entities.armorParts.creeper;
 
 import net.minecraft.util.ResourceLocation;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBase;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorLegsCreeper;
-import zornco.reploidcraftenv.entities.armorParts.IPartLegs;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorBase;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorLegsCreeper;
+import zornco.reploidcraft.entities.armorParts.IPartLegs;
+import zornco.reploidcraft.entities.armorParts.PartBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -44,7 +44,7 @@ public class CreeperLegs extends PartBase implements IPartLegs
 	@Override
 	public void initModel() {
 		model = new ModelRideArmorLegsCreeper();
-		texture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorCreeperLegs.png");
+		texture = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/rideArmorCreeperLegs.png");
 	}
 
 }

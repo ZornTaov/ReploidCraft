@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.core;
+package zornco.reploidcraft.core;
 
 
 import net.minecraft.entity.Entity;
@@ -7,30 +7,30 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.blocks.ContainerItemHolder;
-import zornco.reploidcraftenv.blocks.ContainerMechBay;
-import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
-import zornco.reploidcraftenv.blocks.TileEntityMechBayController;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.armorParts.PartList;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
-import zornco.reploidcraftenv.entities.armorParts.PartsRegistry;
-import zornco.reploidcraftenv.entities.armorParts.creeper.CreeperBody;
-import zornco.reploidcraftenv.entities.armorParts.creeper.CreeperLegs;
-import zornco.reploidcraftenv.entities.armorParts.frog.FrogHead;
-import zornco.reploidcraftenv.entities.armorParts.green.GreenArm;
-import zornco.reploidcraftenv.entities.armorParts.green.GreenBack;
-import zornco.reploidcraftenv.entities.armorParts.green.GreenBody;
-import zornco.reploidcraftenv.entities.armorParts.green.GreenLegs;
-import zornco.reploidcraftenv.entities.armorParts.rabbit.RabbitBack;
-import zornco.reploidcraftenv.entities.armorParts.red.RedBack;
-import zornco.reploidcraftenv.entities.armorParts.red.RedBody;
-import zornco.reploidcraftenv.items.ContainerReploidArmor;
-import zornco.reploidcraftenv.items.ContainerReploidBuster;
-import zornco.reploidcraftenv.items.InventoryArmor;
-import zornco.reploidcraftenv.items.InventoryBuster;
-import zornco.reploidcraftenv.utils.RiderState;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.blocks.ContainerItemHolder;
+import zornco.reploidcraft.blocks.ContainerMechBay;
+import zornco.reploidcraft.blocks.TileEntityItemHolder;
+import zornco.reploidcraft.blocks.TileEntityMechBayController;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.armorParts.PartList;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
+import zornco.reploidcraft.entities.armorParts.PartsRegistry;
+import zornco.reploidcraft.entities.armorParts.creeper.CreeperBody;
+import zornco.reploidcraft.entities.armorParts.creeper.CreeperLegs;
+import zornco.reploidcraft.entities.armorParts.frog.FrogHead;
+import zornco.reploidcraft.entities.armorParts.green.GreenArm;
+import zornco.reploidcraft.entities.armorParts.green.GreenBack;
+import zornco.reploidcraft.entities.armorParts.green.GreenBody;
+import zornco.reploidcraft.entities.armorParts.green.GreenLegs;
+import zornco.reploidcraft.entities.armorParts.rabbit.RabbitBack;
+import zornco.reploidcraft.entities.armorParts.red.RedBack;
+import zornco.reploidcraft.entities.armorParts.red.RedBody;
+import zornco.reploidcraft.items.ContainerReploidArmor;
+import zornco.reploidcraft.items.ContainerReploidBuster;
+import zornco.reploidcraft.items.InventoryArmor;
+import zornco.reploidcraft.items.InventoryBuster;
+import zornco.reploidcraft.utils.RiderState;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -157,7 +157,7 @@ public class CommonProxy implements IGuiHandler {
 		for (Object list : this.partRegistry.getMap().values()) {
 			s += ((PartList) list).getPartList().size();
 		}
-		ReploidCraftEnv.logger.info("Registered " + s + " parts!");
+		ReploidCraft.logger.info("Registered " + s + " parts!");
 	}
 	public void registerArmors(){}
 	public void playChargeContSound(EntityPlayer player){}

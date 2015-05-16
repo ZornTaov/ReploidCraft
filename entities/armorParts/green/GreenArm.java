@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.entities.armorParts.green;
+package zornco.reploidcraft.entities.armorParts.green;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -8,11 +8,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraftforge.common.ForgeHooks;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.armorParts.IPartArm;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.armorParts.IPartArm;
+import zornco.reploidcraft.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
 
 public class GreenArm extends PartBase implements IPartArm{
 
@@ -88,8 +88,8 @@ public class GreenArm extends PartBase implements IPartArm{
 	public Object[] getRecipe() {
 		Object[] recipe = new Object[] {
 				"ib", 
-				Character.valueOf('i'), new ItemStack(ReploidCraftEnv.component, 1, 2), 
-				Character.valueOf('b'), new ItemStack(ReploidCraftEnv.component, 1, 5)
+				Character.valueOf('i'), new ItemStack(ReploidCraft.component, 1, 2), 
+				Character.valueOf('b'), new ItemStack(ReploidCraft.component, 1, 5)
 			};
 		return recipe;
 	}

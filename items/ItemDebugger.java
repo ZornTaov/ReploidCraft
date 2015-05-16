@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.blocks.TileEntityMechBay;
-import zornco.reploidcraftenv.blocks.TileEntityMechBayEnergy;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.blocks.TileEntityMechBay;
+import zornco.reploidcraft.blocks.TileEntityMechBayEnergy;
+import zornco.reploidcraft.entities.EntityRideArmor;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,7 +20,7 @@ public class ItemDebugger extends Item {
 
 	public ItemDebugger() {
 		super();
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class ItemDebugger extends Item {
 		par2EntityPlayer.addChatMessage(new ChatComponentText("" + par3World.getBlockMetadata(par4, par5, par6)));
 		TileEntity tile = par3World.getTileEntity(par4, par5, par6);
 
-		ReploidCraftEnv.logger.info("" + tile.getClass());
+		ReploidCraft.logger.info("" + tile.getClass());
 		if (tile != null) {
 			if (tile instanceof TileEntityMechBayEnergy) {
 				TileEntityMechBay tilebed = (TileEntityMechBay) tile;

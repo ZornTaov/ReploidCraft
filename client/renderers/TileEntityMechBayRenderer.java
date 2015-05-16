@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.renderers;
+package zornco.reploidcraft.client.renderers;
 
 import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glDisable;
@@ -14,11 +14,11 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL12;
 
-import zornco.reploidcraftenv.blocks.TileEntityMechBay;
+import zornco.reploidcraft.blocks.TileEntityMechBay;
 
 public class TileEntityMechBayRenderer extends TileEntitySpecialRenderer {
 
-	protected static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraftenv","textures/blocks/ModelMechBay.png");
+	protected static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraft","textures/blocks/ModelMechBay.png");
 	private ModelMechBay model;
 	public TileEntityMechBayRenderer() {
 		super();

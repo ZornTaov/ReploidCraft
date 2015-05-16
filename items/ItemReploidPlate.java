@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,7 +25,7 @@ public class ItemReploidPlate extends Item {
 		super();
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class ItemReploidPlate extends Item {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister)
 	{
-		this.iconPlate = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":reploidPlate");
+		this.iconPlate = par1IconRegister.registerIcon(ReploidCraft.MOD_ID+":reploidPlate");
 	}
 
 	@SideOnly(Side.CLIENT)

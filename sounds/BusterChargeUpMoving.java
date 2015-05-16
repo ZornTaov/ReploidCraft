@@ -1,11 +1,11 @@
-package zornco.reploidcraftenv.sounds;
+package zornco.reploidcraft.sounds;
 
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import zornco.reploidcraftenv.items.IKeyBound;
-import zornco.reploidcraftenv.items.ItemBuster;
+import zornco.reploidcraft.items.IKeyBound;
+import zornco.reploidcraft.items.ItemBuster;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

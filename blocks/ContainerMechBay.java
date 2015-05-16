@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -6,9 +6,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import zornco.reploidcraftenv.client.gui.SlotMechBay;
-import zornco.reploidcraftenv.client.gui.SlotMechBayBody;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
+import zornco.reploidcraft.client.gui.SlotMechBay;
+import zornco.reploidcraft.client.gui.SlotMechBayBody;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
 
 public class ContainerMechBay extends Container {
 	private TileEntityMechBay mechBay;

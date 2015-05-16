@@ -1,8 +1,8 @@
-package zornco.reploidcraftenv.entities.AIs;
+package zornco.reploidcraft.entities.AIs;
 
 import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.entities.EntityMet;
+import zornco.reploidcraft.entities.EntityMet;
 
 public class EntityAIMetHide extends EntityAISit {
 

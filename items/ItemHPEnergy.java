@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,8 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.sounds.Sounds;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.sounds.Sounds;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,7 +32,7 @@ public class ItemHPEnergy extends ItemFood {
     public ItemHPEnergy(int type, int ammount, float sat) {
 		super(ammount, sat, false);
 		this.type = type;
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 	}
 
 	/**
@@ -106,6 +106,6 @@ public class ItemHPEnergy extends ItemFood {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister)
 	{
-		this.healthIcons = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+this.getUnlocalizedName().substring(5));
+		this.healthIcons = par1IconRegister.registerIcon(ReploidCraft.MOD_ID+":"+this.getUnlocalizedName().substring(5));
 	}
 }

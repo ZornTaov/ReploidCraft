@@ -1,9 +1,9 @@
-package zornco.reploidcraftenv.bullets;
+package zornco.reploidcraft.bullets;
 
 import java.util.Iterator;
 import java.util.List;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -656,6 +656,6 @@ public class EntityBulletBase extends Entity implements IProjectile
 	}
 	public ResourceLocation getTexture()
 	{
-		return new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/MetHat.png");
+		return new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/MetHat.png");
 	}
 }

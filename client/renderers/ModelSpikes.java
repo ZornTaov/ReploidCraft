@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.renderers;
+package zornco.reploidcraft.client.renderers;
 
 public class ModelSpikes {
 

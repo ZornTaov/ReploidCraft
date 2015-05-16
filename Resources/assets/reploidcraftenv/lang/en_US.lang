@@ -47,7 +47,7 @@ item.platformPlacer.name=Platform Placer
 # GUI
 
 # Other
-itemGroup.ReploidCraftEnv=Reploid Craft Environmental
+itemGroup.ReploidCraft=Reploid Craft Environmental
 
 slot.armleft=Left Arm
 slot.armright=Right Arm

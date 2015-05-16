@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv;
+package zornco.reploidcraft;
 
 
 
@@ -14,11 +14,11 @@ import net.minecraftforge.common.util.EnumHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import zornco.reploidcraftenv.core.CommonProxy;
-import zornco.reploidcraftenv.core.Config;
-import zornco.reploidcraftenv.core.EventBus;
-import zornco.reploidcraftenv.core.TabReploid;
-import zornco.reploidcraftenv.network.PacketHandler;
+import zornco.reploidcraft.core.CommonProxy;
+import zornco.reploidcraft.core.Config;
+import zornco.reploidcraft.core.EventBus;
+import zornco.reploidcraft.core.TabReploid;
+import zornco.reploidcraft.network.PacketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -29,24 +29,24 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 //import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid=ReploidCraftEnv.MOD_ID, name="ReploidEnv", version="0.0.1", acceptedMinecraftVersions = "[1.6,)")
+@Mod(modid=ReploidCraft.MOD_ID, name="ReploidCraft", version="0.0.1", acceptedMinecraftVersions = "[1.6,)")
 //@NetworkMod(channels = { "ReploidEnv" }, clientSideRequired=true, serverSideRequired=false, packetHandler=PacketHandler.class)
-public class ReploidCraftEnv {
+public class ReploidCraft {
 
-	public static final String MOD_ID = "reploidcraftenv";
+	public static final String MOD_ID = "reploidcraft";
 	// The instance of your mod that Forge uses.
-	@Instance(ReploidCraftEnv.MOD_ID)
-	public static ReploidCraftEnv instance;
+	@Instance(ReploidCraft.MOD_ID)
+	public static ReploidCraft instance;
 
 	//public static final PacketPipeline packetPipeline = new PacketPipeline();
 	
 	// Says where the client and server 'proxy' code is loaded.
-	@SidedProxy(clientSide="zornco.reploidcraftenv.client.ClientProxy", serverSide="zornco.reploidcraftenv.core.CommonProxy")
+	@SidedProxy(clientSide="zornco.reploidcraft.client.ClientProxy", serverSide="zornco.reploidcraft.core.CommonProxy")
 	public static CommonProxy proxy;
 
-	public static CreativeTabs reploidTab = new TabReploid(ReploidCraftEnv.MOD_ID);
+	public static CreativeTabs reploidTab = new TabReploid(ReploidCraft.MOD_ID);
 
-	public static Logger logger = LogManager.getLogger(ReploidCraftEnv.MOD_ID);
+	public static Logger logger = LogManager.getLogger(ReploidCraft.MOD_ID);
 
 	public static Random rand = new Random();
 

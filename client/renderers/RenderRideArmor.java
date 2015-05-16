@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.renderers;
+package zornco.reploidcraft.client.renderers;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
@@ -7,18 +7,18 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorArmLeft;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorArmRight;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBack;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBase;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorHead;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorLegs;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorTorso;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.EntityRideArmorPart;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorArmLeft;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorArmRight;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorBack;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorBase;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorHead;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorLegs;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorTorso;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.EntityRideArmorPart;
+import zornco.reploidcraft.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
 
 public class RenderRideArmor extends Render {
 
@@ -40,7 +40,7 @@ public class RenderRideArmor extends Render {
 	private ModelBase greenArmLeft  = new ModelRideArmorArmLeft(); 
 	private ModelBase greenArmRight = new ModelRideArmorArmRight();
 	
-	public ResourceLocation defaultTexture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorGreen.png");
+	public ResourceLocation defaultTexture = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/rideArmorGreen.png");
 
 	public RenderRideArmor()
 	{
@@ -86,7 +86,7 @@ public class RenderRideArmor extends Render {
 		//System.out.println(f10);
 		GL11.glTranslatef(0.0F, -f9/5F-(f10*0.6325F)-0.01F + (entity.hasPart(PartSlot.LEGS)?0.0F:1F), 0F);
 		//ModelRideArmorBase temp;
-		this.bindTexture(ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BODY.ordinal()]).getType()));
+		this.bindTexture(ReploidCraft.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BODY.ordinal()]).getType()));
 		renderPart((ModelRideArmorBase) modelChest, entity, PartSlot.BODY, f6, f7, f8, 0.0F);
 		if(entity.rideArmorParts != null)
 		{
@@ -131,15 +131,15 @@ public class RenderRideArmor extends Render {
 	}
 	private ResourceLocation getPartTexture(Entity entity, PartSlot slot)
 	{
-		PartBase part = ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[slot.ordinal()]).getType(), slot);
-		return part != null && part.getTexture() != null ?part.getTexture() :ReploidCraftEnv.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[slot.ordinal()]).getType());
+		PartBase part = ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[slot.ordinal()]).getType(), slot);
+		return part != null && part.getTexture() != null ?part.getTexture() :ReploidCraft.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[slot.ordinal()]).getType());
 
 	}
 	private void renderPart(ModelRideArmorBase part, Entity entity, PartSlot slot, float f6, float f7, float f8, float f9)
 	{
-		if(ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[slot.getIndex()]).getType(), slot).getModel()!=null)
+		if(ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[slot.getIndex()]).getType(), slot).getModel()!=null)
 		{
-			ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[slot.getIndex()]).getType(), slot).getModel().renderPart(entity, f6, f7, f8, f9, 0.0F, 0.0625F);
+			ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[slot.getIndex()]).getType(), slot).getModel().renderPart(entity, f6, f7, f8, f9, 0.0F, 0.0625F);
 		}
 		else
 		{

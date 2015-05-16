@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.crafting;
+package zornco.reploidcraft.crafting;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeHandler {
@@ -15,7 +15,7 @@ public class RecipeHandler {
 		/** Recipes **/
 		//GameRegistry.addRecipe(new ItemStack(Item.monsterPlacer, 1, metID), new Object[] { "   ", " # ", "xxx", Character.valueOf('#'), Block.dirt , Character.valueOf('x'), Block.planks });
 
-		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraftEnv.reploidPlate, 1, 16), // basic plate
+		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, 16), // basic plate
 				new Object[]{ Items.iron_ingot, Items.redstone } );
 		String[] dyes = 
 			{
@@ -36,13 +36,13 @@ public class RecipeHandler {
 				"dyeOrange"
 			};
 		for(int i = 0; i < 15; i++)
-			addShapelessOreRecipe(new ItemStack(ReploidCraftEnv.reploidPlate, 1, i), // blue plate
-					new Object[]{new ItemStack(ReploidCraftEnv.reploidPlate, 1, 16), dyes[i] } );
+			addShapelessOreRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, i), // blue plate
+					new Object[]{new ItemStack(ReploidCraft.reploidPlate, 1, 16), dyes[i] } );
 
-		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraftEnv.reploidPlate, 1, 15), // white plate	
-				new Object[]{ new ItemStack(ReploidCraftEnv.component, 1, 0), new ItemStack(ReploidCraftEnv.reploidPlate, 1, 4) } );
+		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, 15), // white plate	
+				new Object[]{ new ItemStack(ReploidCraft.component, 1, 0), new ItemStack(ReploidCraft.reploidPlate, 1, 4) } );
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.component, 4, 0), //diamond dust
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 4, 0), //diamond dust
 				new Object[] { 
 			"ttt", "tdt", "ttt", 
 			Character.valueOf('t'), Blocks.tnt, 
@@ -50,38 +50,38 @@ public class RecipeHandler {
 		}
 				);
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.component, 1, 1), // AEDS
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, 1), // AEDS
 				new Object[] { 
 			"rdr", "dpd", "rdr", 
 			Character.valueOf('r'), Items.redstone, 
-			Character.valueOf('d'), new ItemStack(ReploidCraftEnv.component, 1, 0), // diamond dust
+			Character.valueOf('d'), new ItemStack(ReploidCraft.component, 1, 0), // diamond dust
 			Character.valueOf('p'), Items.quartz // use quartz block
 		}
 				);
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.healthTank, 1, 30), 
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.healthTank, 1, 30), 
 				new Object[] { 
 			"ihi", "bHb", "bdb", 
 			Character.valueOf('i'), Items.iron_ingot, 
-			Character.valueOf('b'), new ItemStack(ReploidCraftEnv.reploidPlate, 1, 4),
-			Character.valueOf('h'), ReploidCraftEnv.healthBit,
-			Character.valueOf('H'), ReploidCraftEnv.healthByte,
+			Character.valueOf('b'), new ItemStack(ReploidCraft.reploidPlate, 1, 4),
+			Character.valueOf('h'), ReploidCraft.healthBit,
+			Character.valueOf('H'), ReploidCraft.healthByte,
 			Character.valueOf('d'), Items.diamond
 		}
 				);
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.spikes, 8), 
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.spikes, 8), 
 				new Object[] { 
 			" i ", " i ", "bbb", 
-			Character.valueOf('i'), new ItemStack(ReploidCraftEnv.reploidPlate, 1, 7), 
+			Character.valueOf('i'), new ItemStack(ReploidCraft.reploidPlate, 1, 7), 
 			Character.valueOf('b'), Blocks.iron_block
 		}
 				);
 		
-		GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.component, 1, 9), 
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, 9), 
 				new Object[] { 
 			" i ", " b ", "i i", 
-			Character.valueOf('i'), new ItemStack(ReploidCraftEnv.reploidPlate, 1, 7), 
+			Character.valueOf('i'), new ItemStack(ReploidCraft.reploidPlate, 1, 7), 
 			Character.valueOf('b'), Items.iron_ingot
 		}
 				);

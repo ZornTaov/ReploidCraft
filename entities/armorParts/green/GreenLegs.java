@@ -1,7 +1,7 @@
-package zornco.reploidcraftenv.entities.armorParts.green;
+package zornco.reploidcraft.entities.armorParts.green;
 
-import zornco.reploidcraftenv.entities.armorParts.IPartLegs;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.armorParts.IPartLegs;
+import zornco.reploidcraft.entities.armorParts.PartBase;
 
 public class GreenLegs extends PartBase implements IPartLegs {
 

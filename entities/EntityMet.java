@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.entities;
+package zornco.reploidcraft.entities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
@@ -31,7 +31,7 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.entities.AIs.EntityAIBulletAttack;
+import zornco.reploidcraft.entities.AIs.EntityAIBulletAttack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,8 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.bullets.EntityMetBullet;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.bullets.EntityMetBullet;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -20,7 +20,7 @@ public class ItemBuster extends Item implements IKeyBound
 	{
 		super();
 		this.maxStackSize = 1;
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 	}
 	/*@SideOnly(Side.CLIENT)
 	int getIndex() {
@@ -72,14 +72,14 @@ public class ItemBuster extends Item implements IKeyBound
 		{//System.out.println(count);
 			if(count == getMaxItemUseDuration(stack) && stopUp)
 			{
-				ReploidCraftEnv.proxy.playChargeUpSound(player);
+				ReploidCraft.proxy.playChargeUpSound(player);
 				this.stopCont = false;
 			}
 			
 			else if(count <= getMaxItemUseDuration(stack)-35 && stopCont)
 			{
 				this.stopCont = false;
-				ReploidCraftEnv.proxy.playChargeContSound(player);
+				ReploidCraft.proxy.playChargeContSound(player);
 			}
 		}
 	}

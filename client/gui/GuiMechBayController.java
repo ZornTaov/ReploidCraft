@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.gui;
+package zornco.reploidcraft.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -14,13 +14,13 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import zornco.reploidcraftenv.blocks.ContainerMechBay;
-import zornco.reploidcraftenv.blocks.TileEntityMechBay;
-import zornco.reploidcraftenv.blocks.TileMultiBlock;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraft.blocks.ContainerMechBay;
+import zornco.reploidcraft.blocks.TileEntityMechBay;
+import zornco.reploidcraft.blocks.TileMultiBlock;
+import zornco.reploidcraft.entities.EntityRideArmor;
 
 public class GuiMechBayController extends GuiContainer {
-	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraftenv", "textures/gui/mechBay.png");
+	private ResourceLocation resourceLocation = new ResourceLocation("reploidcraft", "textures/gui/mechBay.png");
 
 	TileEntityMechBay mechBay;
 

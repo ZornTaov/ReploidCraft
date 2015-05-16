@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.entities.armorParts;
+package zornco.reploidcraft.entities.armorParts;
 
 import java.util.Map;
 import java.util.Properties;
@@ -6,8 +6,8 @@ import java.util.Properties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.RegistrySimple;
 import net.minecraft.util.ResourceLocation;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.items.ItemRideArmorPart;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.items.ItemRideArmorPart;
 
 import com.google.common.collect.Maps;
 
@@ -24,7 +24,7 @@ public class PartsRegistry extends RegistrySimple
 	private float[] emptyPos = {0,0,0};
 	private float[] emptySize = {0,0,0};
 	private PartBase emptyPart = new PartBase(0, emptyPos, emptySize);
-	public static ResourceLocation defaultTexture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorGreen.png");
+	public static ResourceLocation defaultTexture = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/rideArmorGreen.png");
 
 	@SuppressWarnings("rawtypes")
 	/**
@@ -51,7 +51,7 @@ public class PartsRegistry extends RegistrySimple
 		}
 		else 
 		{
-			ReploidCraftEnv.logger.warn("ERROR: called a missing part " + type + ":" + slot);
+			ReploidCraft.logger.warn("ERROR: called a missing part " + type + ":" + slot);
 			return emptyPart;
 		}
 	}
@@ -64,7 +64,7 @@ public class PartsRegistry extends RegistrySimple
 		}
 		else 
 		{
-			ReploidCraftEnv.logger.warn("ERROR: called a missing Texture for " + type);
+			ReploidCraft.logger.warn("ERROR: called a missing Texture for " + type);
 			return defaultTexture;
 		}
 	}
@@ -81,7 +81,7 @@ public class PartsRegistry extends RegistrySimple
 		}
 		if(((PartList)this.getObject(type)).getPartList().get(slot) != null) 
 		{
-			ReploidCraftEnv.logger.warn("ERROR: Tried adding a part that was already there. " + type + ":" + slot);
+			ReploidCraft.logger.warn("ERROR: Tried adding a part that was already there. " + type + ":" + slot);
 			return;
 		}
 		part.setPartNumber(partNumber++);
@@ -93,9 +93,9 @@ public class PartsRegistry extends RegistrySimple
 		ItemRideArmorPart.getPartList().add((PartBase) part);
 		if(part.getRecipe() != null)
 		{
-			GameRegistry.addRecipe(new ItemStack(ReploidCraftEnv.rideArmorPart, 1, part.getPartNumber()), part.getRecipe() );
+			GameRegistry.addRecipe(new ItemStack(ReploidCraft.rideArmorPart, 1, part.getPartNumber()), part.getRecipe() );
 		}
-		ReploidCraftEnv.logger.info("registered " + type + ":" + slot);
+		ReploidCraft.logger.info("registered " + type + ":" + slot);
 	}
 
 	public void registerSet(PartList list)

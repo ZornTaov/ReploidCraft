@@ -1,10 +1,10 @@
-package zornco.reploidcraftenv.entities.AIs;
+package zornco.reploidcraft.entities.AIs;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.bullets.EntityMetBullet;
+import zornco.reploidcraft.bullets.EntityMetBullet;
 
 public class EntityAIBulletAttackRA extends EntityAIBase
 {

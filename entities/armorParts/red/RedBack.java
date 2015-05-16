@@ -1,10 +1,10 @@
-package zornco.reploidcraftenv.entities.armorParts.red;
+package zornco.reploidcraft.entities.armorParts.red;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.armorParts.IPartBack;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.armorParts.IPartBack;
+import zornco.reploidcraft.entities.armorParts.PartBase;
 
 public class RedBack extends PartBase implements IPartBack {
 

@@ -1,9 +1,9 @@
-package zornco.reploidcraftenv.entities.armorParts.red;
+package zornco.reploidcraft.entities.armorParts.red;
 
 import net.minecraft.util.DamageSource;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.armorParts.IPartBody;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.armorParts.IPartBody;
+import zornco.reploidcraft.entities.armorParts.PartBase;
 
 public class RedBody extends PartBase implements IPartBody {
 

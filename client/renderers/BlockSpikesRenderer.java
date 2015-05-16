@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.renderers;
+package zornco.reploidcraft.client.renderers;
 
 import static net.minecraftforge.common.util.ForgeDirection.*;
 import net.minecraft.block.Block;
@@ -11,7 +11,7 @@ import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 
-import zornco.reploidcraftenv.core.Config;
+import zornco.reploidcraft.core.Config;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class BlockSpikesRenderer extends RenderBlocks

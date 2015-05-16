@@ -1,15 +1,15 @@
-package zornco.reploidcraftenv.utils;
+package zornco.reploidcraft.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.client.gui.GUIItemHolder;
-import zornco.reploidcraftenv.client.gui.GuiMechBayController;
-import zornco.reploidcraftenv.network.MessageReploidCraftGui;
-import zornco.reploidcraftenv.network.PacketHandler;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.client.gui.GUIItemHolder;
+import zornco.reploidcraft.client.gui.GuiMechBayController;
+import zornco.reploidcraft.network.MessageReploidCraftGui;
+import zornco.reploidcraft.network.PacketHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -56,7 +56,7 @@ public final class PlayerUtils {
 			return new GuiMechBayController(player, title, localized);
 		} else 
 		{
-			ReploidCraftEnv.logger.warn("Error, attempted to create a gui that isn't set up yet!");
+			ReploidCraft.logger.warn("Error, attempted to create a gui that isn't set up yet!");
 			return null;//new GuiBetterStorage(player, columns, rows, title, localized);
 		}
 		

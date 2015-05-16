@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.renderers;
+package zornco.reploidcraft.client.renderers;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
@@ -23,13 +23,13 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import zornco.reploidcraftenv.blocks.TileEntityItemHolder;
+import zornco.reploidcraft.blocks.TileEntityItemHolder;
 
 import com.google.common.primitives.SignedBytes;
 
 public class TileEntityItemHolderRenderer extends TileEntitySpecialRenderer {
 
-	protected static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraftenv","textures/blocks/itemHolder.png");
+	protected static final ResourceLocation itemHolderTexture = new ResourceLocation("reploidcraft","textures/blocks/itemHolder.png");
 
 	private Random random;
 

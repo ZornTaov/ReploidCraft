@@ -1,7 +1,7 @@
-package zornco.reploidcraftenv.entities.armorParts;
+package zornco.reploidcraft.entities.armorParts;
 
 import net.minecraft.item.ItemStack;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.EntityRideArmor;
 
 public interface IPartArm {
 	public boolean isMirrored();

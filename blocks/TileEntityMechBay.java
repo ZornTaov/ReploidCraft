@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,11 +18,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.EntityRideArmorPart;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
-import zornco.reploidcraftenv.items.ItemRideArmorPart;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.EntityRideArmorPart;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
+import zornco.reploidcraft.items.ItemRideArmorPart;
 import cofh.api.energy.EnergyStorage;
 
 public class TileEntityMechBay extends TileMultiBlock implements IInventory {
@@ -197,8 +197,8 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		{
 			for (int i = 0; i < rideArmor.getParts().length; i++)
 			{
-				if(((EntityRideArmorPart) rideArmor.getParts()[i]).getType() != "EMPTY" && ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) rideArmor.getParts()[i]).getType(), PartSlot.getSlot(i)) != null)
-					bay.inv[i] = new ItemStack(ReploidCraftEnv.rideArmorPart, 1, ReploidCraftEnv.proxy.partRegistry.getPart(((EntityRideArmorPart) rideArmor.getParts()[i]).getType(), PartSlot.getSlot(i)).getPartNumber());
+				if(((EntityRideArmorPart) rideArmor.getParts()[i]).getType() != "EMPTY" && ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) rideArmor.getParts()[i]).getType(), PartSlot.getSlot(i)) != null)
+					bay.inv[i] = new ItemStack(ReploidCraft.rideArmorPart, 1, ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) rideArmor.getParts()[i]).getType(), PartSlot.getSlot(i)).getPartNumber());
 			}
 		}
 	}

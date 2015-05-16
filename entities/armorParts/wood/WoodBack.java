@@ -1,8 +1,8 @@
-package zornco.reploidcraftenv.entities.armorParts.wood;
+package zornco.reploidcraft.entities.armorParts.wood;
 
-import zornco.reploidcraftenv.entities.armorParts.IPartBack;
-import zornco.reploidcraftenv.entities.armorParts.IPartChest;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.armorParts.IPartBack;
+import zornco.reploidcraft.entities.armorParts.IPartChest;
+import zornco.reploidcraft.entities.armorParts.PartBase;
 
 public class WoodBack extends PartBase implements IPartBack, IPartChest
 {

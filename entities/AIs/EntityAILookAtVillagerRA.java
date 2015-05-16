@@ -1,8 +1,8 @@
-package zornco.reploidcraftenv.entities.AIs;
+package zornco.reploidcraft.entities.AIs;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityVillager;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.EntityRideArmor;
 
 public class EntityAILookAtVillagerRA extends EntityAIBase
 {

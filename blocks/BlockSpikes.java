@@ -1,7 +1,7 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.core.Config;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.core.Config;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -19,7 +19,7 @@ public class BlockSpikes extends Block {
 
 	public BlockSpikes() {
 		super(Material.iron);
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 		//this.blockIndexInTexture = 22;
 	}
 

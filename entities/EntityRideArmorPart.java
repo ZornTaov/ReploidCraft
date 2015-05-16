@@ -1,6 +1,6 @@
-package zornco.reploidcraftenv.entities;
+package zornco.reploidcraft.entities;
 
-//import zornco.reploidcraftenv.entities.parts.SharedPartsAttributes;
+//import zornco.reploidcraft.entities.parts.SharedPartsAttributes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.armorParts.PartSlot;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
 
 public class EntityRideArmorPart extends EntityDragonPart {
 
@@ -36,7 +36,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 		super(par1iEntityMultiPart, "", 0.0F, 0.0F);
 		this.slot = slot;
 		this.setType(type);
-		float[] size = ReploidCraftEnv.proxy.partRegistry.getPart(type, slot).getSize();
+		float[] size = ReploidCraft.proxy.partRegistry.getPart(type, slot).getSize();
 		this.setSize(size[0], size[1]);
 		//this.applyEntityAttributes();
 		this.setHealth(this.getMaxHealth());
@@ -58,7 +58,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	}
 
 	public float[] getOffsetsPos() {
-		return ReploidCraftEnv.proxy.partRegistry.getPart(getType(), slot).getOffsetXYZ();
+		return ReploidCraft.proxy.partRegistry.getPart(getType(), slot).getOffsetXYZ();
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	}
 	public float[] getSize()
 	{
-		return ReploidCraftEnv.proxy.partRegistry.getPart(getType(), slot).getSize();
+		return ReploidCraft.proxy.partRegistry.getPart(getType(), slot).getSize();
 	}
 	public String getType() {
 		return (this.dataWatcher.getWatchableObjectString(20));
@@ -148,7 +148,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	{
 		//IAttributeInstance Hp = this.getEntityAttribute(SharedPartsAttributes.maxHealth);
 		//return Hp != null ? (float)Hp.getAttributeValue():20.0F;
-		return ReploidCraftEnv.proxy.partRegistry.getPart(this.getType(), slot).getMaxHealth();
+		return ReploidCraft.proxy.partRegistry.getPart(this.getType(), slot).getMaxHealth();
 	}
 
 	public IAttributeInstance getEntityAttribute(IAttribute par1Attribute)

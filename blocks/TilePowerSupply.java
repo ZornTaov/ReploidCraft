@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.tileentity.TileEntity;

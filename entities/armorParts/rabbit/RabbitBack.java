@@ -1,16 +1,16 @@
-package zornco.reploidcraftenv.entities.armorParts.rabbit;
+package zornco.reploidcraft.entities.armorParts.rabbit;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBackRabbit;
-import zornco.reploidcraftenv.client.renderers.mechParts.ModelRideArmorBase;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.entities.armorParts.IPartBack;
-import zornco.reploidcraftenv.entities.armorParts.PartBase;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorBackRabbit;
+import zornco.reploidcraft.client.renderers.mechParts.ModelRideArmorBase;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.entities.armorParts.IPartBack;
+import zornco.reploidcraft.entities.armorParts.PartBase;
 
 public class RabbitBack extends PartBase implements IPartBack {
 	
@@ -62,6 +62,6 @@ public class RabbitBack extends PartBase implements IPartBack {
 	@Override
 	public void initModel() {
 		model = new ModelRideArmorBackRabbit();
-		texture = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/rideArmorBackRabbit.png");
+		texture = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/rideArmorBackRabbit.png");
 	}
 }

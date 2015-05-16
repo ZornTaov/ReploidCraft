@@ -1,11 +1,11 @@
-package zornco.reploidcraftenv.network;
+package zornco.reploidcraft.network;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.EntityRideArmor;
-import zornco.reploidcraftenv.utils.RiderState;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.EntityRideArmor;
+import zornco.reploidcraft.utils.RiderState;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -26,7 +26,7 @@ public class MessageRideArmor implements IMessage, IMessageHandler<MessageRideAr
 	public MessageRideArmor() {}
 	public MessageRideArmor(EntityRideArmor rideArmor, Entity entity) {
 		if(rideArmor != null && entity != null){
-			RiderState rs = ReploidCraftEnv.proxy.getRiderState(entity);
+			RiderState rs = ReploidCraft.proxy.getRiderState(entity);
 			if (null != rs)
 			{
 				moveStrafe = rs.getMoveStrafe();

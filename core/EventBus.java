@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.core;
+package zornco.reploidcraft.core;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,11 +22,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.items.IKeyBound;
-import zornco.reploidcraftenv.items.ItemHPEnergy;
-import zornco.reploidcraftenv.items.ItemTank;
-import zornco.reploidcraftenv.sounds.Sounds;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.items.IKeyBound;
+import zornco.reploidcraft.items.ItemHPEnergy;
+import zornco.reploidcraft.items.ItemTank;
+import zornco.reploidcraft.sounds.Sounds;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -75,46 +75,46 @@ public class EventBus
 
 	public void onEntityDrop(LivingDropsEvent event) {
 		EntityLivingBase victim = event.entityLiving;
-		if(ReploidCraftEnv.rand.nextInt(64) == 0) {
+		if(ReploidCraft.rand.nextInt(64) == 0) {
 			System.out.println("DING");
 			if (victim instanceof EntityBlaze) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 1)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 1)));
 			}
 			if (victim instanceof EntityCreeper) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 3)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 3)));
 			}
 			if (victim instanceof EntityEnderman) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 4)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 4)));
 			}
 			if (victim instanceof EntityDragon) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 5)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 5)));
 			}
 			if (victim instanceof EntityGhast) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 6)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 6)));
 			}
 			if (victim instanceof EntityMagmaCube) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 7)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 7)));
 			}
 			if (victim instanceof EntityPigZombie) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 8)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 8)));
 			}
 			if (victim instanceof EntitySkeleton) {
 				if(((EntitySkeleton)victim).getSkeletonType() == 1)
-					event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 13)));
+					event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 13)));
 				else
-					event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 9)));
+					event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 9)));
 			}
 			if (victim instanceof EntitySlime) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 10)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 10)));
 			}
 			if (victim instanceof EntitySpider) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 11)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 11)));
 			}
 			if (victim instanceof EntityWither) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 12)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 12)));
 			}
 			if (victim instanceof EntityZombie) {
-				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraftEnv.upgradeChip, 1, 14)));
+				event.drops.add(new EntityItem(victim.worldObj, victim.posX, victim.posY+0.2, victim.posZ, new ItemStack(ReploidCraft.upgradeChip, 1, 14)));
 			}
 		}
 	}
@@ -149,8 +149,8 @@ public class EventBus
 		{
 			event.setCanceled(true);
 		}*/
-		if(item.getEntityItem().getItem() == ReploidCraftEnv.healthBit 
-				|| item.getEntityItem().getItem() == ReploidCraftEnv.healthByte 
+		if(item.getEntityItem().getItem() == ReploidCraft.healthBit 
+				|| item.getEntityItem().getItem() == ReploidCraft.healthByte 
 				//|| item.getEntityItem().getItem() == ReploidCraft.weaponBit 
 				//|| item.getEntityItem().getItem() == ReploidCraft.weaponByte 
 				)
@@ -195,7 +195,7 @@ public class EventBus
 			if (is == null) {
 				continue;
 			}
-			if (is.getItem().equals(ReploidCraftEnv.healthTank)) {
+			if (is.getItem().equals(ReploidCraft.healthTank)) {
 				if (ItemTank.getType(is).isEmpty())
 				{
 					ItemTank.setType(is, "HP");
@@ -212,9 +212,9 @@ public class EventBus
 		}
 	}
 	private int bitSize(EntityItem item) {
-		if(item.getEntityItem().getItem() == ReploidCraftEnv.healthBit)// || item.getEntityItem().getItem() == ReploidCraft.weaponBit )
+		if(item.getEntityItem().getItem() == ReploidCraft.healthBit)// || item.getEntityItem().getItem() == ReploidCraft.weaponBit )
 			return 3;
-		else if(item.getEntityItem().getItem() == ReploidCraftEnv.healthByte)// || item.getEntityItem().getItem() == ReploidCraft.weaponByte )
+		else if(item.getEntityItem().getItem() == ReploidCraft.healthByte)// || item.getEntityItem().getItem() == ReploidCraft.weaponByte )
 			return 6;
 		else 
 			return 0;

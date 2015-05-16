@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.items;
+package zornco.reploidcraft.items;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.sounds.Sounds;
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.sounds.Sounds;
+import zornco.reploidcraft.ReploidCraft;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,7 +19,7 @@ public class ItemTank extends Item {
 		super();
 		setMaxDamage(30);
 		this.canRepair = false;
-		this.setCreativeTab(ReploidCraftEnv.reploidTab);
+		this.setCreativeTab(ReploidCraft.reploidTab);
 	}
 
 	public ItemStack onItemRightClick(ItemStack is, World par2World, EntityPlayer player)
@@ -73,7 +73,7 @@ public class ItemTank extends Item {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister)
     {
-            this.iconTank = par1IconRegister.registerIcon(ReploidCraftEnv.MOD_ID+":"+this.getUnlocalizedName().substring(5));
+            this.iconTank = par1IconRegister.registerIcon(ReploidCraft.MOD_ID+":"+this.getUnlocalizedName().substring(5));
     }
 
     @SideOnly(Side.CLIENT)

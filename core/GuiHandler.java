@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.core;
+package zornco.reploidcraft.core;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

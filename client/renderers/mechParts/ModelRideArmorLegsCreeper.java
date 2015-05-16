@@ -1,5 +1,5 @@
 
-package zornco.reploidcraftenv.client.renderers.mechParts;
+package zornco.reploidcraft.client.renderers.mechParts;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;

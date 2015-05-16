@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.renderers;
+package zornco.reploidcraft.client.renderers;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
@@ -7,13 +7,13 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.EntityFloatingPlatform;
 
 public class RenderFloatingPlatform extends Render {
 
 	private ModelBase modelPlatform = new ModelFloatingPlatform();
-	private static final ResourceLocation platform = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/FloatingPlatform.png");
+	private static final ResourceLocation platform = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/FloatingPlatform.png");
 
 	public RenderFloatingPlatform()
 	{

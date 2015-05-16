@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.entities;
+package zornco.reploidcraft.entities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import zornco.reploidcraftenv.utils.PlatformPathPoint;
+import zornco.reploidcraft.utils.PlatformPathPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 public class EntityFloatingPlatform extends Entity

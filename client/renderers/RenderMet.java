@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.renderers;
+package zornco.reploidcraft.client.renderers;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -9,15 +9,15 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import zornco.reploidcraftenv.ReploidCraftEnv;
-import zornco.reploidcraftenv.entities.EntityMet;
+import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.entities.EntityMet;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderMet extends RenderLiving
 {
-	private static final ResourceLocation met = new ResourceLocation(ReploidCraftEnv.MOD_ID + ":textures/entity/MetHat.png");
+	private static final ResourceLocation met = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/MetHat.png");
 
 	public RenderMet(ModelBase par1ModelBase, ModelBase par2ModelBase, float shadowSize)
 	{

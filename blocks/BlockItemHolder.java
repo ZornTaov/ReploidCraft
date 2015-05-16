@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 import static net.minecraftforge.common.util.ForgeDirection.UP;
@@ -25,7 +25,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import zornco.reploidcraftenv.ReploidCraftEnv;
+import zornco.reploidcraft.ReploidCraft;
 
 import com.google.common.collect.Lists;
 
@@ -44,7 +44,7 @@ public class BlockItemHolder extends BlockContainer {
 		super(Material.iron);
 		//setBlockBounds(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		random = new Random();
-		setCreativeTab(ReploidCraftEnv.reploidTab);
+		setCreativeTab(ReploidCraft.reploidTab);
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class BlockItemHolder extends BlockContainer {
 			return true;
 		}
 
-		player.openGui(ReploidCraftEnv.instance, 0, world, i, j, k);
+		player.openGui(ReploidCraft.instance, 0, world, i, j, k);
 		return true;
 	}
 	/**

@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.blocks;
+package zornco.reploidcraft.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

@@ -1,4 +1,4 @@
-package zornco.reploidcraftenv.client.gui;
+package zornco.reploidcraft.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -11,8 +11,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import zornco.reploidcraftenv.items.ContainerReploidBuster;
-import zornco.reploidcraftenv.items.InventoryBuster;
+import zornco.reploidcraft.items.ContainerReploidBuster;
+import zornco.reploidcraft.items.InventoryBuster;
 
 public class GuiBusterInventory extends GuiContainer
 {
