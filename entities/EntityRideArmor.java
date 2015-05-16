@@ -588,7 +588,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		super.onUpdate();
 		// TODO: setdead
-		// this.setDead();
+		//this.setDead();
 
 		if (isMechFireResistant())
 			this.fireResistance = 1;
@@ -1146,7 +1146,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 			part.hurtTime = this.maxHurtTime = 10;
 		}
 		ReploidCraftEnv.logger.info("hit on the " + part.getName() + " Health: " + part.getHealth() + "/" + var3 + FMLCommonHandler.instance().getEffectiveSide());
-
+		
 		//doesn't seem like this is working
 		if (part.getHealth() <= 0.0F)
 		{
@@ -1186,6 +1186,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 					doMechAttackLeft();
 					return true;
 				}
+				doMechExplode(var2);
 				return this.attackEntityFrom2(var2, var3);
 			}
 

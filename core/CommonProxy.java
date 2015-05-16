@@ -16,6 +16,7 @@ import zornco.reploidcraftenv.entities.EntityRideArmor;
 import zornco.reploidcraftenv.entities.armorParts.PartList;
 import zornco.reploidcraftenv.entities.armorParts.PartSlot;
 import zornco.reploidcraftenv.entities.armorParts.PartsRegistry;
+import zornco.reploidcraftenv.entities.armorParts.creeper.CreeperBody;
 import zornco.reploidcraftenv.entities.armorParts.creeper.CreeperLegs;
 import zornco.reploidcraftenv.entities.armorParts.frog.FrogHead;
 import zornco.reploidcraftenv.entities.armorParts.green.GreenArm;
@@ -25,6 +26,10 @@ import zornco.reploidcraftenv.entities.armorParts.green.GreenLegs;
 import zornco.reploidcraftenv.entities.armorParts.rabbit.RabbitBack;
 import zornco.reploidcraftenv.entities.armorParts.red.RedBack;
 import zornco.reploidcraftenv.entities.armorParts.red.RedBody;
+import zornco.reploidcraftenv.items.ContainerReploidArmor;
+import zornco.reploidcraftenv.items.ContainerReploidBuster;
+import zornco.reploidcraftenv.items.InventoryArmor;
+import zornco.reploidcraftenv.items.InventoryBuster;
 import zornco.reploidcraftenv.utils.RiderState;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -40,6 +45,14 @@ public class CommonProxy implements IGuiHandler {
 		{
 			TileEntityItemHolder icte = (TileEntityItemHolder) te;
 			return new ContainerItemHolder(player.inventory, icte, 0, 0);
+		}
+		else if (ID == Config.GUI_ARMOR_INV)
+		{
+			return new ContainerReploidArmor(player, player.inventory, new InventoryArmor(player.getHeldItem()));
+		}
+		else if (ID == Config.GUI_BUSTER_INV)
+		{
+			return new ContainerReploidBuster(player, player.inventory, new InventoryBuster(player.getHeldItem()));
 		}
 		else if (te != null && te instanceof TileEntityMechBayController)
 		{
@@ -138,7 +151,7 @@ public class CommonProxy implements IGuiHandler {
 		this.partRegistry.registerPart("RABBIT", PartSlot.BACK, 	new RabbitBack());
 		
 		this.partRegistry.registerPart("CREEPER", PartSlot.LEGS, 	new CreeperLegs());
-		this.partRegistry.registerPart("CREEPER", PartSlot.BODY, 	20, new float[] {0.0F, 1.5F, 0.0F}, new float[] {1.5F, 1.5F});
+		this.partRegistry.registerPart("CREEPER", PartSlot.BODY, 	new CreeperBody());//20, new float[] {0.0F, 1.5F, 0.0F}, new float[] {1.5F, 1.5F});
 
 		int s = 0;
 		for (Object list : this.partRegistry.getMap().values()) {
@@ -146,4 +159,7 @@ public class CommonProxy implements IGuiHandler {
 		}
 		ReploidCraftEnv.logger.info("Registered " + s + " parts!");
 	}
+	public void registerArmors(){}
+	public void playChargeContSound(EntityPlayer player){}
+	public void playChargeUpSound(EntityPlayer player){}
 }

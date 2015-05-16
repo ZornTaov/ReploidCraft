@@ -6,7 +6,10 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraftforge.common.util.EnumHelper;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,6 +54,14 @@ public class ReploidCraftEnv {
 
 	public static EventBus events;
 	
+	public static Item reploidHelm;
+	public static Item reploidChest;
+	public static Item reploidLegs;
+	public static Item reploidBoots;
+	public static Item reploidBuster;
+	
+	public static Item upgradeChip;
+	
 	public static Item healthBit;
 	public static Item healthByte;
 	public static Item weaponBit;
@@ -73,6 +84,9 @@ public class ReploidCraftEnv {
 	public static Block blockItemHolder;
 	public static Block blockMechBay;
 
+	public static ArmorMaterial enumArmorReploid = EnumHelper.addArmorMaterial("reploid", 20, new int[]{2, 6, 5, 2}, 0);
+	public static EnumAction busterAction = EnumHelper.addAction("buster");
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		proxy.registerKeyBindingHandler();
@@ -80,6 +94,7 @@ public class ReploidCraftEnv {
 		proxy.registerParts();
 		config.addItems();
 		config.addBlocks();
+		proxy.registerArmors();
 	}
 
 	@EventHandler

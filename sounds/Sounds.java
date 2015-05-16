@@ -11,6 +11,8 @@ public class Sounds {
 	public static String[] soundFiles = { SOUND_RESOURCE_LOCATION + "bit.ogg", SOUND_RESOURCE_LOCATION + "byte.ogg" };
 	public static final String BIT = SOUND_PREFIX + "bit";
 	public static final String BYTE = SOUND_PREFIX + "byte";
+	public static final String CHARGEUP = SOUND_PREFIX + "chargeUp";
+	public static final String CHARGECONT = SOUND_PREFIX + "chargeCont";
 	
 	public Sounds()
 	{

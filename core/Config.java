@@ -19,11 +19,14 @@ import zornco.reploidcraftenv.crafting.RecipeHandler;
 import zornco.reploidcraftenv.entities.EntityFloatingPlatform;
 import zornco.reploidcraftenv.entities.EntityMet;
 import zornco.reploidcraftenv.entities.EntityRideArmor;
+import zornco.reploidcraftenv.items.ItemBuster;
+import zornco.reploidcraftenv.items.ItemChip;
 import zornco.reploidcraftenv.items.ItemComponent;
 import zornco.reploidcraftenv.items.ItemDebugger;
 import zornco.reploidcraftenv.items.ItemHPEnergy;
 import zornco.reploidcraftenv.items.ItemMechBay;
 import zornco.reploidcraftenv.items.ItemPlatformPlacer;
+import zornco.reploidcraftenv.items.ItemReploidArmor;
 import zornco.reploidcraftenv.items.ItemReploidPlate;
 import zornco.reploidcraftenv.items.ItemRideArmorPart;
 import zornco.reploidcraftenv.items.ItemRideArmorPlacer;
@@ -32,6 +35,10 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Config {
+	public static final int GUI_ITEM_HOLDER = 0;
+	public static final int GUI_MECH_BAY = 1;
+	public static final int GUI_ARMOR_INV = 2;
+	public static final int GUI_BUSTER_INV = 3;
 	//ID's
 	public static int spikesRI = -1;
 	public static int bossDoorRI = -1;
@@ -70,7 +77,16 @@ public class Config {
 	}
 	public void addItems() {
 		/** Items **/
-
+		
+		
+		ReploidCraftEnv.reploidHelm = new ItemReploidArmor(ReploidCraftEnv.enumArmorReploid, 1, 0).setUnlocalizedName("reploid_Helm");
+		ReploidCraftEnv.reploidChest = new ItemReploidArmor(ReploidCraftEnv.enumArmorReploid, 1, 1).setUnlocalizedName("reploid_Chest");
+		ReploidCraftEnv.reploidLegs = new ItemReploidArmor(ReploidCraftEnv.enumArmorReploid, 1, 2).setUnlocalizedName("reploid_Legs");
+		ReploidCraftEnv.reploidBoots = new ItemReploidArmor(ReploidCraftEnv.enumArmorReploid, 1, 3).setUnlocalizedName("reploid_Boots"); 
+		ReploidCraftEnv.reploidBuster = new ItemBuster().setUnlocalizedName("reploid_buster");
+		
+		ReploidCraftEnv.upgradeChip = new ItemChip().setUnlocalizedName("chip");
+		
 		ReploidCraftEnv.healthBit = new ItemHPEnergy(0, 3, 0.5F).setPotionEffect(Potion.heal.id, 1, 0, 1.0F).setAlwaysEdible().setUnlocalizedName("healthBit").setMaxStackSize(1);
 		ReploidCraftEnv.healthByte = new ItemHPEnergy(1, 8, 0.8F).setPotionEffect(Potion.heal.id, 1, 1, 1.0F).setAlwaysEdible().setUnlocalizedName("healthByte").setMaxStackSize(1);
 		//weaponBit = new ItemWPEnergy(weaponBitID).setItemName("Weapon Bit").setMaxStackSize(1);
@@ -89,6 +105,12 @@ public class Config {
 		ReploidCraftEnv.platformPlacer = new ItemPlatformPlacer().setUnlocalizedName("platformPlacer");
 		ReploidCraftEnv.rideArmorPlacer = new ItemRideArmorPlacer().setUnlocalizedName("rideArmorPlacer");
 		//doorBossItem = (new ItemBossDoor(doorBossItemID, Material.iron)).setIconCoord(12, 2).setItemName("doorBoss");
+		registerItem(ReploidCraftEnv.reploidHelm);
+		registerItem(ReploidCraftEnv.reploidChest);
+		registerItem(ReploidCraftEnv.reploidLegs);
+		registerItem(ReploidCraftEnv.reploidBoots);
+		registerItem(ReploidCraftEnv.reploidBuster);
+		registerItem(ReploidCraftEnv.upgradeChip);
 		registerItem(ReploidCraftEnv.healthBit);
 		registerItem(ReploidCraftEnv.healthByte);
 		registerItem(ReploidCraftEnv.healthTank);

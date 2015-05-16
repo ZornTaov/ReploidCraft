@@ -30,7 +30,7 @@ public class EntityMetBullet extends EntityBulletBase {
 	public EntityMetBullet(World world, EntityLiving attacker, EntityLivingBase attackTarget) {
 		super(world, attacker, attackTarget);
 	}
-	public EntityMetBullet(World par1World, EntityLiving ent) {
+	public EntityMetBullet(World par1World, EntityLivingBase ent) {
 		super(par1World, ent);
 	}
 	public void entityInit() {
