@@ -1,0 +1,67 @@
+# Entities
+entity.FloatingPlatform.name=Floating Platform
+
+# Blocks
+tile.mechBay.build.name=Mech Bay Block
+tile.mechBay.energy.name=Mech Bay Energy Accepter
+tile.mechBay.control.name=Mech Bay Controller
+tile.itemHolder.name=Item Holder
+tile.spikes.name=Metal Spikes
+container.itemholder=Item Holder
+
+# Items
+item.Health Tank.name=Health Tank
+item.healthBit.name=Health Bit
+item.healthByte.name=Health Byte
+item.reploidPlate.Black.name=Black Reploid Plate
+item.reploidPlate.Red.name=Red Reploid Plate
+item.reploidPlate.Green.name=Green Reploid Plate
+item.reploidPlate.Brown.name=Brown Reploid Plate
+item.reploidPlate.Blue.name=Blue Reploid Plate
+item.reploidPlate.Purple.name=Purple Reploid Plate
+item.reploidPlate.Cyan.name=Cyan Reploid Plate
+item.reploidPlate.LightGray.name=LightGray Reploid Plate
+item.reploidPlate.Gray.name=Gray Reploid Plate
+item.reploidPlate.Pink.name=Pink Reploid Plate
+item.reploidPlate.Lime.name=Lime Reploid Plate
+item.reploidPlate.Yellow.name=Yellow Reploid Plate
+item.reploidPlate.LightBlue.name=LightBlue Reploid Plate
+item.reploidPlate.Magenta.name=Magenta Reploid Plate
+item.reploidPlate.Orange.name=Orange Reploid Plate
+item.reploidPlate.Enhanced.name=Enhanced Reploid Plate
+item.reploidPlate.Basic.name=Basic Reploid Plate
+item.rideArmorPlacer.name=Ride Armor Placer (TEMP ITEM)
+item.part.name=Ride Armor Part
+item.component.diamond_dust.name=Diamond Dust
+item.component.AEGD.name=AEGD
+item.component.fist.name=Armored Fist
+item.component.spikedfist.name=Spiked Fist
+item.component.redarm.name=Red Arm
+item.component.greenarm.name=Green Arm
+item.component.bluearm.name=Blue Arm
+item.component.cockpit.name=Cockpit
+item.component.vent.name=Vent
+item.component.propeller.name=Propeller
+item.platformPlacer.name=Platform Placer
+item.reploidArmor.head.name=Reploid Helm
+item.reploidArmor.chest.name=Reploid Chest
+item.reploidArmor.legs.name=Reploid Legs
+item.reploidArmor.feet.name=Reploid Boots
+
+# GUI
+
+# Other
+itemGroup.ReploidCraftEnv=Reploid Craft Environmental
+
+# Ride Armor
+slot.armleft=Left Arm
+slot.armright=Right Arm
+slot.body=Body
+slot.head=Head
+slot.legs=Legs
+slot.back=Back
+
+type.green=Green
+type.red=Red
+type.rabbit=Rabbit
+type.frog=Frog
