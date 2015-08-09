@@ -1,0 +1,16 @@
+[
+{
+  "modid": "reploidcraft",
+  "name": "Reploid Craft",
+  "description": "Example placeholder mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://zornco.org",
+  "updateUrl": "",
+  "authorList": ["Zorn_Taov"],
+  "credits": "The Forge and FML guys, Capcop for Megaman and Megaman X",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["MinecraftForge", "CoFHCore"]
+}
+]
