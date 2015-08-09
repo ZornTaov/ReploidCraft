@@ -4,24 +4,24 @@ This is a Mega Man X mod created by Zorn_Taov
 
 ### Currently available
 **Items and Blocks**
-1 set of reploid armor. (WIP)
-1 Buster. (WIP)
-Energy Bits, Bytes, and Tank (Complete)
-Deadly Spikes (Done for now, might change model)
-Item Holder (WIP)
-Various crafting items
+   * 1 set of reploid armor. (WIP)
+   * 1 Buster. (WIP)
+   * Energy Bits, Bytes, and Tank (Complete)
+   * Deadly Spikes (Done for now, might change model)
+   * Item Holder (WIP)
+   * Various crafting items
 
 **Entities**
-Mettool (WIP)
-Ride Armor (WIP)
+   * Mettool (WIP)
+   * Ride Armor (WIP)
 
 **Ride Armor Sets**
-Green (Complete)
-Red (Complete)
-Rabbit (Back Only, WIP)
-Frog (Head only, WIP)
-Creeper (Torso and Legs, WIP)
-Wood (Back only, WIP)
+   * Green (Complete)
+   * Red (Complete)
+   * Rabbit (Back Only, WIP)
+   * Frog (Head only, WIP)
+   * Creeper (Torso and Legs, WIP)
+   * Wood (Back only, WIP)
 
 ### Compiling
 [Setup Java](#setup-java)
