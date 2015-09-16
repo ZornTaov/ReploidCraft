@@ -15,12 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemComponent extends Item {
 
-	 /** List of dye color names */
-    public static final String[] componentNames = new String[] {"Diamond Dust", "AEGD", "Armored Fist", "Spiked Fist", "Red Arm", "Green Arm", "Blue Arm", "Cockpit", "Vent", "Propeller"};
-    public static final String[][] componentDesc = new String[][] {{"",""}, {"Accumulative Energy", "Generation Device"}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}, {"",""}};
-    public static final String[] componentIconName = new String[] {"diamond_dust", "AEGD", "fist", "spikedfist", "redarm", "greenarm", "bluearm", "cockpit", "vent", "propeller"};
 	public static final int[] chipColors = new int[] {1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 2651799, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320};
-    public static final int typeAmmount = 10;
 	@SideOnly(Side.CLIENT)
 	private IIcon[] componentIcon;
     public ItemComponent()
@@ -37,8 +32,8 @@ public class ItemComponent extends Item {
 	 */
 	public String getUnlocalizedName(ItemStack par1ItemStack)
 	{
-		int i = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, typeAmmount);
-		return super.getUnlocalizedName() + "." + componentNames[i];
+		int i = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, Components.getSize());
+		return super.getUnlocalizedName() + "." + Components.values()[i].getUnlocName();
 	}
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -49,13 +44,13 @@ public class ItemComponent extends Item {
      */
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
-    	String desc1 = ItemComponent.componentDesc[par1ItemStack.getItemDamage()][0];
-    	if(!desc1.equals(""))
-        par3List.add(desc1);
-
-    	String desc2 = ItemComponent.componentDesc[par1ItemStack.getItemDamage()][1];
-    	if(!desc2.equals(""))
-        par3List.add(desc2);
+    	if (!Components.values()[par1ItemStack.getItemDamage()].getDesc().equals("")) {
+    		String[] desc = Components.values()[par1ItemStack.getItemDamage()].getDesc().split(";");
+        	for (String string : desc) {
+        		if(!string.equals(""))
+            		par3List.add(string);
+    		}
+		}
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -66,7 +61,7 @@ public class ItemComponent extends Item {
      */
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        for (int var4 = 0; var4 < typeAmmount; ++var4)
+        for (int var4 = 0; var4 < Components.getSize(); ++var4)
         {
             par3List.add(new ItemStack(par1, 1, var4));
         }
@@ -79,7 +74,7 @@ public class ItemComponent extends Item {
 	 */
 	public IIcon getIconFromDamage(int par1)
 	{
-        int var2 = MathHelper.clamp_int(par1, 0, typeAmmount);
+        int var2 = MathHelper.clamp_int(par1, 0, Components.getSize());
 		return this.componentIcon[var2];
     }
 
@@ -87,12 +82,64 @@ public class ItemComponent extends Item {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister)
     {
-        this.componentIcon = new IIcon[componentIconName.length];
+        this.componentIcon = new IIcon[Components.getSize()];
 
-        for (int i = 0; i < componentIconName.length; ++i)
+        for (int i = 0; i < Components.getSize(); ++i)
         {
-            this.componentIcon[i] = par1IconRegister.registerIcon(ReploidCraft.MOD_ID+":"+componentIconName[i]);
+            this.componentIcon[i] = par1IconRegister.registerIcon(ReploidCraft.MOD_ID+":"+Components.values()[i].getUnlocName());
         }
     }
+	protected static int inc = 0;
+	public enum Components
+	{
+		diamondDust	("diamondDust"	),
+		AEGD		("AEGD"	 		, "Accumulative Energy;Generation Device"),
+		fist		("fist"			),
+		spikedFist	("spikedFist"	),
+		drill		("drill"		, "May your Drill;peirce the Heavens!"),
+		redArm		("redArm"		),
+		greenArm	("greenArm"		),
+		blueArm		("blueArm"		),
+		cockpit		("cockpit"		),
+		vent		("vent"			),
+		propeller	("propeller"	),
+		coupling	("coupling"		);
 
+		private final int index;
+		private final String unlocName;
+		private final String desc;
+		
+		private Components(String name)
+		{
+			this(name, "");
+		}
+		
+		private Components(String name, String des)
+		{
+			this.index = ItemComponent.inc++;
+			this.unlocName = name;
+			this.desc = des;
+		}
+		
+		public static int getSize()
+		{
+			return values().length;
+		}
+
+		public int getIndex()
+		{
+			return index;
+		}
+		
+		public String getUnlocName()
+		{
+			return unlocName;
+		}
+		
+		public String getDesc()
+		{
+			return desc;
+		}
+
+	}
 }

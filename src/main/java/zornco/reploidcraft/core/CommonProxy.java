@@ -138,7 +138,7 @@ public class CommonProxy implements IGuiHandler {
 		this.partRegistry.registerPart("GREEN", PartSlot.BACK, 		new GreenBack());
 		this.partRegistry.registerPart("GREEN", PartSlot.LEGS, 		new GreenLegs());
 		this.partRegistry.registerPart("GREEN", PartSlot.ARMLEFT, 	new GreenArm());
-		this.partRegistry.registerPart("GREEN", PartSlot.ARMRIGHT, 	new GreenArm());
+		this.partRegistry.registerPart("GREEN", PartSlot.ARMRIGHT, 	new GreenArm(PartSlot.ARMRIGHT));
 		
 		this.partRegistry.registerPart("RED", PartSlot.BODY, 		new RedBody());
 		this.partRegistry.registerPart("RED", PartSlot.BACK, 		new RedBack());

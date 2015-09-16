@@ -32,16 +32,18 @@ item.reploidPlate.Enhanced.name=Enhanced Reploid Plate
 item.reploidPlate.Basic.name=Basic Reploid Plate
 item.rideArmorPlacer.name=Ride Armor Placer (TEMP ITEM)
 item.part.name=Ride Armor Part
-item.component.diamond_dust.name=Diamond Dust
+item.component.diamondDust.name=Diamond Dust
 item.component.AEGD.name=AEGD
 item.component.fist.name=Armored Fist
-item.component.spikedfist.name=Spiked Fist
-item.component.redarm.name=Red Arm
-item.component.greenarm.name=Green Arm
-item.component.bluearm.name=Blue Arm
+item.component.spikedFist.name=Spiked Fist
+item.component.drill.name=Drill
+item.component.redArm.name=Red Arm
+item.component.greenArm.name=Green Arm
+item.component.blueArm.name=Blue Arm
 item.component.cockpit.name=Cockpit
 item.component.vent.name=Vent
 item.component.propeller.name=Propeller
+item.component.couplng.name=Coupling
 item.platformPlacer.name=Platform Placer
 item.reploidArmor.head.name=Reploid Helm
 item.reploidArmor.chest.name=Reploid Chest
@@ -51,7 +53,7 @@ item.reploidArmor.feet.name=Reploid Boots
 # GUI
 
 # Other
-itemGroup.ReploidCraftEnv=Reploid Craft Environmental
+itemGroup.ReploidCraftEnv=Reploid Craft
 
 # Ride Armor
 slot.armleft=Left Arm

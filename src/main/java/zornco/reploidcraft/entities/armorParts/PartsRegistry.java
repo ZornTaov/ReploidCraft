@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.RegistrySimple;
 import net.minecraft.util.ResourceLocation;
 import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.crafting.RecipeHandler;
 import zornco.reploidcraft.items.ItemRideArmorPart;
 
 import com.google.common.collect.Maps;
@@ -93,7 +94,7 @@ public class PartsRegistry extends RegistrySimple
 		ItemRideArmorPart.getPartList().add((PartBase) part);
 		if(part.getRecipe() != null)
 		{
-			GameRegistry.addRecipe(new ItemStack(ReploidCraft.rideArmorPart, 1, part.getPartNumber()), part.getRecipe() );
+			RecipeHandler.addOreRecipe(new ItemStack(ReploidCraft.rideArmorPart, 1, part.getPartNumber()), part.getRecipe(), false );
 		}
 		ReploidCraft.logger.info("registered " + type + ":" + slot);
 	}

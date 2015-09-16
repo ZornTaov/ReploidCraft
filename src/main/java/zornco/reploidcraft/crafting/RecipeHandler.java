@@ -7,6 +7,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.items.ItemComponent.Components;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeHandler {
@@ -40,9 +41,9 @@ public class RecipeHandler {
 					new Object[]{new ItemStack(ReploidCraft.reploidPlate, 1, 16), dyes[i] } );
 
 		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, 15), // white plate	
-				new Object[]{ new ItemStack(ReploidCraft.component, 1, 0), new ItemStack(ReploidCraft.reploidPlate, 1, 4) } );
+				new Object[]{ new ItemStack(ReploidCraft.component, 1, Components.diamondDust.getIndex()), new ItemStack(ReploidCraft.reploidPlate, 1, 4) } );
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 4, 0), //diamond dust
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 4, Components.diamondDust.getIndex()), //diamond dust
 				new Object[] { 
 			"ttt", "tdt", "ttt", 
 			Character.valueOf('t'), Blocks.tnt, 
@@ -50,11 +51,11 @@ public class RecipeHandler {
 		}
 				);
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, 1), // AEDS
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.AEGD.getIndex()), // AEDS
 				new Object[] { 
 			"rdr", "dpd", "rdr", 
 			Character.valueOf('r'), Items.redstone, 
-			Character.valueOf('d'), new ItemStack(ReploidCraft.component, 1, 0), // diamond dust
+			Character.valueOf('d'), new ItemStack(ReploidCraft.component, 1, Components.diamondDust.getIndex()), // diamond dust
 			Character.valueOf('p'), Items.quartz // use quartz block
 		}
 				);
@@ -78,7 +79,7 @@ public class RecipeHandler {
 		}
 				);
 		
-		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, 9), 
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.propeller.getIndex()), 
 				new Object[] { 
 			" i ", " b ", "i i", 
 			Character.valueOf('i'), new ItemStack(ReploidCraft.reploidPlate, 1, 7), 
@@ -105,10 +106,14 @@ public class RecipeHandler {
 			}
 		);*/
 	}
+	
+	public static void addOreRecipe(ItemStack output, Object[] recipe) {
+		RecipeHandler.addOreRecipe(output, recipe, true);
+	}
 
 	@SuppressWarnings("unchecked")
-	public static void addOreRecipe(ItemStack output, Object[] input) {
-		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(output, new Object[] { Boolean.valueOf(true), input }));
+	public static void addOreRecipe(ItemStack output, Object[] recipe, boolean mirror) {
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(output, new Object[] { Boolean.valueOf(mirror), recipe }));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -116,4 +121,6 @@ public class RecipeHandler {
 	{
 		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(output, input));
 	}
+
+	
 }

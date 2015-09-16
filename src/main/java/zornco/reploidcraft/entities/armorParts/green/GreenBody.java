@@ -1,11 +1,15 @@
 package zornco.reploidcraft.entities.armorParts.green;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import zornco.reploidcraft.ReploidCraft;
 import zornco.reploidcraft.entities.EntityRideArmor;
 import zornco.reploidcraft.entities.armorParts.IPartBody;
 import zornco.reploidcraft.entities.armorParts.PartBase;
+import zornco.reploidcraft.entities.armorParts.PartSlot;
+import zornco.reploidcraft.items.ItemComponent.Components;
 
 public class GreenBody extends PartBase implements IPartBody {
 
@@ -41,6 +45,21 @@ public class GreenBody extends PartBase implements IPartBody {
 	public boolean doExplode(EntityRideArmor ride, DamageSource source)
 	{
 		return false;
+	}
+
+	@Override
+	public Object[] getRecipe() {
+		Object[] recipe = new Object[] {
+				"gCg",
+				"cac",
+				"vcv", 
+				Character.valueOf('a'), new ItemStack(ReploidCraft.component, 1, Components.AEGD.getIndex()), //AEGD
+				Character.valueOf('g'), new ItemStack(ReploidCraft.reploidPlate, 1, 2), //green plate
+				Character.valueOf('C'), new ItemStack(ReploidCraft.component, 1, Components.cockpit.getIndex()), //cockpit
+				Character.valueOf('c'), new ItemStack(ReploidCraft.component, 1, Components.coupling.getIndex()), //coupling
+				Character.valueOf('v'), new ItemStack(ReploidCraft.component, 1, Components.vent.getIndex()) //vent
+			};
+		return recipe;
 	}
 
 }

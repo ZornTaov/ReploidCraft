@@ -9,6 +9,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraftforge.common.ForgeHooks;
 import zornco.reploidcraft.ReploidCraft;
+import zornco.reploidcraft.items.ItemComponent.Components;
 import zornco.reploidcraft.entities.EntityRideArmor;
 import zornco.reploidcraft.entities.armorParts.IPartArm;
 import zornco.reploidcraft.entities.armorParts.PartBase;
@@ -16,7 +17,13 @@ import zornco.reploidcraft.entities.armorParts.PartSlot;
 
 public class GreenArm extends PartBase implements IPartArm{
 
+	PartSlot side;
 	ItemStack[] tools = {new ItemStack(Items.iron_pickaxe), new ItemStack(Items.iron_shovel), new ItemStack(Items.iron_axe)};
+	public GreenArm(PartSlot slot) {
+		this();
+		this.side = slot;
+	}
+
 	public GreenArm() {
 		super(20, new float[] {1.25F, 1.0F, 0.0F}, new float[] {1.0F, 1.0F});
 	}
@@ -85,16 +92,6 @@ public class GreenArm extends PartBase implements IPartArm{
 	}
 
 	@Override
-	public Object[] getRecipe() {
-		Object[] recipe = new Object[] {
-				"ib", 
-				Character.valueOf('i'), new ItemStack(ReploidCraft.component, 1, 2), 
-				Character.valueOf('b'), new ItemStack(ReploidCraft.component, 1, 5)
-			};
-		return recipe;
-	}
-
-	@Override
 	public ItemStack[] harvestEquivilent() {
 		return tools;
 	}
@@ -104,5 +101,18 @@ public class GreenArm extends PartBase implements IPartArm{
 	{
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public Object[] getRecipe() {
+		String couplingDir = side == PartSlot.ARMRIGHT ? " ac" : "ca ";
+		Object[] recipe = new Object[] {
+				couplingDir,
+				" f ", 
+				Character.valueOf('f'), new ItemStack(ReploidCraft.component, 1, Components.fist.getIndex()), //armored fist
+				Character.valueOf('c'), new ItemStack(ReploidCraft.component, 1, Components.coupling.getIndex()), //coupling
+				Character.valueOf('a'), new ItemStack(ReploidCraft.component, 1, Components.greenArm.getIndex()) //green arm
+			};
+		return recipe;
 	}
 }
