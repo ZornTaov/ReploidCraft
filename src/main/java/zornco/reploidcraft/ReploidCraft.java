@@ -18,6 +18,7 @@ import zornco.reploidcraft.core.CommonProxy;
 import zornco.reploidcraft.core.Config;
 import zornco.reploidcraft.core.EventBus;
 import zornco.reploidcraft.core.TabReploid;
+import zornco.reploidcraft.items.ItemRideArmorPart;
 import zornco.reploidcraft.network.PacketHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -91,9 +92,10 @@ public class ReploidCraft {
 	public void preInit(FMLPreInitializationEvent event) {
 		proxy.registerKeyBindingHandler();
 		proxy.registerSounds();
-		proxy.registerParts();
 		config.addItems();
 		config.addBlocks();
+		proxy.registerParts();
+		((ItemRideArmorPart) rideArmorPart).populateParts();
 		proxy.registerArmors();
 	}
 

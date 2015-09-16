@@ -98,7 +98,6 @@ public class Config {
 		ReploidCraft.reploidPlate = new ItemReploidPlate().setUnlocalizedName("reploidPlate");
 		ReploidCraft.component = new ItemComponent().setUnlocalizedName("component");
 		ReploidCraft.rideArmorPart = new ItemRideArmorPart().setUnlocalizedName("part");
-		((ItemRideArmorPart) ReploidCraft.rideArmorPart).populateParts();
 		//ReploidCraft.itemHolder = (new ItemItemHolder(itemHolderID)).setUnlocalizedName("holder").setTextureName("item_holder");
 		ReploidCraft.debugger = new ItemDebugger().setUnlocalizedName("debugger");
 
