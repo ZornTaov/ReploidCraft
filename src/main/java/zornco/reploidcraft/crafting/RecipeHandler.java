@@ -15,9 +15,10 @@ public class RecipeHandler {
 	public void registerRecipes() {
 		/** Recipes **/
 		//GameRegistry.addRecipe(new ItemStack(Item.monsterPlacer, 1, metID), new Object[] { "   ", " # ", "xxx", Character.valueOf('#'), Block.dirt , Character.valueOf('x'), Block.planks });
-
+		/** Plates **/
 		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, 16), // basic plate
-				new Object[]{ Items.iron_ingot, Items.redstone } );
+			new Object[]{ Items.iron_ingot, Items.redstone } );
+		
 		String[] dyes = 
 			{
 				"dyeBlack",
@@ -37,72 +38,137 @@ public class RecipeHandler {
 				"dyeOrange"
 			};
 		for(int i = 0; i < 15; i++)
-			addShapelessOreRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, i), // blue plate
-					new Object[]{new ItemStack(ReploidCraft.reploidPlate, 1, 16), dyes[i] } );
+			addShapelessOreRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, i), // colored plate
+				new Object[] { new ItemStack(ReploidCraft.reploidPlate, 1, 16), dyes[i] } );
 
-		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, 15), // white plate	
-				new Object[]{ new ItemStack(ReploidCraft.component, 1, Components.diamondDust.getIndex()), new ItemStack(ReploidCraft.reploidPlate, 1, 4) } );
+		GameRegistry.addShapelessRecipe(new ItemStack(ReploidCraft.reploidPlate, 1, 15), // white(enhanced) plate	
+			new Object[] { new ItemStack(ReploidCraft.component, 1, Components.diamondDust.getIndex()), new ItemStack(ReploidCraft.reploidPlate, 1, 4) } );
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 4, Components.diamondDust.getIndex()), //diamond dust
-				new Object[] { 
-			"ttt", "tdt", "ttt", 
-			Character.valueOf('t'), Blocks.tnt, 
-			Character.valueOf('d'), Items.diamond // diamond dust\
-		}
-				);
+		/** Components **/
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 4, Components.diamondDust.getIndex()),
+			new Object[] { 
+				"ttt", 
+				"tdt", 
+				"ttt", 
+				Character.valueOf('t'), Blocks.tnt, 
+				Character.valueOf('d'), Items.diamond
+			}
+		);
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.AEGD.getIndex()), // AEDS
-				new Object[] { 
-			"rdr", "dpd", "rdr", 
-			Character.valueOf('r'), Items.redstone, 
-			Character.valueOf('d'), new ItemStack(ReploidCraft.component, 1, Components.diamondDust.getIndex()), // diamond dust
-			Character.valueOf('p'), Items.quartz // use quartz block
-		}
-				);
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.AEGD.getIndex()),
+			new Object[] { 
+				"rdr", 
+				"dpd", 
+				"rdr", 
+				Character.valueOf('r'), Items.redstone, 
+				Character.valueOf('d'), new ItemStack(ReploidCraft.component, 1, Components.diamondDust.getIndex()), // diamond dust
+				Character.valueOf('p'), Items.quartz // use quartz block
+			} 
+		);
+			
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.fist.getIndex()),
+			new Object[] { 
+				"ii ", 
+				"imc", 
+				"ii ", 
+				Character.valueOf('i'), Items.iron_ingot, 
+				Character.valueOf('c'), new ItemStack( ReploidCraft.component, 1, Components.coupling.getIndex() ),
+				Character.valueOf('m'), new ItemStack( ReploidCraft.component, 1, Components.motor.getIndex() )
+			} 
+		);
 
-		GameRegistry.addRecipe(new ItemStack(ReploidCraft.healthTank, 1, 30), 
-				new Object[] { 
-			"ihi", "bHb", "bdb", 
-			Character.valueOf('i'), Items.iron_ingot, 
-			Character.valueOf('b'), new ItemStack(ReploidCraft.reploidPlate, 1, 4),
-			Character.valueOf('h'), ReploidCraft.healthBit,
-			Character.valueOf('H'), ReploidCraft.healthByte,
-			Character.valueOf('d'), Items.diamond
-		}
-				);
-
-		GameRegistry.addRecipe(new ItemStack(ReploidCraft.spikes, 8), 
-				new Object[] { 
-			" i ", " i ", "bbb", 
-			Character.valueOf('i'), new ItemStack(ReploidCraft.reploidPlate, 1, 7), 
-			Character.valueOf('b'), Blocks.iron_block
-		}
-				);
-		
+		//Character.valueOf('g'), new ItemStack( ReploidCraft.reploidPlate, 1, 10 ), // lime plate
 		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.propeller.getIndex()), 
+			new Object[] { 
+				" i ", 
+				" b ", 
+				"i i", 
+				Character.valueOf('i'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ), 
+				Character.valueOf('b'), Items.iron_ingot 
+			} 
+		);
+		
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.motor.getIndex()), 
+			new Object[] { 
+				"brb", 
+				"rir", 
+				"brb", 
+				Character.valueOf('b'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ),
+				Character.valueOf('r'), Items.redstone, 
+				Character.valueOf('i'), Items.iron_ingot
+			} 
+		);
+		
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.joint.getIndex()), 
+			new Object[] { 
+				" bi", 
+				"bmb", 
+				" bi", 
+				Character.valueOf('b'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ),
+				Character.valueOf('m'), new ItemStack( ReploidCraft.component, 1, Components.motor.getIndex() ), 
+				Character.valueOf('i'), Items.iron_ingot
+			} 
+		);
+		
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.socket.getIndex()), 
+			new Object[] { 
+				"i ", 
+				"sb", 
+				"i ", 
+				Character.valueOf('b'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ), 
+				Character.valueOf('i'), Items.iron_ingot, 
+				Character.valueOf('s'), Blocks.sticky_piston
+			} 
+		);
+		
+		GameRegistry.addRecipe(new ItemStack(ReploidCraft.component, 1, Components.coupling.getIndex()), 
+			new Object[] { 
+				"ibs", 
+				Character.valueOf('b'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ), 
+				Character.valueOf('i'), Items.iron_ingot, 
+				Character.valueOf('s'), Blocks.sticky_piston
+			} 
+		);
+		
+		/** Tanks **/
+		GameRegistry.addRecipe( new ItemStack( ReploidCraft.healthTank, 1, 30 ), 
+			new Object[] {
+				"ihi", 
+				"bHb", 
+				"bdb", 
+				Character.valueOf('i'), Items.iron_ingot, 
+				Character.valueOf('b'), new ItemStack( ReploidCraft.reploidPlate, 1, 4 ), 
+				Character.valueOf('h'), ReploidCraft.healthBit, 
+				Character.valueOf('H'), ReploidCraft.healthByte, 
+				Character.valueOf('d'), Items.diamond 
+			} 
+		);
+
+		/*GameRegistry.addRecipe(new ItemStack(weaponTank), 
 				new Object[] { 
-			" i ", " b ", "i i", 
-			Character.valueOf('i'), new ItemStack(ReploidCraft.reploidPlate, 1, 7), 
-			Character.valueOf('b'), Items.iron_ingot
-		}
-				);
+					"iwi", "bWb", "bdb", 
+					Character.valueOf('i'), Item.ingotIron, 
+					Character.valueOf('b'), blueReploidPlate,
+					Character.valueOf('w'), weaponBit,
+					Character.valueOf('W'), weaponByte,
+					Character.valueOf('d'), Item.diamond
+				}
+		);*/
+		
+		/** Blocks **/
+		GameRegistry.addRecipe( new ItemStack( ReploidCraft.spikes, 8 ), 
+			new Object[] {
+				" i ", " i ", "bbb", 
+				Character.valueOf('i'), new ItemStack( ReploidCraft.reploidPlate, 1, 7 ), 
+				Character.valueOf('b'), Blocks.iron_block 
+			} 
+		);
 		
 		/*GameRegistry.addRecipe(new ItemStack(doorBossItem, 1), 
 				new Object[] { 
 			"ipi", "i i", "ipi", 
 			Character.valueOf('i'), Item.ingotIron, 
 			Character.valueOf('b'), Block.blockSteel
-			}
-		);*/
-
-		/*GameRegistry.addRecipe(new ItemStack(weaponTank), 
-		new Object[] { 
-			"iwi", "bWb", "bdb", 
-			Character.valueOf('i'), Item.ingotIron, 
-			Character.valueOf('b'), blueReploidPlate,
-			Character.valueOf('w'), weaponBit,
-			Character.valueOf('W'), weaponByte,
-			Character.valueOf('d'), Item.diamond
 			}
 		);*/
 	}
