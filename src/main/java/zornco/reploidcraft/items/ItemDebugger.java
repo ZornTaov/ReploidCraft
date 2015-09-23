@@ -77,6 +77,6 @@ public class ItemDebugger extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		itemIcon = par1IconRegister.registerIcon("bedcraftbeyond:scissors");
+		itemIcon = par1IconRegister.registerIcon(ReploidCraft.MOD_ID+":scissors");
 	}
 }
