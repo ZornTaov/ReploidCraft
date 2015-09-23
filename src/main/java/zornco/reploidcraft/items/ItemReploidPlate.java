@@ -17,7 +17,7 @@ public class ItemReploidPlate extends Item
 
 	/** List of dye color names */
 	public static final String[] plateColorNames = new String[] { "Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "Enhanced", "Basic" };
-	public static final int[] chipColors = new int[] { 1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320, 2651799 };
+	public static final int[] chipColors = new int[] { 1973019, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320, 8943479 };
 
 	private IIcon iconPlate;
 	public static final int typeAmmount = 17;
