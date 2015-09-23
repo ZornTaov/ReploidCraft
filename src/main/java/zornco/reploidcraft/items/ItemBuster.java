@@ -1,5 +1,6 @@
 package zornco.reploidcraft.items;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -30,6 +31,11 @@ public class ItemBuster extends Item implements IKeyBound
 	public String getTextureFile() {
 		return "/zornco/megax/textures/XBusterDetailed.png";
 	}*/
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister iconRegister){
+		this.itemIcon = iconRegister.registerIcon(ReploidCraft.MOD_ID+":"+this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1));
+	}
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean requiresMultipleRenderPasses()

@@ -48,7 +48,7 @@ public class ItemReploidArmor extends ItemArmor
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister){
-		this.itemIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1));
+		this.itemIcon = iconRegister.registerIcon(ReploidCraft.MOD_ID+":"+this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf('.') + 1));
 	}
 	@Override
 	@SideOnly(Side.CLIENT)
