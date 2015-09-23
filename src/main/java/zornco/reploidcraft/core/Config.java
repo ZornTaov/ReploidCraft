@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.BiomeGenBase;
 import zornco.reploidcraft.ReploidCraft;
@@ -79,10 +80,10 @@ public class Config {
 		/** Items **/
 		
 		
-		ReploidCraft.reploidHelm = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 0).setUnlocalizedName("reploid_Helm");
-		ReploidCraft.reploidChest = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 1).setUnlocalizedName("reploid_Chest");
-		ReploidCraft.reploidLegs = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 2).setUnlocalizedName("reploid_Legs");
-		ReploidCraft.reploidBoots = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 3).setUnlocalizedName("reploid_Boots"); 
+		ReploidCraft.reploidHelm = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 0).setUnlocalizedName("reploidArmor.head");
+		ReploidCraft.reploidChest = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 1).setUnlocalizedName("reploidArmor.chest");
+		ReploidCraft.reploidLegs = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 2).setUnlocalizedName("reploidArmor.legs");
+		ReploidCraft.reploidBoots = new ItemReploidArmor(ReploidCraft.enumArmorReploid, 1, 3).setUnlocalizedName("reploidArmor.boots"); 
 		ReploidCraft.reploidBuster = new ItemBuster().setUnlocalizedName("reploid_buster");
 		
 		ReploidCraft.upgradeChip = new ItemChip().setUnlocalizedName("chip");
@@ -134,5 +135,13 @@ public class Config {
 	public static void registerBlock(Block block, Class<? extends ItemBlock> itemBlockClass)
 	{
 		GameRegistry.registerBlock(block, itemBlockClass, block.getUnlocalizedName().replace("tile.", ""));
+	}
+
+	public void printLang()
+	{
+		for ( int i = 0; i < ItemComponent.Components.getSize(); i++ )
+		{
+			ReploidCraft.logger.warn( ReploidCraft.component.getUnlocalizedName( new ItemStack( ReploidCraft.component, 1, i ) ) + ".name=" + ReploidCraft.component.getItemStackDisplayName( new ItemStack( ReploidCraft.component, 1, i ) ) );
+		}
 	}
 }

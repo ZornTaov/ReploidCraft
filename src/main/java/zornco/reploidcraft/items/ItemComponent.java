@@ -98,9 +98,16 @@ public class ItemComponent extends Item
 	{
 		diamondDust(),
 		AEGD("Accumulative Energy;Generation Device"),
+		motor(),
+		joint(),
+		socket(),
+		coupling(),
+		cockpit(),
+		vent(),
+		propeller(),
 		fist(),
 		spikedFist(),
-		drill("May your Drill;peirce the Heavens!"),
+		drill("May your Drill;Peirce the Heavens!"),
 		machineGun(),
 		missileGun(),
 		redArm(),
@@ -111,14 +118,7 @@ public class ItemComponent extends Item
 		greenJet(),
 		blueArm(),
 		blueLeg(),
-		blueJet(),
-		cockpit(),
-		vent(),
-		propeller(),
-		motor(),
-		joint(),
-		socket(),
-		coupling();
+		blueJet();
 
 		private final int index;
 		private final String desc;

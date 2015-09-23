@@ -109,6 +109,7 @@ public class ReploidCraft
 		NetworkRegistry.INSTANCE.registerGuiHandler( this, proxy );
 		PacketHandler.init();
 		config.registerEntities();
+		//config.printLang();
 	}
 
 	@EventHandler

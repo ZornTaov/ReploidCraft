@@ -32,23 +32,36 @@ item.reploidPlate.Enhanced.name=Enhanced Reploid Plate
 item.reploidPlate.Basic.name=Basic Reploid Plate
 item.rideArmorPlacer.name=Ride Armor Placer (TEMP ITEM)
 item.part.name=Ride Armor Part
-item.component.diamondDust.name=Diamond Dust
-item.component.AEGD.name=AEGD
-item.component.fist.name=Armored Fist
-item.component.spikedFist.name=Spiked Fist
-item.component.drill.name=Drill
-item.component.redArm.name=Red Arm
-item.component.greenArm.name=Green Arm
-item.component.blueArm.name=Blue Arm
-item.component.cockpit.name=Cockpit
-item.component.vent.name=Vent
-item.component.propeller.name=Propeller
-item.component.couplng.name=Coupling
 item.platformPlacer.name=Platform Placer
 item.reploidArmor.head.name=Reploid Helm
 item.reploidArmor.chest.name=Reploid Chest
 item.reploidArmor.legs.name=Reploid Legs
 item.reploidArmor.feet.name=Reploid Boots
+
+# Componants
+item.component.diamondDust.name=Diamond Dust
+item.component.AEGD.name=AEGD
+item.component.motor.name=Motor
+item.component.joint.name=Joint
+item.component.socket.name=Socket
+item.component.coupling.name=Coupling
+item.component.cockpit.name=Cockpit
+item.component.vent.name=Vent
+item.component.propeller.name=Propeller
+item.component.fist.name=Armored Fist
+item.component.spikedFist.name=Spiked Fist
+item.component.drill.name=Drill
+item.component.machineGun.name=Machine Gun
+item.component.missileGun.name=Missle Launcher
+item.component.redArm.name=Red Arm
+item.component.redLeg.name=Red Leg
+item.component.redJet.name=Red Jet
+item.component.greenArm.name=Green Arm
+item.component.greenLeg.name=Green Leg
+item.component.greenJet.name=Green Jet
+item.component.blueArm.name=Blue Arm
+item.component.blueLeg.name=Blue Leg
+item.component.blueJet.name=Blue Jet
 
 # GUI
 
@@ -67,3 +80,4 @@ type.green=Green
 type.red=Red
 type.rabbit=Rabbit
 type.frog=Frog
+type.creeper=Creeper
