@@ -1,7 +1,5 @@
 package zornco.reploidcraft;
 
-
-
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -27,42 +25,43 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-//import cpw.mods.fml.common.network.NetworkMod;
+// import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid=ReploidCraft.MOD_ID, name="ReploidCraft", version="0.0.1", acceptedMinecraftVersions = "[1.6,)")
-//@NetworkMod(channels = { "ReploidEnv" }, clientSideRequired=true, serverSideRequired=false, packetHandler=PacketHandler.class)
-public class ReploidCraft {
+@Mod( modid = ReploidCraft.MOD_ID, name = "ReploidCraft", version = "0.0.1", acceptedMinecraftVersions = "[1.6,)" )
+// @NetworkMod(channels = { "ReploidEnv" }, clientSideRequired=true, serverSideRequired=false, packetHandler=PacketHandler.class)
+public class ReploidCraft
+{
 
 	public static final String MOD_ID = "reploidcraft";
 	// The instance of your mod that Forge uses.
-	@Instance(ReploidCraft.MOD_ID)
+	@Instance( ReploidCraft.MOD_ID )
 	public static ReploidCraft instance;
 
-	//public static final PacketPipeline packetPipeline = new PacketPipeline();
-	
+	// public static final PacketPipeline packetPipeline = new PacketPipeline();
+
 	// Says where the client and server 'proxy' code is loaded.
-	@SidedProxy(clientSide="zornco.reploidcraft.client.ClientProxy", serverSide="zornco.reploidcraft.core.CommonProxy")
+	@SidedProxy( clientSide = "zornco.reploidcraft.client.ClientProxy", serverSide = "zornco.reploidcraft.core.CommonProxy" )
 	public static CommonProxy proxy;
 
-	public static CreativeTabs reploidTab = new TabReploid(ReploidCraft.MOD_ID);
+	public static CreativeTabs reploidTab = new TabReploid( ReploidCraft.MOD_ID );
 
-	public static Logger logger = LogManager.getLogger(ReploidCraft.MOD_ID);
+	public static Logger logger = LogManager.getLogger( ReploidCraft.MOD_ID );
 
 	public static Random rand = new Random();
 
 	public static Config config = new Config();
 
 	public static EventBus events;
-	
+
 	public static Item reploidHelm;
 	public static Item reploidChest;
 	public static Item reploidLegs;
 	public static Item reploidBoots;
 	public static Item reploidBuster;
-	
+
 	public static Item upgradeChip;
-	
+
 	public static Item healthBit;
 	public static Item healthByte;
 	public static Item weaponBit;
@@ -85,32 +84,36 @@ public class ReploidCraft {
 	public static Block blockItemHolder;
 	public static Block blockMechBay;
 
-	public static ArmorMaterial enumArmorReploid = EnumHelper.addArmorMaterial("reploid", 20, new int[]{2, 6, 5, 2}, 0);
-	public static EnumAction busterAction = EnumHelper.addAction("buster");
-	
+	public static ArmorMaterial enumArmorReploid = EnumHelper.addArmorMaterial( "reploid", 20, new int[] {
+		2, 6, 5, 2 }, 0 );
+	public static EnumAction busterAction = EnumHelper.addAction( "buster" );
+
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
+	public void preInit( FMLPreInitializationEvent event )
+	{
 		proxy.registerKeyBindingHandler();
 		proxy.registerSounds();
 		config.addItems();
 		config.addBlocks();
 		proxy.registerParts();
-		((ItemRideArmorPart) rideArmorPart).populateParts();
+		( (ItemRideArmorPart) rideArmorPart ).populateParts();
 		proxy.registerArmors();
 	}
 
 	@EventHandler
-	public void load(FMLInitializationEvent event) {
+	public void load( FMLInitializationEvent event )
+	{
 		Config.recipes.registerRecipes();
 		proxy.registerRenderInformation();
 		events = new EventBus();
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-        PacketHandler.init();
+		NetworkRegistry.INSTANCE.registerGuiHandler( this, proxy );
+		PacketHandler.init();
 		config.registerEntities();
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		//packetPipeline.postInitialise();
+	public void postInit( FMLPostInitializationEvent event )
+	{
+		// packetPipeline.postInitialise();
 	}
 }

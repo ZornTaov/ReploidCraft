@@ -19,15 +19,17 @@ import cpw.mods.fml.relauncher.Side;
 public class PartsRegistry extends RegistrySimple
 {
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings( "rawtypes" )
 	private Map field_148764_a;
-	private static int partNumber = 0; 
-	private float[] emptyPos = {0,0,0};
-	private float[] emptySize = {0,0,0};
-	private PartBase emptyPart = new PartBase(0, emptyPos, emptySize);
-	public static ResourceLocation defaultTexture = new ResourceLocation(ReploidCraft.MOD_ID + ":textures/entity/rideArmorGreen.png");
+	private static int partNumber = 0;
+	private float[] emptyPos = {
+		0, 0, 0 };
+	private float[] emptySize = {
+		0, 0, 0 };
+	private PartBase emptyPart = new PartBase( 0, emptyPos, emptySize );
+	public static ResourceLocation defaultTexture = new ResourceLocation( ReploidCraft.MOD_ID + ":textures/entity/rideArmorGreen.png" );
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings( "rawtypes" )
 	/**
 	 * Creates the Map we will use to map keys to their registered values.
 	 */
@@ -37,83 +39,89 @@ public class PartsRegistry extends RegistrySimple
 		return this.field_148764_a;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings( "rawtypes" )
 	public Map getMap()
 	{
 		return this.registryObjects;
 	}
-	public PartBase getPart(String type, PartSlot slot)
-	{
-		if(this.containsKey(type))
-		{
-			PartBase entry = (PartBase) ((PartList)this.getObject(type)).getPartList().get(slot);
 
-			return entry != null? entry : emptyPart;
-		}
-		else 
+	public PartBase getPart( String type, PartSlot slot )
+	{
+		if ( this.containsKey( type ) )
 		{
-			ReploidCraft.logger.warn("ERROR: called a missing part " + type + ":" + slot);
+			PartBase entry = (PartBase) ( (PartList) this.getObject( type ) ).getPartList().get( slot );
+
+			return entry != null ? entry : emptyPart;
+		}
+		else
+		{
+			ReploidCraft.logger.warn( "ERROR: called a missing part " + type + ":" + slot );
 			return emptyPart;
 		}
 	}
-	public ResourceLocation getPartTexture(String type)
+
+	public ResourceLocation getPartTexture( String type )
 	{
-		if(this.containsKey(type))
+		if ( this.containsKey( type ) )
 		{
-			ResourceLocation entry = (ResourceLocation) ((PartList)this.getObject(type)).getTexture();
-			return entry != null? entry : defaultTexture;
+			ResourceLocation entry = (ResourceLocation) ( (PartList) this.getObject( type ) ).getTexture();
+			return entry != null ? entry : defaultTexture;
 		}
-		else 
+		else
 		{
-			ReploidCraft.logger.warn("ERROR: called a missing Texture for " + type);
+			ReploidCraft.logger.warn( "ERROR: called a missing Texture for " + type );
 			return defaultTexture;
 		}
 	}
-	public void registerPart(String type, PartSlot slot, float health, float[] offsetXYZ, float[] size)
+
+	public void registerPart( String type, PartSlot slot, float health, float[] offsetXYZ, float[] size )
 	{
-		this.registerPart(type, slot, new PartBase(health, offsetXYZ, size));
+		this.registerPart( type, slot, new PartBase( health, offsetXYZ, size ) );
 	}
-	@SuppressWarnings("unchecked")
-	public void registerPart(String type, PartSlot slot, PartBase part)
+
+	@SuppressWarnings( "unchecked" )
+	public void registerPart( String type, PartSlot slot, PartBase part )
 	{
-		if(!this.containsKey(type))
+		if ( !this.containsKey( type ) )
 		{
-			this.registerSet(new PartList().setPartCategory(type).setTexture(type.toString()));
+			this.registerSet( new PartList().setPartCategory( type ).setTexture( type.toString() ) );
 		}
-		if(((PartList)this.getObject(type)).getPartList().get(slot) != null) 
+		if ( ( (PartList) this.getObject( type ) ).getPartList().get( slot ) != null )
 		{
-			ReploidCraft.logger.warn("ERROR: Tried adding a part that was already there. " + type + ":" + slot);
+			ReploidCraft.logger.warn( "ERROR: Tried adding a part that was already there. " + type + ":" + slot );
 			return;
 		}
-		part.setPartNumber(partNumber++);
-		part.setString(type+"."+slot);
+		part.setPartNumber( partNumber++ );
+		part.setString( type + "." + slot );
 
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-			part.initModel();
-		((PartList)this.getObject(type)).getPartList().put(slot, part);
-		ItemRideArmorPart.getPartList().add((PartBase) part);
-		if(part.getRecipe() != null)
+		if ( FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ) part.initModel();
+		( (PartList) this.getObject( type ) ).getPartList().put( slot, part );
+		ItemRideArmorPart.getPartList().add( (PartBase) part );
+		if ( part.getRecipe() != null )
 		{
-			RecipeHandler.addOreRecipe(new ItemStack(ReploidCraft.rideArmorPart, 1, part.getPartNumber()), part.getRecipe(), false );
+			RecipeHandler.addOreRecipe( new ItemStack( ReploidCraft.rideArmorPart, 1, part.getPartNumber() ), part.getRecipe(), false );
 		}
-		ReploidCraft.logger.info("registered " + type + ":" + slot);
+		ReploidCraft.logger.info( "registered " + type + ":" + slot );
 	}
 
-	public void registerSet(PartList list)
+	public void registerSet( PartList list )
 	{
-		this.putObject(list.getPartCategory(), list);
+		this.putObject( list.getPartCategory(), list );
 	}
 
 	public void func_148763_c()
 	{
 		this.field_148764_a.clear();
 	}
-	protected class TypeMap {
-		@SuppressWarnings("rawtypes")
-		Map<Enum,Properties> slotMap;
-		protected Properties getPartFromSlot(PartSlot slot)
+
+	protected class TypeMap
+	{
+		@SuppressWarnings( "rawtypes" )
+		Map<Enum, Properties> slotMap;
+
+		protected Properties getPartFromSlot( PartSlot slot )
 		{
-			return slotMap.get(slot);
+			return slotMap.get( slot );
 		}
 	}
 }
