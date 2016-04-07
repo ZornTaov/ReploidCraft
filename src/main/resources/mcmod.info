@@ -1,16 +1,16 @@
 [
 {
   "modid": "reploidcraft",
-  "name": "Reploid Craft",
-  "description": "Example placeholder mod.",
+  "name": "ReploidCraft",
+  "description": "As a new age dawns, mechanical creatures named Bioroid now populate the planet.  Create modular mechanical beasts that you can ride into battle, or customizable armors that will help you pound the destructive Bioroids into the ground.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "http://zornco.org",
   "updateUrl": "",
   "authorList": ["Zorn_Taov"],
-  "credits": "The Forge and FML guys, Capcop for Megaman and Megaman X",
+  "credits": "Capcom for inspiration",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": ["MinecraftForge", "CoFHCore"]
+  "dependencies": []
 }
 ]
