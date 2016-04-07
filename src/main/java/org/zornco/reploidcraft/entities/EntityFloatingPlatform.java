@@ -20,6 +20,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -62,17 +63,24 @@ public class EntityFloatingPlatform extends Entity {
 	@Override
 	public boolean processInitialInteract(EntityPlayer par1EntityPlayer, ItemStack stack, EnumHand hand)
 	{
-		if (!this.worldObj.isRemote)
-		{
+		//if (!this.worldObj.isRemote)
+		//{
 			ItemStack var2 = par1EntityPlayer.inventory.getCurrentItem();
 
 			if (var2 != null && var2.getItem() == Items.diamond)
 			{
+				if(par1EntityPlayer.isSneaking())
+				{
 				//par1EntityPlayer.openGui(ReploidCraft.instance, GuiIds.UPGRADE_STATION, par1World, i, j, k);
-				setNextPointPosition();
+					setNextPointPosition();
 				//open gui
+				}
+				else
+				{
+					this.setPathType(!this.getPathType());
+				}
 			}
-		}
+		//}
 		return true;
 
 	}
@@ -81,27 +89,55 @@ public class EntityFloatingPlatform extends Entity {
 	public void onUpdate() {
 		super.onUpdate();
 		//ReploidCraft.logger.info(this.currentFlightTargets.size() + " " + this.worldObj.isRemote);
+		//ReploidCraft.logger.info((this.worldObj.isRemote?"client ":"server ") + this.getPointPosition() + " " + this.posX + " " + this.posY + " " + this.posZ);
 		//this.setDead();
-		
+		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expandXyz(0.1));
+
+        
 		if(worldObj.isRemote)
 		{
 			++this.innerRotation;
-			List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
-
-	        if (!list.isEmpty())
+			if (!list.isEmpty())
 	        {
 	            for (Entity entity : list)
 	            {
-	                if (!(entity instanceof EntityShulker) && !entity.noClip)
+	                if (!(entity instanceof EntityFloatingPlatform) && !entity.noClip)
 	                {
-	                    entity.moveEntity(nextPosX-posX, nextPosY-posY, nextPosZ-posZ);
+	                	//entity.setPosition(this.nextPosX, this.nextPosY - this.height/2 + entity.getEyeHeight(), this.nextPosZ);
+	                	entity.moveEntity((this.nextPosX-this.posX), (this.nextPosY-this.posY), (this.nextPosZ-this.posZ));
+	                    //entity.moveEntity(this.prevPosX-this.posX, this.prevPosY-this.posY, this.prevPosZ-this.posZ);
+	                    //entity.moveEntity(this.posX-this.prevPosX, this.posY-this.prevPosY, this.posZ-this.prevPosZ);
 	                }
 	            }
 	        }
+			if (this.innerRotation%30==0)
+			for (int i = 0; i < this.currentFlightTargets.size(); i++) { 
+				PlatformPathPoint point1 = currentFlightTargets.get(i);
+				PlatformPathPoint point2 = currentFlightTargets.get(i != this.currentFlightTargets.size()-1? i+1 : 0);
+				this.worldObj.spawnParticle(EnumParticleTypes.CLOUD, point2.posX, point2.posY+0.2, point2.posZ, 0.0, 0.0, 0.0, new int[0]);
+				for (int j = 0; j < 20; j++) {
+					double targetPosX = point2.posX;
+					double targetPosY = point2.posY;
+					double targetPosZ = point2.posZ;
+					
+					float speed = point2.speed;
+					double delta_x = targetPosX - point1.posX;
+					double delta_y = targetPosY - point1.posY;
+					double delta_z = targetPosZ - point1.posZ;
+					double goal_dist = Math.sqrt( (delta_x * delta_x) + (delta_y * delta_y) + (delta_z * delta_z) );
+					
+					//time = goal_dist*20D;
+					double nexPosX = lerp(point1.posX, targetPosX, 20, j);
+					double nexPosY = lerp(point1.posY, targetPosY, 20, j);
+					double nexPosZ = lerp(point1.posZ, targetPosZ, 20, j);
+					
+					this.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, nexPosX, nexPosY+0.2, nexPosZ, 0.0, 0.0, 0.0, new int[0]);
+				}
+				
+			}
 		}
 		else
 		{
-			
 		}
 		if(this.currentFlightTargets.size() > 0)
 		{
@@ -124,49 +160,39 @@ public class EntityFloatingPlatform extends Entity {
 			double targetPosX = this.currentFlightTargets.get(getPointPosition()).posX;
 			double targetPosY = this.currentFlightTargets.get(getPointPosition()).posY;
 			double targetPosZ = this.currentFlightTargets.get(getPointPosition()).posZ;
-			//ReploidCraft.logger.warning("" + targetPosX + " " + targetPosY + " " + targetPosZ);
+			
 			float speed = this.currentFlightTargets.get(getPointPosition()).speed;
 			double delta_x = targetPosX - this.prevFlightTarget.posX;
 			double delta_y = targetPosY - this.prevFlightTarget.posY;
 			double delta_z = targetPosZ - this.prevFlightTarget.posZ;
 			double goal_dist = Math.sqrt( (delta_x * delta_x) + (delta_y * delta_y) + (delta_z * delta_z) );
-			/*if (goal_dist > speed)
-			{
-			    double ratio = speed / goal_dist;
-			    motionX = ratio * delta_x;
-			    motionY = ratio * delta_y;
-			    motionZ = ratio * delta_z;
-				this.prevPosX = this.posX;
-				this.prevPosY = this.posY;
-				this.prevPosZ = this.posZ;
-			    this.setPosition(this.posX + motionX, this.posY + motionY, this.posZ + motionZ);
-			}
-			else
-			{
-				this.setPosition(targetPosX + Math.signum(targetPosX) * 0.5D, 
-						targetPosY + 0.5D, 
-						targetPosZ + Math.signum(targetPosZ) * 0.5D);
-				setNextPointPosition();
-			}*/
+			
 			time = goal_dist*20D;
 			nextPosX = lerp(this.prevFlightTarget.posX, targetPosX, time, timeSinceStart);
 			nextPosY = lerp(this.prevFlightTarget.posY, targetPosY, time, timeSinceStart);
 			nextPosZ = lerp(this.prevFlightTarget.posZ, targetPosZ, time, timeSinceStart);
 			
 			this.moveEntity(nextPosX-posX, nextPosY-posY, nextPosZ-posZ);
-			//ReploidCraft.logger.warning("" + nextPosX + " " + nextPosY + " " + nextPosZ);
+			//ReploidCraft.logger.warn("" + nextPosX + " " + nextPosY + " " + nextPosZ);
 
 			if (timeSinceStart >= time)
 			{
 				setNextPointPosition();
 				timeSinceStart = 0;
 			}
-			else /*if (ticksExisted%5 == 0)*/
+			else 
 				timeSinceStart++;
 
 			/*nextRenderPosX = lerp(this.prevFlightTarget.posX, targetPosX, time, timeSinceStart);
 			nextRenderPosY = lerp(this.prevFlightTarget.posY, targetPosY, time, timeSinceStart);
 			nextRenderPosZ = lerp(this.prevFlightTarget.posZ, targetPosZ, time, timeSinceStart);*/
+		}
+		else
+		{
+			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY, this.posZ, 1F, 0));
+			this.currentFlightTargets.add(new PlatformPathPoint(this.posX + 3, this.posY, this.posZ, 1F, 0));
+			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY, this.posZ + 5.0, 1F, 0));
+			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY + 1.0, this.posZ, 1F, 0));
 		}
 		//TODO: move the platform smoothly
 		
@@ -209,7 +235,7 @@ public class EntityFloatingPlatform extends Entity {
 					dataPoint--;
 					if(dataPoint < 0)
 					{
-						dataPoint = currentFlightTargets.size();
+						dataPoint = currentFlightTargets.size()-1;
 					}
 				}
 				this.setPointPosition(dataPoint);
