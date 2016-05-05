@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -21,8 +22,9 @@ public class ClientProxy extends CommonProxy {
 		 * Item/Block models
 		 */
 		this.registerItemModel(RCItems.platformPlacer);
+		this.registerItemModel(RCItems.platformRemote);
 		
-		
+		//ForgeHooksClient.registerTESRItemStack(item, metadata, TileClass);
 		/*
 		 * Entities
 		 */

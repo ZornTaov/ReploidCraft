@@ -5,12 +5,17 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.zornco.reploidcraft.ReploidCraft;
+import org.zornco.reploidcraft.init.RCItems;
 import org.zornco.reploidcraft.util.PlatformPathPoint;
+
+import com.google.common.base.Optional;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,13 +28,17 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityFloatingPlatform extends Entity {
 	private static final DataParameter<Boolean> PATH_TYPE = EntityDataManager.<Boolean>createKey(EntityFloatingPlatform.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> PATH_DIR = EntityDataManager.<Boolean>createKey(EntityFloatingPlatform.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> PATH_POS = EntityDataManager.<Integer>createKey(EntityFloatingPlatform.class, DataSerializers.VARINT);
-
+	private static final DataParameter<Float> PATH_TIME = EntityDataManager.<Float>createKey(EntityFloatingPlatform.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> PATH_TIME_TO_NEXT = EntityDataManager.<Float>createKey(EntityFloatingPlatform.class, DataSerializers.FLOAT);
+	private static final DataParameter<Optional<ItemStack>> PATH_DATA = EntityDataManager.<Optional<ItemStack>>createKey(EntityFloatingPlatform.class, DataSerializers.OPTIONAL_ITEM_STACK);
+    
 	/**
 	 * List of absolute int coords starting from where the platform was placed
 	 */
@@ -38,8 +47,6 @@ public class EntityFloatingPlatform extends Entity {
 
 	/** Used to create the rotation animation when rendering the propeller. */
 	public int innerRotation;
-	public double timeSinceStart = 0;
-	public double time = 0;
 
 	public EntityFloatingPlatform(World worldIn) {
 		super(worldIn);
@@ -55,6 +62,8 @@ public class EntityFloatingPlatform extends Entity {
 		this.prevPosX = x;
 		this.prevPosY = y;
 		this.prevPosZ = z;
+
+        //this.dataWatcher.set(PATH_DATA, Optional.of(new ItemStack(RCItems.platformRemote,1,0,new NBTTagCompound())));
 	}
 
 	/**
@@ -65,19 +74,37 @@ public class EntityFloatingPlatform extends Entity {
 	{
 		//if (!this.worldObj.isRemote)
 		//{
-			ItemStack var2 = par1EntityPlayer.inventory.getCurrentItem();
 
-			if (var2 != null && var2.getItem() == Items.diamond)
+			if (stack != null )
 			{
-				if(par1EntityPlayer.isSneaking())
+				if (stack.getItem() == Items.diamond)
 				{
-				//par1EntityPlayer.openGui(ReploidCraft.instance, GuiIds.UPGRADE_STATION, par1World, i, j, k);
-					setNextPointPosition();
-				//open gui
+					if(par1EntityPlayer.isSneaking())
+					{
+					//par1EntityPlayer.openGui(ReploidCraft.instance, GuiIds.UPGRADE_STATION, par1World, i, j, k);
+						setNextPointPosition();
+					//open gui
+					}
+					else
+					{
+						this.setPathType(!this.getPathType());
+					}
 				}
-				else
+				else if (stack.getItem() == RCItems.platformRemote)
 				{
-					this.setPathType(!this.getPathType());
+					if (!stack.hasTagCompound()) {
+						stack.setTagCompound(new NBTTagCompound());
+					}
+					if (stack.getTagCompound().hasKey("hasPath")) {
+						stack.getTagCompound().removeTag("hasPath");
+						this.readPathFromItem(stack.getTagCompound());
+					}
+					else
+					{
+						NBTTagCompound path = new NBTTagCompound();
+						this.writePathToItem(stack.getTagCompound());
+						stack.getTagCompound().setBoolean("hasPath", true);
+					}
 				}
 			}
 		//}
@@ -91,25 +118,14 @@ public class EntityFloatingPlatform extends Entity {
 		//ReploidCraft.logger.info(this.currentFlightTargets.size() + " " + this.worldObj.isRemote);
 		//ReploidCraft.logger.info((this.worldObj.isRemote?"client ":"server ") + this.getPointPosition() + " " + this.posX + " " + this.posY + " " + this.posZ);
 		//this.setDead();
-		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expandXyz(0.1));
 
+		
         
 		if(worldObj.isRemote)
 		{
 			++this.innerRotation;
-			if (!list.isEmpty())
-	        {
-	            for (Entity entity : list)
-	            {
-	                if (!(entity instanceof EntityFloatingPlatform) && !entity.noClip)
-	                {
-	                	//entity.setPosition(this.nextPosX, this.nextPosY - this.height/2 + entity.getEyeHeight(), this.nextPosZ);
-	                	entity.moveEntity((this.nextPosX-this.posX), (this.nextPosY-this.posY), (this.nextPosZ-this.posZ));
-	                    //entity.moveEntity(this.prevPosX-this.posX, this.prevPosY-this.posY, this.prevPosZ-this.posZ);
-	                    //entity.moveEntity(this.posX-this.prevPosX, this.posY-this.prevPosY, this.posZ-this.prevPosZ);
-	                }
-	            }
-	        }
+
+			
 			if (this.innerRotation%30==0)
 			for (int i = 0; i < this.currentFlightTargets.size(); i++) { 
 				PlatformPathPoint point1 = currentFlightTargets.get(i);
@@ -160,28 +176,31 @@ public class EntityFloatingPlatform extends Entity {
 			double targetPosX = this.currentFlightTargets.get(getPointPosition()).posX;
 			double targetPosY = this.currentFlightTargets.get(getPointPosition()).posY;
 			double targetPosZ = this.currentFlightTargets.get(getPointPosition()).posZ;
+			if (getTimeToNext() >= getTime()) {
+				float speed = this.currentFlightTargets.get(getPointPosition()).speed;
+				double delta_x = targetPosX - this.prevFlightTarget.posX;
+				double delta_y = targetPosY - this.prevFlightTarget.posY;
+				double delta_z = targetPosZ - this.prevFlightTarget.posZ;
+				float goal_dist = (float) Math.sqrt( (delta_x * delta_x) + (delta_y * delta_y) + (delta_z * delta_z) );
+				
+				setTimeToNext(goal_dist*20F);;
+			}
 			
-			float speed = this.currentFlightTargets.get(getPointPosition()).speed;
-			double delta_x = targetPosX - this.prevFlightTarget.posX;
-			double delta_y = targetPosY - this.prevFlightTarget.posY;
-			double delta_z = targetPosZ - this.prevFlightTarget.posZ;
-			double goal_dist = Math.sqrt( (delta_x * delta_x) + (delta_y * delta_y) + (delta_z * delta_z) );
 			
-			time = goal_dist*20D;
-			nextPosX = lerp(this.prevFlightTarget.posX, targetPosX, time, timeSinceStart);
-			nextPosY = lerp(this.prevFlightTarget.posY, targetPosY, time, timeSinceStart);
-			nextPosZ = lerp(this.prevFlightTarget.posZ, targetPosZ, time, timeSinceStart);
+			nextPosX = lerp(this.prevFlightTarget.posX, targetPosX, getTimeToNext(), getTime());
+			nextPosY = lerp(this.prevFlightTarget.posY, targetPosY, getTimeToNext(), getTime());
+			nextPosZ = lerp(this.prevFlightTarget.posZ, targetPosZ, getTimeToNext(), getTime());
 			
 			this.moveEntity(nextPosX-posX, nextPosY-posY, nextPosZ-posZ);
 			//ReploidCraft.logger.warn("" + nextPosX + " " + nextPosY + " " + nextPosZ);
 
-			if (timeSinceStart >= time)
+			if (getTime() >= getTimeToNext())
 			{
 				setNextPointPosition();
-				timeSinceStart = 0;
+				setTime(0);
 			}
 			else 
-				timeSinceStart++;
+				incTime();
 
 			/*nextRenderPosX = lerp(this.prevFlightTarget.posX, targetPosX, time, timeSinceStart);
 			nextRenderPosY = lerp(this.prevFlightTarget.posY, targetPosY, time, timeSinceStart);
@@ -195,7 +214,20 @@ public class EntityFloatingPlatform extends Entity {
 			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY + 1.0, this.posZ, 1F, 0));
 		}
 		//TODO: move the platform smoothly
-		
+		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(0.0, 1, 0.0));
+		if (!list.isEmpty())
+        {
+            for (Entity entity : list)
+            {
+                if (!(entity instanceof EntityFloatingPlatform) && !entity.noClip)
+                {
+                	//entity.setPosition(this.nextPosX-this.posX+entity.posX, this.nextPosY + this.height/* + entity.getEyeHeight()*/, this.nextPosZ-this.posZ+entity.posZ);
+                	entity.moveEntity((this.nextPosX-this.posX), (this.nextPosY-this.posY), (this.nextPosZ-this.posZ));
+                    //entity.moveEntity(this.prevPosX-this.posX, this.prevPosY-this.posY, this.prevPosZ-this.posZ);
+                    //entity.moveEntity(this.posX-this.prevPosX, this.posY-this.prevPosY, this.posZ-this.prevPosZ);
+                }
+            }
+        }
 	}
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
@@ -269,6 +301,8 @@ public class EntityFloatingPlatform extends Entity {
 	public void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
 		nbttagcompound.setInteger("Point", this.getPointPosition());
+		nbttagcompound.setFloat("Time", this.getTime());
+		nbttagcompound.setFloat("TimeToNext", this.getTimeToNext());
 		NBTTagList nbttaglist = new NBTTagList();
 		Iterator<PlatformPathPoint> it=currentFlightTargets.iterator();
 		byte i = 0;
@@ -287,6 +321,8 @@ public class EntityFloatingPlatform extends Entity {
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 		this.setPointPosition(nbttagcompound.getInteger("Point"));
+		this.setTime(nbttagcompound.getFloat("Time"));
+		this.setTimeToNext(nbttagcompound.getFloat("TimeToNext"));
 		NBTTagList nbttaglist = nbttagcompound.getTagList("CordList", 3);
 		this.currentFlightTargets.clear();
 		for(int i = 0; i < nbttaglist.tagCount(); i++)
@@ -296,12 +332,71 @@ public class EntityFloatingPlatform extends Entity {
 			this.currentFlightTargets.add(var5, PlatformPathPoint.loadPointFromNBT(nbttagcompound1));
 		}
 	}
+	public void writePathToItem(NBTTagCompound itemnbt)
+	{
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		nbttagcompound.setInteger("Point", this.getPointPosition());
+		nbttagcompound.setFloat("Time", this.getTime());
+		nbttagcompound.setFloat("TimeToNext", this.getTimeToNext());
+		NBTTagList nbttaglist = new NBTTagList();
+		Iterator<PlatformPathPoint> it=currentFlightTargets.iterator();
+		byte i = 0;
+		while(it.hasNext())
+		{
+			NBTTagCompound entry = new NBTTagCompound();
+			entry = new NBTTagCompound();
+			entry.setByte("point", (byte)i);
+			((PlatformPathPoint) it.next()).writeToNBT(entry);
+			nbttaglist.appendTag(entry);
+			i++;
+		}
+		nbttagcompound.setByte("Size", i);
+		nbttagcompound.setTag("CordList", nbttaglist);
+		itemnbt.setTag("path", nbttagcompound);
+	}
+	public void readPathFromItem(NBTTagCompound itemnbt)
+	{
+		NBTTagCompound nbttagcompound = itemnbt.getCompoundTag("path");
+		this.setPointPosition(nbttagcompound.getInteger("Point"));
+		this.setTime(nbttagcompound.getFloat("Time"));
+		this.setTimeToNext(nbttagcompound.getFloat("TimeToNext"));
+		NBTTagList nbttaglist = nbttagcompound.getTagList("CordList", 3);
+		this.currentFlightTargets.clear();
+		for(int i = 0; i < nbttaglist.tagCount(); i++)
+		{
+			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+			int var5 = nbttagcompound1.getByte("point") & 255;
+			this.currentFlightTargets.add(var5, PlatformPathPoint.loadPointFromNBT(nbttagcompound1));
+		}
+	}
+	public void setupPathNBT(NBTTagCompound nbttagcompound)
+	{
+		/*nbttagcompound.setInteger("Point", this.getPointPosition());
+		nbttagcompound.setFloat("Time", this.getTime());
+		nbttagcompound.setFloat("TimeToNext", this.getTimeToNext());*/
+		NBTTagList nbttaglist = new NBTTagList();
+		byte i = 0;
+		NBTTagCompound entry = new NBTTagCompound();
+		entry = new NBTTagCompound();
+		entry.setByte("Point", (byte)0);
+		PlatformPathPoint point = new PlatformPathPoint(this.posX, this.posY, this.posZ, 1, 1);
+		point.writeToNBT(entry);
+		nbttaglist.appendTag(entry);
+		i++;
+		
+		nbttagcompound.setByte("Size", i);
+		nbttagcompound.setTag("CordList", nbttaglist);
+	}
 	@Override
 	protected void entityInit() {
 		this.getDataManager().register(PATH_TYPE, Boolean.valueOf(false));
 		this.getDataManager().register(PATH_DIR, Boolean.valueOf(false));
 		this.getDataManager().register(PATH_POS, Integer.valueOf(0));
+		this.getDataManager().register(PATH_TIME, Float.valueOf(0));
+		this.getDataManager().register(PATH_TIME_TO_NEXT, Float.valueOf(0));
+        this.getDataManager().register(PATH_DATA, Optional.of(new ItemStack(RCItems.platformRemote,1,0,new NBTTagCompound())));
 	}
+	
 	/**
 	 * Returns true if circle, pingpong false
 	 */
@@ -330,17 +425,56 @@ public class EntityFloatingPlatform extends Entity {
 	{
 		this.getDataManager().set(PATH_DIR, Boolean.valueOf(par1));
 	}
-	public int getPointPosition()
+	protected int getPointPosition()
 	{
 		return this.getDataManager().get(PATH_POS);
 	}
-	public void setPointPosition(int point)
+	protected void setPointPosition(int point)
 	{
 		this.getDataManager().set(PATH_POS, Integer.valueOf((int)point));
 	}
+	protected float getTime()
+	{
+		return this.getDataManager().get(PATH_TIME);
+	}
+	protected void setTime(float time)
+	{
+		this.getDataManager().set(PATH_TIME, Float.valueOf((float)time));
+	}
+	protected void incTime()
+	{
+		this.getDataManager().set(PATH_TIME, Float.valueOf((float)getTime()+1));
+	}
+	protected float getTimeToNext()
+	{
+		return this.getDataManager().get(PATH_TIME_TO_NEXT);
+	}
+	protected void setTimeToNext(float time)
+	{
+		this.getDataManager().set(PATH_TIME_TO_NEXT, Float.valueOf((float)time));
+	}
+	protected ItemStack getPathData()
+	{
+		ItemStack stack = this.getDataManager().get(PATH_DATA).orNull();
+		if (stack == null)
+        {
+			//shouldn't happen if I do this right, but this should make a new path at it's current position
+            stack = new ItemStack(RCItems.platformRemote,1,0,new NBTTagCompound());
+            this.setupPathNBT(stack.getTagCompound());
+            setPathData(stack);
+        }
+        return stack;
+	}
+	protected void setPathData(ItemStack stack)
+    {
+        this.getDataManager().set(PATH_DATA, Optional.fromNullable(stack));
+        this.getDataManager().setDirty(PATH_DATA);
+    }
 	
-	public void addPathPoint(PlatformPathPoint e) {
-		this.currentFlightTargets.add(e);
+	protected void addPathPoint(PlatformPathPoint e) {
+		
+		NBTTagCompound list= this.getPathData().getTagCompound();
+		
 	}
 	public double lerp(double start, double target, double duration, double timeSinceStart)
 	{
@@ -387,6 +521,45 @@ public class EntityFloatingPlatform extends Entity {
      */
     public void applyEntityCollision(Entity entityIn)
     {
+    	if (!this.isRidingSameEntity(entityIn))
+        {
+            if (!entityIn.noClip && !this.noClip)
+            {
+                double d0 = entityIn.posX - this.posX;
+                double d1 = entityIn.posZ - this.posZ;
+                double d2 = MathHelper.abs_max(d0, d1);
+
+                if (d2 >= 0.01D)
+                {
+                    d2 = (double)MathHelper.sqrt_double(d2);
+                    d0 = d0 / d2;
+                    d1 = d1 / d2;
+                    double d3 = 1.0D / d2;
+
+                    if (d3 > 1.0D)
+                    {
+                        d3 = 1.0D;
+                    }
+
+                    d0 = d0 * d3;
+                    d1 = d1 * d3;
+                    d0 = d0 * 0.05000000074505806D;
+                    d1 = d1 * 0.05000000074505806D;
+                    d0 = d0 * (double)(1.0F - this.entityCollisionReduction);
+                    d1 = d1 * (double)(1.0F - this.entityCollisionReduction);
+
+                    if (!this.isBeingRidden())
+                    {
+                        //this.addVelocity(-d0, 0.0D, -d1);
+                    }
+
+                    if (!entityIn.isBeingRidden())
+                    {
+                        entityIn.addVelocity(d0, 0.0D, d1);
+                    }
+                }
+            }
+        }
     }
     /**
      * Returns the collision bounding box for this entity
@@ -437,6 +610,14 @@ public class EntityFloatingPlatform extends Entity {
 	{
 		return false;
 	}
+    /**
+     * Used in model rendering to determine if the entity riding this entity should be in the 'sitting' position.
+     * @return false to prevent an entity that is mounted to this entity from displaying the 'sitting' animation.
+     */
+    public boolean shouldRiderSit()
+    {
+        return false;
+    }
 	@Override
 	public void fall(float distance, float damageMultiplier) { }
 	@Override

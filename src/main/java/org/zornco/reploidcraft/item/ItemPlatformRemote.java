@@ -1,16 +1,14 @@
 package org.zornco.reploidcraft.item;
+
 import java.util.List;
 
 import org.zornco.reploidcraft.ReploidCraft;
 import org.zornco.reploidcraft.entities.EntityFloatingPlatform;
-import org.zornco.reploidcraft.util.PlatformPathPoint;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -18,17 +16,16 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class ItemPlatformPlacer extends Item {
-	public ItemPlatformPlacer()
+public class ItemPlatformRemote extends Item {
+
+	public ItemPlatformRemote()
 	{
 		super();
-		this.setMaxStackSize(4);
-        this.setHasSubtypes(true);
+		this.setMaxStackSize(1);
         this.setMaxDamage(0);
-        this.setUnlocalizedName("platformPlacer");
+        this.setUnlocalizedName("platformRemote");
 		this.setCreativeTab(ReploidCraft.reploidCraftTab);
 	}
 	@Override
