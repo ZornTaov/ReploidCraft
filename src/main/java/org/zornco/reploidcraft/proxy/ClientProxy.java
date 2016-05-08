@@ -40,7 +40,7 @@ public class ClientProxy extends CommonProxy {
 		for (int i = 0; i < EnumEnergyPelletStr.values().length; i++) {
 			this.registerItemModel(RCItems.energyPellet, i, EnumEnergyPelletStr.byMetadata(i).getName());
 		}
-		
+
 		/*
 		 * Entities
 		 */
@@ -56,14 +56,14 @@ public class ClientProxy extends CommonProxy {
 		// TODO Auto-generated method stub
 
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
-                new IItemColor()
-		{
-			public int getColorFromItemstack(ItemStack stack, int tintIndex)
-			{
-				ReploidCraft.logger.info("hello");
-				return  ((ItemEnergyPelletBase)stack.getItem()).getColor(stack);
-			}
-		}, RCItems.energyPellet);
+				new IItemColor()
+				{
+					@Override
+					public int getColorFromItemstack(ItemStack stack, int tintIndex)
+					{
+						return  ((ItemEnergyPelletBase)stack.getItem()).getColor(stack);
+					}
+				}, RCItems.energyPellet);
 	}
 	private void registerItemModel(Item item)
 	{
