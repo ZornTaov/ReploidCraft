@@ -25,7 +25,6 @@ public class ItemPlatformRemote extends Item {
 		super();
 		this.setMaxStackSize(1);
         this.setMaxDamage(0);
-        this.setUnlocalizedName("platformRemote");
 		this.setCreativeTab(ReploidCraft.reploidCraftTab);
 	}
 	@Override

@@ -48,12 +48,12 @@ public class ReploidCraft {
 		RCBlocks.preInit();
 		RCItems.preInit();
 		proxy.registerEntities();
-		proxy.registerRenderers();
+		proxy.registerRenderersPre();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-
+		proxy.registerRenderersInit();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 	}
 

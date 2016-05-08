@@ -12,6 +12,7 @@ public class CommonProxy {
         int id = 0;
         EntityRegistry.registerModEntity(EntityFloatingPlatform.class, "floatingplatform", id++, ReploidCraft.instance, 64, 3, true);
 	}
-	public void registerRenderers() {}
+	public void registerRenderersPre() {}
+	public void registerRenderersInit() {}
 
 }

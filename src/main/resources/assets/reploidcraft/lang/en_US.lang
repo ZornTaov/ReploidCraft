@@ -2,82 +2,25 @@
 entity.FloatingPlatform.name=Floating Platform
 
 # Blocks
-tile.mechBay.build.name=Mech Bay Block
-tile.mechBay.energy.name=Mech Bay Energy Accepter
-tile.mechBay.control.name=Mech Bay Controller
-tile.itemHolder.name=Item Holder
-tile.spikes.name=Metal Spikes
-container.itemholder=Item Holder
 
 # Items
 item.Health Tank.name=Health Tank
-item.healthBit.name=Health Bit
-item.healthByte.name=Health Byte
-item.reploidPlate.Black.name=Black Reploid Plate
-item.reploidPlate.Red.name=Red Reploid Plate
-item.reploidPlate.Green.name=Green Reploid Plate
-item.reploidPlate.Brown.name=Brown Reploid Plate
-item.reploidPlate.Blue.name=Blue Reploid Plate
-item.reploidPlate.Purple.name=Purple Reploid Plate
-item.reploidPlate.Cyan.name=Cyan Reploid Plate
-item.reploidPlate.LightGray.name=LightGray Reploid Plate
-item.reploidPlate.Gray.name=Gray Reploid Plate
-item.reploidPlate.Pink.name=Pink Reploid Plate
-item.reploidPlate.Lime.name=Lime Reploid Plate
-item.reploidPlate.Yellow.name=Yellow Reploid Plate
-item.reploidPlate.LightBlue.name=LightBlue Reploid Plate
-item.reploidPlate.Magenta.name=Magenta Reploid Plate
-item.reploidPlate.Orange.name=Orange Reploid Plate
-item.reploidPlate.Enhanced.name=Enhanced Reploid Plate
-item.reploidPlate.Basic.name=Basic Reploid Plate
-item.rideArmorPlacer.name=Ride Armor Placer (TEMP ITEM)
-item.part.name=Ride Armor Part
+item.energyPellet.bit.name=Health Bit
+item.energyPellet.nibble.name=Health Nibble
+item.energyPellet.byte.name=Health Byte
+item.energyPellet.word.name=Health Word
 item.platformPlacer.name=Platform Placer
-item.reploidArmor.head.name=Reploid Helm
-item.reploidArmor.chest.name=Reploid Chest
-item.reploidArmor.legs.name=Reploid Legs
-item.reploidArmor.feet.name=Reploid Boots
+item.platformRemote.name=Platform Remote
 
 # Componants
-item.component.diamondDust.name=Diamond Dust
-item.component.AEGD.name=AEGD
-item.component.motor.name=Motor
-item.component.joint.name=Joint
-item.component.socket.name=Socket
-item.component.coupling.name=Coupling
-item.component.cockpit.name=Cockpit
-item.component.vent.name=Vent
-item.component.propeller.name=Propeller
-item.component.fist.name=Armored Fist
-item.component.spikedFist.name=Spiked Fist
-item.component.drill.name=Drill
-item.component.machineGun.name=Machine Gun
-item.component.missileGun.name=Missle Launcher
-item.component.redArm.name=Red Arm
-item.component.redLeg.name=Red Leg
-item.component.redJet.name=Red Jet
-item.component.greenArm.name=Green Arm
-item.component.greenLeg.name=Green Leg
-item.component.greenJet.name=Green Jet
-item.component.blueArm.name=Blue Arm
-item.component.blueLeg.name=Blue Leg
-item.component.blueJet.name=Blue Jet
 
 # GUI
 
 # Other
-itemGroup.ReploidCraftEnv=Reploid Craft
+itemGroup.reploidcraft=Reploid Craft
 
-# Ride Armor
-slot.armleft=Left Arm
-slot.armright=Right Arm
-slot.body=Body
-slot.head=Head
-slot.legs=Legs
-slot.back=Back
-
-type.green=Green
-type.red=Red
-type.rabbit=Rabbit
-type.frog=Frog
-type.creeper=Creeper
+# Subtitle
+reploidcraft.subtitle.bit=Got Bit
+reploidcraft.subtitle.nibble=Got Nibble
+reploidcraft.subtitle.byte=Got Byte
+reploidcraft.subtitle.word=Got Word

@@ -1,0 +1,4 @@
+{
+  "energy.nibble": {"category": "player","sounds": ["reploidcraft:nibble"], "subtitle": "reploidcraft.subtitle.nibble"},
+  "energy.word": {"category": "player","sounds": ["reploidcraft:word"], "subtitle": "reploidcraft.subtitle.word"},
+}

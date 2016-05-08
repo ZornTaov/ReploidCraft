@@ -1,6 +1,6 @@
 {
-  "bit": {"category": "player","sounds": ["bit"]},
-  "byte": {"category": "player","sounds": ["byte"]},
-  "chargeUp": {"category": "player","sounds": ["chargeUp"]},
-  "chargeCont": {"category": "player","sounds": ["chargeCont"]}
+  "energy.bit": {"category": "player","sounds": ["reploidcraft:bit"], "subtitle": "reploidcraft.subtitle.bit"},
+  "energy.byte": {"category": "player","sounds": ["reploidcraft:byte"], "subtitle": "reploidcraft.subtitle.byte"},
+  "buster.chargeUp": {"category": "player","sounds": ["reploidcraft:chargeUp"], "subtitle": "reploidcraft.subtitle.chargeUp"},
+  "buster.chargeCont": {"category": "player","sounds": ["reploidcraft:chargeCont"], "subtitle": "reploidcraft.subtitle.chargeCont"}
 }
