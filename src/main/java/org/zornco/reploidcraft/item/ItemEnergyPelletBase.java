@@ -40,11 +40,13 @@ public class ItemEnergyPelletBase extends Item {
 		switch(itemStackIn.getMetadata())
 		{
 		case 0:
-			worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, RCSounds.SOUNDBIT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + itemStackIn.getMetadata() * 0.25F);
+		case 1:
+			worldIn.playSound((EntityPlayer)playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, RCSounds.SOUNDBIT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + itemStackIn.getMetadata() * 0.25F);
 			
 			break;
-		case 1:
-			worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, RCSounds.SOUNDBYTE, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + itemStackIn.getMetadata() * 0.25F);
+		case 2:
+		case 3:
+			worldIn.playSound((EntityPlayer)playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, RCSounds.SOUNDBYTE, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + itemStackIn.getMetadata()/2.0F * 0.25F);
 			break;
 		}
 
@@ -85,6 +87,12 @@ public class ItemEnergyPelletBase extends Item {
             subItems.add(new ItemStack(itemIn, 1, i));
         }
     }
+
+    @SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack stack)
+    {
+        return true;
+    }
     
     public boolean hasColor(ItemStack stack)
     {
@@ -93,6 +101,6 @@ public class ItemEnergyPelletBase extends Item {
 
 	public int getColor(ItemStack stack) {
 		// TODO Auto-generated method stub
-		return 42584;
+		return 280;//152;//hue, rgb=42584;
 	}
 }

@@ -1,12 +1,15 @@
 package org.zornco.reploidcraft.proxy;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.zornco.reploidcraft.ReploidCraft;
+import org.zornco.reploidcraft.client.ClientTickHandler;
 import org.zornco.reploidcraft.client.render.RenderFloatingPlatform;
 import org.zornco.reploidcraft.entities.EntityFloatingPlatform;
 import org.zornco.reploidcraft.init.RCItems;
+import org.zornco.reploidcraft.init.RCSounds;
 import org.zornco.reploidcraft.item.EnumEnergyPelletStr;
 import org.zornco.reploidcraft.item.ItemEnergyPelletBase;
 
@@ -24,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -31,6 +35,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerRenderersPre() {
+		RCSounds.registerSounds();
 		/*
 		 * Item/Block models
 		 */
@@ -53,15 +58,15 @@ public class ClientProxy extends CommonProxy {
 		});
 	}
 	public void registerRenderersInit() {
-		// TODO Auto-generated method stub
-
+		MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
 				new IItemColor()
 				{
 					@Override
 					public int getColorFromItemstack(ItemStack stack, int tintIndex)
 					{
-						return  ((ItemEnergyPelletBase)stack.getItem()).getColor(stack);
+						float time = ClientTickHandler.ticksInGame + ClientTickHandler.partialTicks;
+                        return Color.getHSBColor(((ItemEnergyPelletBase)stack.getItem()).getColor(stack)/360.0F, 1F, (float)Math.sin(time*0.05F)/4+0.75F).hashCode();
 					}
 				}, RCItems.energyPellet);
 	}
