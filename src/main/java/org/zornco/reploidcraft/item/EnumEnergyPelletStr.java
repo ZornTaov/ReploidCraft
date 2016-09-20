@@ -23,6 +23,11 @@ public enum EnumEnergyPelletStr {
 		return this.meta;
 	}
 
+	public int getStrength()
+	{
+		return this.strength;
+	}
+
 	public String getName()
 	{
 		return this.name;

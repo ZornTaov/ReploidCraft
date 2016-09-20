@@ -1,4 +1,4 @@
-package org.zornco.reploidcraft.common.handler;
+package org.zornco.reploidcraft.client.handler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

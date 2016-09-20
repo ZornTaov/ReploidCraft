@@ -12,7 +12,7 @@ public class TabReploidCraft extends CreativeTabs {
 
 	@Override
 	public Item getTabIconItem() {
-		return Items.diamond;
+		return Items.DIAMOND;
 	}
 
 }

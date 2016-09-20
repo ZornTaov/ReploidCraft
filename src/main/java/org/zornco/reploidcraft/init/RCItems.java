@@ -1,5 +1,6 @@
 package org.zornco.reploidcraft.init;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -9,13 +10,23 @@ public class RCItems {
 
 	public static final Item platformPlacer = new ItemPlatformPlacer();
 	public static final Item platformRemote = new ItemPlatformRemote();
-	public static final Item simpleBuster = new ItemSimpleBuster();
+	public static final Item basicBuster = new ItemBasicBuster();
+	public static final Item basicReploidArmorHelm = new ItemBasicReploidArmor(EntityEquipmentSlot.HEAD);
+	public static final Item basicReploidArmorChest = new ItemBasicReploidArmor(EntityEquipmentSlot.CHEST);
+	public static final Item basicReploidArmorLegs = new ItemBasicReploidArmor(EntityEquipmentSlot.LEGS);
+	public static final Item basicReploidArmorFeet = new ItemBasicReploidArmor(EntityEquipmentSlot.FEET);
 	public static final Item energyPellet = new ItemEnergyPelletBase();
+	public static final Item basicBlade = new ItemBasicBlade();
 	
 	public static void preInit() {
 		registerItem(platformPlacer, "platformPlacer");
 		registerItem(platformRemote, "platformRemote");
-		registerItem(simpleBuster, "simpleBuster");
+		registerItem(basicBuster, "basicBuster");
+		registerItem(basicBlade, "basicBlade");
+		registerItem(basicReploidArmorHelm, "basicReploidArmorHelm");
+		registerItem(basicReploidArmorChest, "basicReploidArmorChest");
+		registerItem(basicReploidArmorLegs, "basicReploidArmorLegs");
+		registerItem(basicReploidArmorFeet, "basicReploidArmorFeet");
 		registerItem(energyPellet, "energyPellet");
 	}
 	private static void registerItem(Item item, String registryName)

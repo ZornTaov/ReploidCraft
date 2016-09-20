@@ -14,5 +14,7 @@ public class CommonProxy {
 	}
 	public void registerRenderersPre() {}
 	public void registerRenderersInit() {}
+	public void registerHandlers() {}
+	public void registerArmors() {}
 
 }

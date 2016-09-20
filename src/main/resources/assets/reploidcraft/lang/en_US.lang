@@ -9,8 +9,13 @@ item.energyPellet.bit.name=Health Bit
 item.energyPellet.nibble.name=Health Nibble
 item.energyPellet.byte.name=Health Byte
 item.energyPellet.word.name=Health Word
+item.basicBuster.name=Reploid Buster
 item.platformPlacer.name=Platform Placer
 item.platformRemote.name=Platform Remote
+
+# Info
+item.simpleBuster.use.hidden=shift to see secret use
+item.simpleBuster.use.shown=pew pew
 
 # Componants
 

@@ -14,8 +14,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.zornco.reploidcraft.client.TabReploidCraft;
-import org.zornco.reploidcraft.common.handler.GuiHandler;
+import org.zornco.reploidcraft.client.handler.GuiHandler;
 import org.zornco.reploidcraft.init.*;
+import org.zornco.reploidcraft.network.ReploidNetwork;
 import org.zornco.reploidcraft.proxy.ClientProxy;
 import org.zornco.reploidcraft.proxy.CommonProxy;
 
@@ -49,6 +50,9 @@ public class ReploidCraft {
 		RCItems.preInit();
 		proxy.registerEntities();
 		proxy.registerRenderersPre();
+		proxy.registerArmors();
+		proxy.registerHandlers();
+		ReploidNetwork.init();
 	}
 
 	@EventHandler
