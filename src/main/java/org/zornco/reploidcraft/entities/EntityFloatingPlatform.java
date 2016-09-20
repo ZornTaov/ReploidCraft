@@ -77,7 +77,7 @@ public class EntityFloatingPlatform extends Entity {
 
 			if (stack != null )
 			{
-				if (stack.getItem() == Items.diamond)
+				if (stack.getItem() == Items.DIAMOND)
 				{
 					if(par1EntityPlayer.isSneaking())
 					{
@@ -209,9 +209,9 @@ public class EntityFloatingPlatform extends Entity {
 		else
 		{
 			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY, this.posZ, 1F, 0));
-			this.currentFlightTargets.add(new PlatformPathPoint(this.posX + 3, this.posY, this.posZ, 1F, 0));
-			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY, this.posZ + 5.0, 1F, 0));
-			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY + 1.0, this.posZ, 1F, 0));
+			this.currentFlightTargets.add(new PlatformPathPoint(this.posX + 1, this.posY, this.posZ, 1F, 0));
+			this.currentFlightTargets.add(new PlatformPathPoint(this.posX + 1.0, this.posY + 3.0, this.posZ, 1F, 0));
+			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY + 3.0, this.posZ, 1F, 0));
 		}
 		//TODO: move the platform smoothly
 		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(0.0, 1, 0.0));
@@ -221,8 +221,12 @@ public class EntityFloatingPlatform extends Entity {
             {
                 if (!(entity instanceof EntityFloatingPlatform) && !entity.noClip)
                 {
-                	//entity.setPosition(this.nextPosX-this.posX+entity.posX, this.nextPosY + this.height/* + entity.getEyeHeight()*/, this.nextPosZ-this.posZ+entity.posZ);
+                	//entity.setPosition(entity.posX, this.nextPosY + .9F + entity.getYOffset(), entity.posZ);
                 	entity.moveEntity((this.nextPosX-this.posX), (this.nextPosY-this.posY), (this.nextPosZ-this.posZ));
+                	
+                	entity.isAirBorne = false;
+                	entity.onGround = true;
+                	entity.fallDistance = 0;
                     //entity.moveEntity(this.prevPosX-this.posX, this.prevPosY-this.posY, this.prevPosZ-this.posZ);
                     //entity.moveEntity(this.posX-this.prevPosX, this.posY-this.prevPosY, this.posZ-this.prevPosZ);
                 }
@@ -389,7 +393,7 @@ public class EntityFloatingPlatform extends Entity {
 	}
 	@Override
 	protected void entityInit() {
-		this.getDataManager().register(PATH_TYPE, Boolean.valueOf(false));
+		this.getDataManager().register(PATH_TYPE, Boolean.valueOf(true));
 		this.getDataManager().register(PATH_DIR, Boolean.valueOf(false));
 		this.getDataManager().register(PATH_POS, Integer.valueOf(0));
 		this.getDataManager().register(PATH_TIME, Float.valueOf(0));

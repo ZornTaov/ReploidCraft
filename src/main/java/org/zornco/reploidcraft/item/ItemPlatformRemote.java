@@ -74,7 +74,7 @@ public class ItemPlatformRemote extends Item {
                             //float f = (float)MathHelper.floor_float((MathHelper.wrapAngleTo180_float(playerIn.rotationYaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
                             entityplatform.setLocationAndAngles(d0 + 0.5D, d1, d2 + 0.5D, 0.0F/*f*/, 0.0F);
                             worldIn.spawnEntityInWorld(entityplatform);
-                            worldIn.playSound((EntityPlayer)null, entityplatform.posX, entityplatform.posY, entityplatform.posZ, SoundEvents.entity_armorstand_place, SoundCategory.BLOCKS, 0.75F, 0.8F);
+                            worldIn.playSound((EntityPlayer)null, entityplatform.posX, entityplatform.posY, entityplatform.posZ, SoundEvents.ENTITY_ARMORSTAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
                         }
                         if (!playerIn.capabilities.isCreativeMode)
             			{
