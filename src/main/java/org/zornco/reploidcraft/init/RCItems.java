@@ -8,6 +8,7 @@ import org.zornco.reploidcraft.item.*;
 
 public class RCItems {
 
+	public static final Item rideArmorPlacer = new ItemRideArmorPlacer();
 	public static final Item platformPlacer = new ItemPlatformPlacer();
 	public static final Item platformRemote = new ItemPlatformRemote();
 	public static final Item basicBuster = new ItemBasicBuster();
@@ -19,6 +20,7 @@ public class RCItems {
 	public static final Item basicBlade = new ItemBasicBlade();
 	
 	public static void preInit() {
+		registerItem(rideArmorPlacer, "rideArmorPlacer");
 		registerItem(platformPlacer, "platformPlacer");
 		registerItem(platformRemote, "platformRemote");
 		registerItem(basicBuster, "basicBuster");

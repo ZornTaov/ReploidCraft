@@ -11,7 +11,9 @@ import org.zornco.reploidcraft.client.ClientTickHandler;
 import org.zornco.reploidcraft.client.handler.InputHandler;
 import org.zornco.reploidcraft.client.render.ModelReploidBlue;
 import org.zornco.reploidcraft.client.render.RenderFloatingPlatform;
+import org.zornco.reploidcraft.client.render.ridearmor.RenderRideArmor;
 import org.zornco.reploidcraft.entities.EntityFloatingPlatform;
+import org.zornco.reploidcraft.entities.EntityRideArmor;
 import org.zornco.reploidcraft.init.RCItems;
 import org.zornco.reploidcraft.init.RCSounds;
 import org.zornco.reploidcraft.item.EnumEnergyPelletStr;
@@ -68,6 +70,7 @@ public class ClientProxy extends CommonProxy {
 		 * Item/Block models
 		 */
 		this.registerItemModel(RCItems.platformPlacer);
+		this.registerItemModel(RCItems.rideArmorPlacer);
 		this.registerItemModel(RCItems.platformRemote);
 		this.registerItemModel(RCItems.basicBuster);
 		this.registerItemModel(RCItems.basicBlade);
@@ -87,6 +90,13 @@ public class ClientProxy extends CommonProxy {
 			@Override
 			public Render<? super EntityFloatingPlatform> createRenderFor(RenderManager manager) {
 				return new RenderFloatingPlatform(manager);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityRideArmor.class,
+				new IRenderFactory<EntityRideArmor>() {
+			@Override
+			public Render<? super EntityRideArmor> createRenderFor(RenderManager manager) {
+				return new RenderRideArmor(manager);
 			}
 		});
 	}
