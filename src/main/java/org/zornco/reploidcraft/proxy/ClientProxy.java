@@ -23,6 +23,7 @@ import org.zornco.reploidcraft.item.ItemBasicBuster;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -69,6 +70,7 @@ public class ClientProxy extends CommonProxy {
 		/*
 		 * Item/Block models
 		 */
+		//ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		this.registerItemModel(RCItems.platformPlacer);
 		this.registerItemModel(RCItems.rideArmorPlacer);
 		this.registerItemModel(RCItems.platformRemote);
@@ -152,13 +154,13 @@ public class ClientProxy extends CommonProxy {
 
 	private void registerItemModel(Item item, int meta)
 	{
-		ResourceLocation rl = Item.REGISTRY.getNameForObject(item);
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(rl, "inventory"));
+		//ResourceLocation rl = Item.REGISTRY.getNameForObject(item);
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 
 	private void registerItemModel(Item item, int meta, String customName)
 	{
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(RCItems.energyPellet.getRegistryName() + "\\" + customName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(RCItems.energyPellet.getRegistryName() + "/" + customName, "inventory"));
 
 	}
 }

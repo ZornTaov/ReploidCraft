@@ -1,5 +1,5 @@
 {
-	"parent": "reploidcraft:item/platformRemoteModel",
+	"parent": "reploidcraft:item/platformremotemodel",
 	"display": {
         "gui": {
             "rotation": [ 70, 35, 0 ],

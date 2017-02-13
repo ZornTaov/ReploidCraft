@@ -1,8 +1,8 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "__comment": "model generated using MrCrayfish's model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "particle": "reploidcraft:items/simpleBuster",
-        "0": "reploidcraft:items/simpleBuster"
+        "particle": "reploidcraft:items/simplebuster",
+        "0": "reploidcraft:items/simplebuster"
     },
     "display": {
         "gui": {

@@ -22,10 +22,10 @@ public class InputHandler {
 	public void onMouseInput(MouseEvent event)
 	{
 		if (FMLClientHandler.instance().getClient().inGameHasFocus) {
-            EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+            EntityPlayer player = FMLClientHandler.instance().getClient().player;
             if (player != null) {
 				if (player.isSneaking()) {
-	                ItemStack currentItem = FMLClientHandler.instance().getClient().thePlayer.getHeldItemMainhand();
+	                ItemStack currentItem = FMLClientHandler.instance().getClient().player.getHeldItemMainhand();
 
 	                if (currentItem != null && currentItem.getItem() instanceof IKeyBound) {
 		
@@ -40,9 +40,9 @@ public class InputHandler {
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if (reploidMenu.isPressed() && FMLClientHandler.instance().getClient().inGameHasFocus) {
-            EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+            EntityPlayer player = FMLClientHandler.instance().getClient().player;
             if (player != null) {
-                ItemStack currentItem = FMLClientHandler.instance().getClient().thePlayer.getHeldItemMainhand();
+                ItemStack currentItem = FMLClientHandler.instance().getClient().player.getHeldItemMainhand();
 
                 if (currentItem != null && currentItem.getItem() instanceof IKeyBound) {
 

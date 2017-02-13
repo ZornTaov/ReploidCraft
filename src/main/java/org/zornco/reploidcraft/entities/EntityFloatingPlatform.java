@@ -12,6 +12,7 @@ import com.google.common.base.Optional;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +38,7 @@ public class EntityFloatingPlatform extends Entity {
 	private static final DataParameter<Integer> PATH_POS = EntityDataManager.<Integer>createKey(EntityFloatingPlatform.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> PATH_TIME = EntityDataManager.<Float>createKey(EntityFloatingPlatform.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> PATH_TIME_TO_NEXT = EntityDataManager.<Float>createKey(EntityFloatingPlatform.class, DataSerializers.FLOAT);
-	private static final DataParameter<Optional<ItemStack>> PATH_DATA = EntityDataManager.<Optional<ItemStack>>createKey(EntityFloatingPlatform.class, DataSerializers.OPTIONAL_ITEM_STACK);
+	private static final DataParameter<ItemStack> PATH_DATA = EntityDataManager.<ItemStack>createKey(EntityFloatingPlatform.class, DataSerializers.OPTIONAL_ITEM_STACK);
     
 	/**
 	 * List of absolute int coords starting from where the platform was placed
@@ -70,8 +71,9 @@ public class EntityFloatingPlatform extends Entity {
 	 * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
 	 */
 	@Override
-	public boolean processInitialInteract(EntityPlayer par1EntityPlayer, ItemStack stack, EnumHand hand)
+	public boolean processInitialInteract(EntityPlayer playerIn, EnumHand handIn)
 	{
+        ItemStack stack = playerIn.getHeldItem(handIn);
 		//if (!this.worldObj.isRemote)
 		//{
 
@@ -79,7 +81,7 @@ public class EntityFloatingPlatform extends Entity {
 			{
 				if (stack.getItem() == Items.DIAMOND)
 				{
-					if(par1EntityPlayer.isSneaking())
+					if(playerIn.isSneaking())
 					{
 					//par1EntityPlayer.openGui(ReploidCraft.instance, GuiIds.UPGRADE_STATION, par1World, i, j, k);
 						setNextPointPosition();
@@ -121,7 +123,7 @@ public class EntityFloatingPlatform extends Entity {
 
 		
         
-		if(worldObj.isRemote)
+		if(world.isRemote)
 		{
 			++this.innerRotation;
 
@@ -130,7 +132,7 @@ public class EntityFloatingPlatform extends Entity {
 			for (int i = 0; i < this.currentFlightTargets.size(); i++) { 
 				PlatformPathPoint point1 = currentFlightTargets.get(i);
 				PlatformPathPoint point2 = currentFlightTargets.get(i != this.currentFlightTargets.size()-1? i+1 : 0);
-				this.worldObj.spawnParticle(EnumParticleTypes.CLOUD, point2.posX, point2.posY+0.2, point2.posZ, 0.0, 0.0, 0.0, new int[0]);
+				this.world.spawnParticle(EnumParticleTypes.CLOUD, point2.posX, point2.posY+0.2, point2.posZ, 0.0, 0.0, 0.0, new int[0]);
 				for (int j = 0; j < 20; j++) {
 					double targetPosX = point2.posX;
 					double targetPosY = point2.posY;
@@ -147,7 +149,7 @@ public class EntityFloatingPlatform extends Entity {
 					double nexPosY = lerp(point1.posY, targetPosY, 20, j);
 					double nexPosZ = lerp(point1.posZ, targetPosZ, 20, j);
 					
-					this.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, nexPosX, nexPosY+0.2, nexPosZ, 0.0, 0.0, 0.0, new int[0]);
+					this.world.spawnParticle(EnumParticleTypes.REDSTONE, nexPosX, nexPosY+0.2, nexPosZ, 0.0, 0.0, 0.0, new int[0]);
 				}
 				
 			}
@@ -191,7 +193,7 @@ public class EntityFloatingPlatform extends Entity {
 			nextPosY = lerp(this.prevFlightTarget.posY, targetPosY, getTimeToNext(), getTime());
 			nextPosZ = lerp(this.prevFlightTarget.posZ, targetPosZ, getTimeToNext(), getTime());
 			
-			this.moveEntity(nextPosX-posX, nextPosY-posY, nextPosZ-posZ);
+			this.move(MoverType.SELF, nextPosX-posX, nextPosY-posY, nextPosZ-posZ);
 			//ReploidCraft.logger.warn("" + nextPosX + " " + nextPosY + " " + nextPosZ);
 
 			if (getTime() >= getTimeToNext())
@@ -214,7 +216,7 @@ public class EntityFloatingPlatform extends Entity {
 			this.currentFlightTargets.add(new PlatformPathPoint(this.posX, this.posY + 3.0, this.posZ, 1F, 0));
 		}
 		//TODO: move the platform smoothly
-		List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(0.0, 1, 0.0));
+		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(0.0, 1, 0.0));
 		if (!list.isEmpty())
         {
             for (Entity entity : list)
@@ -222,8 +224,8 @@ public class EntityFloatingPlatform extends Entity {
                 if (!(entity instanceof EntityFloatingPlatform) && !entity.noClip)
                 {
                 	//entity.setPosition(entity.posX, this.nextPosY + .9F + entity.getYOffset(), entity.posZ);
-                	entity.moveEntity((this.nextPosX-this.posX), (this.nextPosY-this.posY), (this.nextPosZ-this.posZ));
-                	
+                	entity.move(MoverType.SELF, (this.nextPosX-this.posX), (this.nextPosY-this.posY), (this.nextPosZ-this.posZ));
+
                 	entity.isAirBorne = false;
                 	entity.onGround = true;
                 	entity.fallDistance = 0;
@@ -241,7 +243,7 @@ public class EntityFloatingPlatform extends Entity {
         }
         else
         {
-            if (!this.isDead && !this.worldObj.isRemote)
+            if (!this.isDead && !this.world.isRemote)
             {
                 this.setDead();
                 this.setBeenAttacked();
@@ -398,7 +400,7 @@ public class EntityFloatingPlatform extends Entity {
 		this.getDataManager().register(PATH_POS, Integer.valueOf(0));
 		this.getDataManager().register(PATH_TIME, Float.valueOf(0));
 		this.getDataManager().register(PATH_TIME_TO_NEXT, Float.valueOf(0));
-        this.getDataManager().register(PATH_DATA, Optional.of(new ItemStack(RCItems.platformRemote,1,0,new NBTTagCompound())));
+        this.getDataManager().register(PATH_DATA, new ItemStack(RCItems.platformRemote,1,0,new NBTTagCompound()));
 	}
 	
 	/**
@@ -459,7 +461,7 @@ public class EntityFloatingPlatform extends Entity {
 	}
 	protected ItemStack getPathData()
 	{
-		ItemStack stack = this.getDataManager().get(PATH_DATA).orNull();
+		ItemStack stack = this.getDataManager().get(PATH_DATA);
 		if (stack == null)
         {
 			//shouldn't happen if I do this right, but this should make a new path at it's current position
@@ -471,7 +473,7 @@ public class EntityFloatingPlatform extends Entity {
 	}
 	protected void setPathData(ItemStack stack)
     {
-        this.getDataManager().set(PATH_DATA, Optional.fromNullable(stack));
+        this.getDataManager().set(PATH_DATA, stack);
         this.getDataManager().setDirty(PATH_DATA);
     }
 	
@@ -531,11 +533,11 @@ public class EntityFloatingPlatform extends Entity {
             {
                 double d0 = entityIn.posX - this.posX;
                 double d1 = entityIn.posZ - this.posZ;
-                double d2 = MathHelper.abs_max(d0, d1);
+                double d2 = MathHelper.absMax(d0, d1);
 
                 if (d2 >= 0.01D)
                 {
-                    d2 = (double)MathHelper.sqrt_double(d2);
+                    d2 = (double)MathHelper.sqrt(d2);
                     d0 = d0 / d2;
                     d1 = d1 / d2;
                     double d3 = 1.0D / d2;

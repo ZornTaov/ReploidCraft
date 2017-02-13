@@ -1,8 +1,8 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "__comment": "model generated using MrCrayfish's model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "0": "reploidcraft:items/simpleShield_Energy",
-        "1": "reploidcraft:items/simpleShield_Band"
+        "0": "reploidcraft:items/simpleshield_energy",
+        "1": "reploidcraft:items/simpleshield_band"
     },
     "elements": [
         {

@@ -16,6 +16,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,8 +32,9 @@ public class ItemEnergyPelletBase extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+    {
+    ItemStack itemStackIn = playerIn.getHeldItem(handIn);
 		int toHeal = EnumEnergyPelletStr.byMetadata(itemStackIn.getMetadata()).getStrength();
 		if (playerIn.getHealth() == playerIn.getMaxHealth()) {
 
@@ -65,12 +67,8 @@ public class ItemEnergyPelletBase extends Item {
 		}
 		if (!playerIn.capabilities.isCreativeMode)
 		{
-			--itemStackIn.stackSize;
-
-			if (itemStackIn.stackSize == 0)
-			{
-				playerIn.inventory.deleteStack(itemStackIn);
-			}
+			itemStackIn.shrink(1);
+			
 			playerIn.addStat(StatList.getObjectUseStats(this));
 			return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 		}
@@ -96,7 +94,7 @@ public class ItemEnergyPelletBase extends Item {
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
 	{
 		for (int i = 0; i < 4; ++i)
 		{

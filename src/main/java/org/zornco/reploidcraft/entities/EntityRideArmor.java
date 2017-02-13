@@ -34,7 +34,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.AnimalChest;
+import net.minecraft.inventory.ContainerHorseChest;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
@@ -74,7 +75,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	public int tailCounter;
 	public int sprintCounter;
 	protected boolean rideArmorJumping;
-	private AnimalChest rideArmorChest;
+	private ContainerHorseChest rideArmorChest;
 	private boolean hasReproduced;
 	/** "The higher this value, the more likely the rideArmor is to be tamed next time a player rides it." */
 	protected int temper;
@@ -337,9 +338,9 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 
 	public boolean prepareChunkForSpawn()
 	{
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.posZ);
-		this.worldObj.getBiomeGenForCoords(new BlockPos(i, 0, j));
+		int i = MathHelper.floor(this.posX);
+		int j = MathHelper.floor(this.posZ);
+		this.world.getBiomeForCoordsBody(new BlockPos(i, 0, j));
 		return true;
 	}
 
@@ -370,27 +371,27 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			ReploidCraft.logger.info(distance);
 		}
 
-		int i = MathHelper.ceiling_float_int((distance * 0.5F - 3.0F) * damageMultiplier);
+		int i = MathHelper.ceil((distance * 0.5F - 3.0F) * damageMultiplier);
 
 		if (i > 0)
 		{
-			this.attackEntityFrom(DamageSource.fall, (float)i);
+			this.attackEntityFrom(DamageSource.FALL, (float)i);
 
 			if (this.isBeingRidden())
 			{
 				for (Entity entity : this.getRecursivePassengers())
 				{
-					entity.attackEntityFrom(DamageSource.fall, (float)i);
+					entity.attackEntityFrom(DamageSource.FALL, (float)i);
 				}
 			}
 
-			IBlockState iblockstate = this.worldObj.getBlockState(new BlockPos(this.posX, this.posY - 0.2D - (double)this.prevRotationYaw, this.posZ));
+			IBlockState iblockstate = this.world.getBlockState(new BlockPos(this.posX, this.posY - 0.2D - (double)this.prevRotationYaw, this.posZ));
 			Block block = iblockstate.getBlock();
 
 			if (iblockstate.getMaterial() != Material.AIR && !this.isSilent())
 			{
 				SoundType soundtype = block.getSoundType();
-				this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, soundtype.getStepSound(), this.getSoundCategory(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
+				this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, soundtype.getStepSound(), this.getSoundCategory(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
 			}
 		}
 	}
@@ -555,7 +556,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	{
 		SoundType soundtype = blockIn.getSoundType();
 
-		if (this.worldObj.getBlockState(pos.up()).getBlock() == Blocks.SNOW_LAYER)
+		if (this.world.getBlockState(pos.up()).getBlock() == Blocks.SNOW_LAYER)
 		{
 			soundtype = Blocks.SNOW_LAYER.getSoundType();
 		}
@@ -712,14 +713,14 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 
 	public void openGUI(EntityPlayer playerEntity)
 	{
-		if (!this.worldObj.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity)))// && this.isTame())
+		if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity)))// && this.isTame())
 		{
 			this.rideArmorChest.setCustomName(this.getName());
 			//playerEntity.openGuiRideArmorInventory(this, this.rideArmorChest);
 		}
 	}
 
-	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack)
+	public boolean processInteract(EntityPlayer player, EnumHand hand)
 	{
 		/*if (stack != null && stack.getItem() == Items.SPAWN_EGG)
 		{
@@ -882,6 +883,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 				}
 			}*/
 
+        ItemStack stack = player.getHeldItem(hand);
 		if (this.isRidable() && !this.isBeingRidden())
 		{
 			if (stack != null && stack.interactWithEntity(player, this, hand))
@@ -896,7 +898,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		}
 		else
 		{
-			return super.processInteract(player, hand, stack);
+			return super.processInteract(player, hand);
 		}
 		//}
 	}
@@ -906,7 +908,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		player.rotationYaw = this.rotationYaw;
 		player.rotationPitch = this.rotationPitch;
 
-		if (!this.worldObj.isRemote)
+		if (!this.world.isRemote)
 		{
 			player.startRiding(this);
 		}
@@ -941,7 +943,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	{
 		super.onDeath(cause);
 
-		if (!this.worldObj.isRemote)
+		if (!this.world.isRemote)
 		{
 			this.dropChestItems();
 		}
@@ -960,7 +962,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 
 		super.onLivingUpdate();
 
-		if (!this.worldObj.isRemote)
+		if (!this.world.isRemote)
 		{
 			if (this.rand.nextInt(900) == 0 && this.deathTime == 0)
 			{
@@ -986,7 +988,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	{
 		super.onUpdate();
 
-		if (this.worldObj.isRemote && this.dataManager.isDirty())
+		if (this.world.isRemote && this.dataManager.isDirty())
 		{
 			this.dataManager.setClean();
 			this.resetTexturePrefix();
@@ -1091,9 +1093,9 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		//this.dropChests();
 	}
 
-	private void dropItemsInChest(Entity entityIn, AnimalChest animalChestIn)
+	private void dropItemsInChest(Entity entityIn, ContainerHorseChest animalChestIn)
 	{
-		if (animalChestIn != null && !this.worldObj.isRemote)
+		if (animalChestIn != null && !this.world.isRemote)
 		{
 			for (int i = 0; i < animalChestIn.getSizeInventory(); ++i)
 			{
@@ -1189,7 +1191,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			this.prevLimbSwingAmount = this.limbSwingAmount;
 			double d1 = this.posX - this.prevPosX;
 			double d0 = this.posZ - this.prevPosZ;
-			float f2 = MathHelper.sqrt_double(d1 * d1 + d0 * d0) * 4.0F;
+			float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
 
 			if (f2 > 1.0F)
 			{
@@ -1488,7 +1490,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			double d0 = this.rand.nextGaussian() * 0.02D;
 			double d1 = this.rand.nextGaussian() * 0.02D;
 			double d2 = this.rand.nextGaussian() * 0.02D;
-			this.worldObj.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
+			this.world.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
 		}
 	}
 
@@ -1699,5 +1701,11 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	@Override
 	public EntityAgeable createChild(EntityAgeable ageable) {
 		return null;
+	}
+
+	@Override
+	public void onInventoryChanged(IInventory invBasic) {
+		// TODO Auto-generated method stub
+		
 	}
 }

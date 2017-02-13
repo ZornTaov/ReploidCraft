@@ -30,7 +30,7 @@ public class MessageWheelUsed implements IMessage, IMessageHandler<MessageWheelU
     public MessageWheelUsed(EntityPlayer player, int dir) {
 
 
-		this.dimension = player.worldObj.provider.getDimension();
+		this.dimension = player.world.provider.getDimension();
 		this.entityID = player.getEntityId();
 		this.dir = dir;
     }
@@ -56,7 +56,7 @@ public class MessageWheelUsed implements IMessage, IMessageHandler<MessageWheelU
     {
 		
 
-		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
+		IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world;
 		mainThread.addScheduledTask(new Runnable() {
 			@Override
 			public void run() {

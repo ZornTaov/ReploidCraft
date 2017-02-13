@@ -1,7 +1,7 @@
 {
     "textures": {
-        "0": "reploidcraft:items/FloatingPlatformModel",
-        "all": "reploidcraft:items/FloatingPlatformModel"
+        "0": "reploidcraft:items/floatingplatformmodel",
+        "all": "reploidcraft:items/floatingplatformmodel"
     },
     "elements": [
         {

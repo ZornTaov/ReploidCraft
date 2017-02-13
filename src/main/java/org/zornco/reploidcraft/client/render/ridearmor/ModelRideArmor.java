@@ -559,21 +559,21 @@ public class ModelRideArmor extends ModelBase {
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) { 
         //flip to change "on" state from 0, 54, 90 to 180, -180+54, 90
         //setRotateAngle(panel, 0, 0, (float)Math.toRadians((Math.toDegrees(limbSwing)%180>90?-180:0)));
-        float f7 = MathHelper.cos(limbSwing * 0.6662F / 3F) * 1.4F * limbSwingAmount;
-        f7 /= 3F;
+        float f7 = MathHelper.cos(limbSwing * 0.6662F / .57F) * 1.4F * limbSwingAmount / 6F;
+
 		setRotateAngle(rootTorso, 0F, f7/2, 0F);
-		setRotateAngle(rootArmRight, 0F, f7/2, 0);
-		setRotateAngle(rootArmLeft, 0, f7/2, 0);
+		setRotateAngle(rootArmRight, 0F, f7, 0);
+		setRotateAngle(rootArmLeft, 0, f7, 0);
 		setRotateAngle(rootBack, 0, f7/2, 0);
 		setRotateAngle(rootLegs, 0, -f7/2, 0);
-		setRotateAngle(armLeft1, -f7/2, 0F, (float)Math.toRadians(-5));
-		setRotateAngle(armRight1, f7/2, 0F, (float)Math.toRadians(5));
-		setRotateAngle(lowerArmLeft, 0, 0, f7/2);
-		setRotateAngle(lowerArmRight, 0, 0, -f7/2);
-		setRotateAngle(upperLegLeft, f7/2, 0F, 0);
-		setRotateAngle(upperLegRight, -f7/2, 0F, 0);
-		setRotateAngle(lowerLegLeft, f7/2, 0F, 0);
-		setRotateAngle(lowerLegRight, -f7/2, 0F, 0);
+		setRotateAngle(armLeft1, -f7, 0F, (float)Math.toRadians(-5));
+		setRotateAngle(armRight1, f7, 0F, (float)Math.toRadians(5));
+		setRotateAngle(lowerArmLeft, 0, 0, f7);
+		setRotateAngle(lowerArmRight, 0, 0, -f7);
+		setRotateAngle(upperLegLeft, f7, 0F, 0);
+		setRotateAngle(upperLegRight, -f7, 0F, 0);
+		setRotateAngle(lowerLegLeft, f7, 0F, 0);
+		setRotateAngle(lowerLegRight, -f7, 0F, 0);
         this.seatback.render(scale);
         this.rootArmRight.render(scale);
         this.rootBack.render(scale);

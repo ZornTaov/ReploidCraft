@@ -1,7 +1,7 @@
 {
     "textures": {
-        "0": "reploidcraft:items/platformRemoteModel",
-        "all": "reploidcraft:items/platformRemoteModel"
+        "0": "reploidcraft:items/platformremotemodel",
+        "all": "reploidcraft:items/platformremotemodel"
     },
     "elements": [
         {

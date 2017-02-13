@@ -1,5 +1,5 @@
 {
-    "parent": "reploidcraft:item/basicShield_base",
+    "parent": "reploidcraft:item/basicshield_base",
     "display": {
         "gui": {
         "thirdperson_righthand": {
@@ -43,7 +43,7 @@
             "predicate": {
                 "blocking": 1
             },
-            "model": "reploidcraft:item/basicShield_blocking"
+            "model": "reploidcraft:item/basicshield_blocking"
         }
     ]
 }

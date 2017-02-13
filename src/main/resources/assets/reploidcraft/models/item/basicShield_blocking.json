@@ -1,5 +1,5 @@
 {
-    "parent": "reploidcraft:item/basicShield_base",
+    "parent": "reploidcraft:item/basicshield_base",
     "display": {
         "thirdperson_righthand": {
             "rotation": [ 45, 45, 0 ],

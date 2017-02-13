@@ -1,5 +1,5 @@
 {
-	"parent": "reploidcraft:item/platformPlacerModel",
+	"parent": "reploidcraft:item/platformplacermodel",
 	"display": {
         "gui": {
             "rotation": [ 30, 45, 0 ],
