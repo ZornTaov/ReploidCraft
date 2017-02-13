@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.zornco.reploidcraft.ReploidCraft;
+import org.zornco.reploidcraft.block.BlockMechBay;
+import org.zornco.reploidcraft.block.TileEntityMechBay;
 import org.zornco.reploidcraft.client.ClientTickHandler;
 import org.zornco.reploidcraft.client.handler.InputHandler;
 import org.zornco.reploidcraft.client.render.ModelReploidBlue;
 import org.zornco.reploidcraft.client.render.RenderFloatingPlatform;
+import org.zornco.reploidcraft.client.render.TileEntityMechBayRenderer;
 import org.zornco.reploidcraft.client.render.ridearmor.RenderRideArmor;
 import org.zornco.reploidcraft.entities.EntityFloatingPlatform;
 import org.zornco.reploidcraft.entities.EntityRideArmor;
+import org.zornco.reploidcraft.init.RCBlocks;
 import org.zornco.reploidcraft.init.RCItems;
 import org.zornco.reploidcraft.init.RCSounds;
 import org.zornco.reploidcraft.item.EnumEnergyPelletStr;
@@ -35,6 +39,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.ResourceLocation;
@@ -70,7 +75,12 @@ public class ClientProxy extends CommonProxy {
 		/*
 		 * Item/Block models
 		 */
-		//ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+
+		ItemBlock itemBlock = new ItemBlock(RCBlocks.mechBay);
+		for (int i = 0; i < EnumEnergyPelletStr.values().length; i++) {
+			this.registerItemModel(itemBlock, i, BlockMechBay.EnumType.byMetadata(i).getName());
+		}
+		
 		this.registerItemModel(RCItems.platformPlacer);
 		this.registerItemModel(RCItems.rideArmorPlacer);
 		this.registerItemModel(RCItems.platformRemote);
@@ -101,6 +111,7 @@ public class ClientProxy extends CommonProxy {
 				return new RenderRideArmor(manager);
 			}
 		});
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechBay.class, new TileEntityMechBayRenderer());
 	}
 	public void registerRenderersInit() {
 		MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
@@ -160,7 +171,7 @@ public class ClientProxy extends CommonProxy {
 
 	private void registerItemModel(Item item, int meta, String customName)
 	{
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(RCItems.energyPellet.getRegistryName() + "/" + customName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName() + "/" + customName, "inventory"));
 
 	}
 }

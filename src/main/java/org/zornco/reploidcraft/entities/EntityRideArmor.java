@@ -105,6 +105,9 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		//this.initRideArmorChest();
 	}
 
+	public EntityRideArmor(World worldIn, BlockPos p) {
+		this(worldIn, p.getX(), p.getY(), p.getZ());
+	}
 	public EntityRideArmor(World worldIn, double x, double y, double z) {
 		this(worldIn);
 		this.setPosition(x, y, z);

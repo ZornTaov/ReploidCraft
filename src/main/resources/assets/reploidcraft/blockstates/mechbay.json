@@ -1,0 +1,30 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "reploidcraft:mechbay",
+		"transform": "forge:default-block",
+		"uvlock": true
+	},
+	"variants": {
+		"normal": [{
+			
+		}],
+		"variant": {
+			"basic": {
+				"textures": {
+					"all": "reploidcraft:blocks/mechbay"
+				}
+			},
+			"controller": {
+				"textures": {
+					"all": "reploidcraft:blocks/mechbaycontroller"
+				}
+			},
+			"power": {
+				"textures": {
+					"all": "reploidcraft:blocks/mechbaypower"
+				}
+			}
+		}
+	}
+}

@@ -57,6 +57,7 @@ public class ReploidCraft {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		proxy.init();
 		proxy.registerRenderersInit();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 	}
