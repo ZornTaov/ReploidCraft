@@ -3,6 +3,7 @@ package zornco.reploidcraft.client.renderers;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -87,27 +88,32 @@ public class RenderRideArmor extends Render {
 		GL11.glTranslatef(0.0F, -f9/5F-(f10*0.6325F)-0.01F + (entity.hasPart(PartSlot.LEGS)?0.0F:1F), 0F);
 		//ModelRideArmorBase temp;
 		this.bindTexture(ReploidCraft.proxy.partRegistry.getPartTexture(((EntityRideArmorPart) entity.getParts()[PartSlot.BODY.ordinal()]).getType()));
+		modelChest.onGround = this.renderSwingProgress(entity, par9);
 		renderPart((ModelRideArmorBase) modelChest, entity, PartSlot.BODY, f6, f7, f8, 0.0F);
 		if(entity.rideArmorParts != null)
 		{
 			if (entity.hasPart(PartSlot.HEAD))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.HEAD));
+				modelHead.onGround = this.renderSwingProgress(entity, par9);
 				renderPart((ModelRideArmorBase) modelHead, entity, PartSlot.HEAD, f6, f7, f8, 0.0F);
 			}
 			if (entity.hasPart(PartSlot.ARMLEFT))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.ARMLEFT));
+				modelArmLeft.onGround = this.renderSwingProgress(entity, par9);
 				renderPart((ModelRideArmorBase) modelArmLeft, entity, PartSlot.ARMLEFT, f6, f7, f8, entity.hasPart(PartSlot.LEGS)?1.0F:5F);
 			}
 			if (entity.hasPart(PartSlot.ARMRIGHT))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.ARMRIGHT));
+				modelArmRight.onGround = this.renderSwingProgress(entity, par9);
 				renderPart((ModelRideArmorBase) modelArmRight, entity, PartSlot.ARMRIGHT, f6, f7, f8, entity.hasPart(PartSlot.LEGS)?1.0F:5F);
 			}
 			if (entity.hasPart(PartSlot.BACK))
 			{
 				this.bindTexture(getPartTexture(entity, PartSlot.BACK));
+				modelBack.onGround = this.renderSwingProgress(entity, par9);
 				renderPart((ModelRideArmorBase) modelBack, entity, PartSlot.BACK, f6, f7, f8, 0.0F);
 				
 			}
@@ -129,6 +135,10 @@ public class RenderRideArmor extends Render {
 
 		return defaultTexture;
 	}
+	protected float renderSwingProgress(EntityLivingBase p_77040_1_, float p_77040_2_)
+    {
+        return p_77040_1_.getSwingProgress(p_77040_2_);
+    }
 	private ResourceLocation getPartTexture(Entity entity, PartSlot slot)
 	{
 		PartBase part = ReploidCraft.proxy.partRegistry.getPart(((EntityRideArmorPart) entity.getParts()[slot.ordinal()]).getType(), slot);

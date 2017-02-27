@@ -681,6 +681,7 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 	{
 		super.onLivingUpdate();
 		this.updatePartsString();
+        this.updateArmSwingProgress();
 
 		if (!this.worldObj.isRemote)
 		{
@@ -1339,6 +1340,8 @@ public class EntityRideArmor extends EntityCreature implements IInvBasic, IEntit
 
 	public boolean doMechAttackLeft()
 	{
+		swingItem();
+		ReploidCraft.logger.info("SWING");
 		if (ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT) instanceof IPartArm)
 		{
 			return ((IPartArm) ReploidCraft.proxy.partRegistry.getPart(this.partSwitch(ARMLEFT.ordinal()).getType(), ARMLEFT)).doAttack(this);

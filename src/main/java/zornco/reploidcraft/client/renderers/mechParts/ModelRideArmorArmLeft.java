@@ -1,7 +1,9 @@
 package zornco.reploidcraft.client.renderers.mechParts;
 
+import zornco.reploidcraft.ReploidCraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
 
 public class ModelRideArmorArmLeft extends ModelRideArmorBase {
 	
@@ -42,8 +44,33 @@ public class ModelRideArmorArmLeft extends ModelRideArmorBase {
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		float f7 = (float)(Math.sin((double)(f1 * (float)Math.PI * 0.2F )))/4f * f;
-		setRotation(upperArmLeft, -f7, f7/2, -0.2F*f3);
-		setRotation(lowerArmLeft, f7, 0F, 0F);
+		float limbSwing = (float)(Math.sin((double)(f1 * (float)Math.PI * 0.2F )))/4f * f;
+		setRotation(upperArmLeft, -limbSwing, limbSwing/2, -0.2F*f3);
+		setRotation(lowerArmLeft, limbSwing, 0F, 0F);
+        float f6;
+        float f7;
+		if (this.onGround > -9990.0F)
+        {
+            f6 = this.onGround;
+            //ReploidCraft.logger.info(onGround);
+            /*this.bipedBody.rotateAngleY = MathHelper.sin(MathHelper.sqrt_float(f6) * (float)Math.PI * 2.0F) * 0.2F;
+            this.bipedRightArm.rotationPointZ = MathHelper.sin(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedRightArm.rotationPointX = -MathHelper.cos(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedLeftArm.rotationPointZ = -MathHelper.sin(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedLeftArm.rotationPointX = MathHelper.cos(this.bipedBody.rotateAngleY) * 5.0F;
+            this.bipedRightArm.rotateAngleY += this.bipedBody.rotateAngleY;
+            this.bipedLeftArm.rotateAngleY += this.bipedBody.rotateAngleY;
+            this.bipedLeftArm.rotateAngleX += this.bipedBody.rotateAngleY;*/
+            f6 = 1.0F - this.onGround;
+            f6 *= f6;
+            f6 *= f6;
+            f6 = 1.0F - f6;
+            f7 = MathHelper.sin(f6 * (float)Math.PI);
+            float f8 = MathHelper.sin(this.onGround * (float)Math.PI);// * -(this.bipedHead.rotateAngleX - 0.7F) * 0.75F;
+            this.upperArmLeft.rotateAngleX = (float)((double)this.upperArmLeft.rotateAngleX - ((double)f7 * 0.6D + (double)f8));
+            this.lowerArmLeft.rotateAngleX = -this.upperArmLeft.rotateAngleX;
+            //this.bipedRightArm.rotateAngleY += this.bipedBody.rotateAngleY * 2.0F;
+            this.upperArmLeft.rotateAngleZ = MathHelper.sin(this.onGround * (float)Math.PI) * -0.6F -0.2F*f3;
+        }
 	}
 }
