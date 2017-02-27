@@ -141,6 +141,36 @@ public class RecipeHandler {
 			} 
 		);
 			
+		addOreRecipe(new ItemStack(ReploidCraft.component, 1, Components.barrel.getIndex()), 
+			new Object[] { 
+				"bbb", 
+				"   ", 
+				"bbb", 
+				Character.valueOf('b'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 )
+			} 
+		);
+			
+		addOreRecipe(new ItemStack(ReploidCraft.component, 1, Components.magazine.getIndex()), 
+			new Object[] { 
+				"bab", 
+				"bab", 
+				"bbb", 
+				Character.valueOf('b'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ), 
+				Character.valueOf('a'), Items.arrow
+			} 
+		);
+			
+		addOreRecipe(new ItemStack(ReploidCraft.component, 1, Components.missile.getIndex()), 
+			new Object[] { 
+				" pp", 
+				"btt", 
+				" pp", 
+				Character.valueOf('p'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ), 
+				Character.valueOf('b'), Blocks.stone_button,
+				Character.valueOf('t'), Blocks.tnt
+			} 
+		);
+			
 		addOreRecipe(new ItemStack(ReploidCraft.component, 1, Components.fist.getIndex()),
 			new Object[] { 
 				"ii ", 
@@ -172,6 +202,18 @@ public class RecipeHandler {
 				Character.valueOf('d'), "gemDiamond", 
 				Character.valueOf('c'), new ItemStack( ReploidCraft.component, 1, Components.coupling.getIndex() ),
 				Character.valueOf('s'), ReploidCraft.spikes,
+				Character.valueOf('p'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ), 
+				Character.valueOf('m'), new ItemStack( ReploidCraft.component, 1, Components.motor.getIndex() )
+			} 
+		);
+		
+		addOreRecipe(new ItemStack(ReploidCraft.component, 1, Components.machineGun.getIndex()),
+			new Object[] { 
+				"bpc", 
+				" zm", 
+				Character.valueOf('c'), new ItemStack( ReploidCraft.component, 1, Components.coupling.getIndex() ),
+				Character.valueOf('z'), new ItemStack( ReploidCraft.component, 1, Components.magazine.getIndex() ),
+				Character.valueOf('b'), new ItemStack( ReploidCraft.component, 1, Components.barrel.getIndex() ),
 				Character.valueOf('p'), new ItemStack( ReploidCraft.reploidPlate, 1, 16 ), 
 				Character.valueOf('m'), new ItemStack( ReploidCraft.component, 1, Components.motor.getIndex() )
 			} 
