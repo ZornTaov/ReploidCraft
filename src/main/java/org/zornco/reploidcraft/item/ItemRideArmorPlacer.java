@@ -1,17 +1,10 @@
 package org.zornco.reploidcraft.item;
 import java.util.List;
 
-import org.zornco.reploidcraft.ReploidCraft;
-import org.zornco.reploidcraft.entities.EntityFloatingPlatform;
-import org.zornco.reploidcraft.entities.EntityRideArmor;
-import org.zornco.reploidcraft.util.PlatformPathPoint;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -21,6 +14,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import org.zornco.reploidcraft.ReploidCraft;
+import org.zornco.reploidcraft.entities.EntityRideArmor;
+import org.zornco.reploidcraft.entities.armorparts.PartSlot;
 
 public class ItemRideArmorPlacer extends Item {
 	public ItemRideArmorPlacer()
@@ -72,16 +69,23 @@ public class ItemRideArmorPlacer extends Item {
                     }
                     else
                     {
+
+                        EntityRideArmor rideArmor = new EntityRideArmor(worldIn, d0 + 0.5D, d1, d2 + 0.5D);
                         if (!worldIn.isRemote)
                         {
                             worldIn.setBlockToAir(blockpos);
                             worldIn.setBlockToAir(blockpos1);
-                            EntityRideArmor entityrideArmor = new EntityRideArmor(worldIn, d0 + 0.5D, d1, d2 + 0.5D);
-                            //float f = (float)MathHelper.floor_float((MathHelper.wrapAngleTo180_float(playerIn.rotationYaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
-                            entityrideArmor.setLocationAndAngles(d0 + 0.5D, d1, d2 + 0.5D, 0.0F/*f*/, 0.0F);
-                            worldIn.spawnEntity(entityrideArmor);
-                            worldIn.playSound((EntityPlayer)null, entityrideArmor.posX, entityrideArmor.posY, entityrideArmor.posZ, SoundEvents.ENTITY_ARMORSTAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
+                            float f = (float)(((MathHelper.floor((player.rotationYaw * 4.0F / 360.0F) + 0.5F) & 3) - 2F) * 90F);
+                            rideArmor.setLocationAndAngles(d0 + 0.5D, d1, d2 + 0.5D, f, 0.0F);
+                            worldIn.spawnEntity(rideArmor);
+                            worldIn.playSound((EntityPlayer)null, rideArmor.posX, rideArmor.posY, rideArmor.posZ, SoundEvents.ENTITY_ARMORSTAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
                         }
+                        
+                        rideArmor.setPart(PartSlot.BODY, "RED");
+            			rideArmor.setPart(PartSlot.BACK, "RED");
+            			rideArmor.setPart(PartSlot.LEGS, "RED");
+            			rideArmor.setPart(PartSlot.ARMLEFT, "RED");
+            			rideArmor.setPart(PartSlot.ARMRIGHT, "RED");
                         if (!player.capabilities.isCreativeMode)
             			{
                         	//--stack.stackSize;

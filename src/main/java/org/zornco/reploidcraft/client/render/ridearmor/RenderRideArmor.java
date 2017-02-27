@@ -17,6 +17,13 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderRideArmor extends RenderLiving<EntityRideArmor> {
 	private static final ResourceLocation platform = new ResourceLocation(ReploidCraft.MODID + ":textures/entity/ridearmor/chest.png");//FloatingPlatform.png");
+
+	private ModelBase modelHead;
+	private ModelBase modelChest;
+	private ModelBase modelBack;
+	private ModelBase modelLegs;
+	private ModelBase modelArmLeft;
+	private ModelBase modelArmRight;
 	
 	public RenderRideArmor(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelRideArmor(), 1F);
@@ -31,6 +38,7 @@ public class RenderRideArmor extends RenderLiving<EntityRideArmor> {
 		GlStateManager.translate(0.0F, -0.5F, 0.0F);
         super.preRenderCallback(entitylivingbaseIn, partialTickTime);
     }
+    
 	/*@Override
 	public void doRender(EntityRideArmor entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		float var10 = ((float) entity.moveForward + partialTicks) / 5.0F;

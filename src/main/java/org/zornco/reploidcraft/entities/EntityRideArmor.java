@@ -1,10 +1,25 @@
 package org.zornco.reploidcraft.entities;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import org.zornco.reploidcraft.ReploidCraft;
+import org.zornco.reploidcraft.entities.armorparts.IPartArm;
+import org.zornco.reploidcraft.entities.armorparts.IPartBack;
+import org.zornco.reploidcraft.entities.armorparts.IPartBody;
+import org.zornco.reploidcraft.entities.armorparts.IPartChest;
+import org.zornco.reploidcraft.entities.armorparts.IPartHead;
+import org.zornco.reploidcraft.entities.armorparts.IPartLegs;
+import org.zornco.reploidcraft.entities.armorparts.PartSlot;
+
+import static org.zornco.reploidcraft.entities.armorparts.PartSlot.ARMLEFT;
+import static org.zornco.reploidcraft.entities.armorparts.PartSlot.ARMRIGHT;
+import static org.zornco.reploidcraft.entities.armorparts.PartSlot.BACK;
+import static org.zornco.reploidcraft.entities.armorparts.PartSlot.BODY;
+import static org.zornco.reploidcraft.entities.armorparts.PartSlot.HEAD;
+import static org.zornco.reploidcraft.entities.armorparts.PartSlot.LEGS;
 
 import com.google.common.base.Optional;
 
@@ -18,8 +33,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IJumpingMount;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -28,7 +45,11 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -41,6 +62,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
@@ -53,56 +75,82 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityRideArmor extends EntityAnimal implements IInventoryChangedListener, IJumpingMount
+public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, IInventoryChangedListener, IJumpingMount
 {
 	private static final IAttribute JUMP_STRENGTH = (new RangedAttribute((IAttribute)null, "rideArmor.jumpStrength", 0.7D, 0.0D, 2.0D)).setDescription("Jump Strength").setShouldWatch(true);
-	private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
+	//private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
 	private static final DataParameter<Byte> STATUS = EntityDataManager.<Byte>createKey(EntityRideArmor.class, DataSerializers.BYTE);
-	private static final DataParameter<Integer> RIDEARMOR_TYPE = EntityDataManager.<Integer>createKey(EntityRideArmor.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> RIDEARMOR_VARIANT = EntityDataManager.<Integer>createKey(EntityRideArmor.class, DataSerializers.VARINT);
+	//private static final DataParameter<Integer> RIDEARMOR_TYPE = EntityDataManager.<Integer>createKey(EntityRideArmor.class, DataSerializers.VARINT);
+	//private static final DataParameter<Integer> RIDEARMOR_VARIANT = EntityDataManager.<Integer>createKey(EntityRideArmor.class, DataSerializers.VARINT);
 	private static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityRideArmor.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	private static final DataParameter<Integer> RIDEARMOR_ARMOR = EntityDataManager.<Integer>createKey(EntityRideArmor.class, DataSerializers.VARINT);
-	private static final String[] RIDEARMOR_TEXTURES = new String[] {"textures/entity/rideArmor/rideArmor_white.png", "textures/entity/rideArmor/rideArmor_creamy.png", "textures/entity/rideArmor/rideArmor_chestnut.png", "textures/entity/rideArmor/rideArmor_brown.png", "textures/entity/rideArmor/rideArmor_black.png", "textures/entity/rideArmor/rideArmor_gray.png", "textures/entity/rideArmor/rideArmor_darkbrown.png"};
-	private static final String[] RIDEARMOR_TEXTURES_ABBR = new String[] {"hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
-	private static final String[] RIDEARMOR_MARKING_TEXTURES = new String[] {null, "textures/entity/rideArmor/rideArmor_markings_white.png", "textures/entity/rideArmor/rideArmor_markings_whitefield.png", "textures/entity/rideArmor/rideArmor_markings_whitedots.png", "textures/entity/rideArmor/rideArmor_markings_blackdots.png"};
-	private static final String[] RIDEARMOR_MARKING_TEXTURES_ABBR = new String[] {"", "wo_", "wmo", "wdo", "bdo"};
-	private int eatingHaystackCounter;
-	private int openMouthCounter;
-	private int jumpRearingCounter;
-	public int tailCounter;
+	private static final DataParameter<String> PARTS_STRING = EntityDataManager.<String>createKey(EntityRideArmor.class, DataSerializers.STRING);
+	//private static final DataParameter<Integer> RIDEARMOR_ARMOR = EntityDataManager.<Integer>createKey(EntityRideArmor.class, DataSerializers.VARINT);
+	//private static final String[] RIDEARMOR_TEXTURES = new String[] {"textures/entity/rideArmor/rideArmor_white.png", "textures/entity/rideArmor/rideArmor_creamy.png", "textures/entity/rideArmor/rideArmor_chestnut.png", "textures/entity/rideArmor/rideArmor_brown.png", "textures/entity/rideArmor/rideArmor_black.png", "textures/entity/rideArmor/rideArmor_gray.png", "textures/entity/rideArmor/rideArmor_darkbrown.png"};
+	//private static final String[] RIDEARMOR_TEXTURES_ABBR = new String[] {"hwh", "hcr", "hch", "hbr", "hbl", "hgr", "hdb"};
+	//private static final String[] RIDEARMOR_MARKING_TEXTURES = new String[] {null, "textures/entity/rideArmor/rideArmor_markings_white.png", "textures/entity/rideArmor/rideArmor_markings_whitefield.png", "textures/entity/rideArmor/rideArmor_markings_whitedots.png", "textures/entity/rideArmor/rideArmor_markings_blackdots.png"};
+	//private static final String[] RIDEARMOR_MARKING_TEXTURES_ABBR = new String[] {"", "wo_", "wmo", "wdo", "bdo"};
+	//private int eatingHaystackCounter;
+	//private int openMouthCounter;
+	//private int jumpRearingCounter;
+	//public int tailCounter;
 	public int sprintCounter;
 	protected boolean rideArmorJumping;
 	private ContainerHorseChest rideArmorChest;
 	private boolean hasReproduced;
 	/** "The higher this value, the more likely the rideArmor is to be tamed next time a player rides it." */
-	protected int temper;
 	protected float jumpPower;
 	private boolean allowStandSliding;
 	private boolean skeletonTrap;
-	private int skeletonTrapTime = 0;
-	private float headLean;
-	private float prevHeadLean;
-	private float rearingAmount;
-	private float prevRearingAmount;
-	private float mouthOpenness;
-	private float prevMouthOpenness;
+	//private float headLean;
+	//private float prevHeadLean;
+	//private float rearingAmount;
+	//private float prevRearingAmount;
+	//private float mouthOpenness;
+	//private float prevMouthOpenness;
 	/** Used to determine the sound that the rideArmor should make when it steps */
 	private int gallopTime;
-	private String texturePrefix;
-	private String[] rideArmorTexturesArray = new String[3];
-	private boolean hasTexture = false;
+	//private String texturePrefix;
+	//private String[] rideArmorTexturesArray = new String[3];
+	//private boolean hasTexture = false;
+	
+	//Ride Armor Parts code
+	public EntityRideArmorPart[] rideArmorParts;
+	/** The head bounding box of the Ride Armor */
+	public EntityRideArmorPart rideArmorHead;
+	/** The body bounding box of Ride Armor */
+	public EntityRideArmorPart rideArmorBody;
+	public EntityRideArmorPart rideArmorBack;
+	public EntityRideArmorPart rideArmorFeet;
+	public EntityRideArmorPart rideArmorArmLeft;
+	public EntityRideArmorPart rideArmorArmRight;
+
+	private String lastPartsString = "";
+	
+	//Ride Armor AI
+	protected EntityAIBase swimming = new EntityAISwimming(this);
+	protected EntityAIBase panic = new EntityAIPanic(this, 1.2D);
+	protected EntityAIBase wander = new EntityAIWander(this, 0.7D);
+	protected EntityAIBase watchClosest = new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F);
+	protected EntityAIBase lookIdle = new EntityAILookIdle(this);
+	private EnumMobType mobType;
 
 	public EntityRideArmor(World worldIn)
 	{
 		super(worldIn);
 		this.setSize(1.3964844F, 1.6F);
 		this.isImmuneToFire = false;
-		//this.setChested(false);
+		this.setChested(false);
 		this.stepHeight = 1.0F;
-		//this.initRideArmorChest();
+		this.initRideArmorChest();
+		
+		this.rideArmorParts = new EntityRideArmorPart[] { rideArmorHead = new EntityRideArmorPart(this, "EMPTY", HEAD),
+				rideArmorBody = new EntityRideArmorPart(this, "EMPTY", BODY), rideArmorBack = new EntityRideArmorPart(this, "EMPTY", BACK),
+				rideArmorFeet = new EntityRideArmorPart(this, "EMPTY", LEGS), rideArmorArmLeft = new EntityRideArmorPart(this, "EMPTY", ARMLEFT),
+				rideArmorArmRight = new EntityRideArmorPart(this, "EMPTY", ARMRIGHT) };
 	}
 
 	public EntityRideArmor(World worldIn, BlockPos p) {
@@ -119,24 +167,25 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 
 	protected void initEntityAI()
 	{
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIPanic(this, 1.2D));
-		this.tasks.addTask(6, new EntityAIWander(this, 0.7D));
-		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		this.tasks.addTask(8, new EntityAILookIdle(this));
+		this.tasks.addTask(0, swimming);
+		this.tasks.addTask(1, panic);
+		this.tasks.addTask(6, wander);
+		this.tasks.addTask(7, watchClosest);
+		this.tasks.addTask(8, lookIdle);
 	}
 
 	protected void entityInit()
 	{
 		super.entityInit();
 		this.dataManager.register(STATUS, Byte.valueOf((byte)0));
-		this.dataManager.register(RIDEARMOR_TYPE, Integer.valueOf(RideArmorType.RIDEARMOR.getOrdinal()));
-		this.dataManager.register(RIDEARMOR_VARIANT, Integer.valueOf(0));
+		this.dataManager.register(PARTS_STRING, "");
+		//this.dataManager.register(RIDEARMOR_TYPE, Integer.valueOf(RideArmorType.RIDEARMOR.getOrdinal()));
+		//this.dataManager.register(RIDEARMOR_VARIANT, Integer.valueOf(0));
 		this.dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
 		//this.dataManager.register(RIDEARMOR_ARMOR, Integer.valueOf(RideArmorArmorType.NONE.getOrdinal()));
 	}
 
-	public void setType(RideArmorType armorType)
+	/*public void setType(RideArmorType armorType)
 	{
 		this.dataManager.set(RIDEARMOR_TYPE, Integer.valueOf(armorType.getOrdinal()));
 		this.resetTexturePrefix();
@@ -156,14 +205,14 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	public int getRideArmorVariant()
 	{
 		return ((Integer)this.dataManager.get(RIDEARMOR_VARIANT)).intValue();
-	}
+	}*/
 
 	/**
 	 * Get the name of this object. For players this returns their username
 	 */
 	public String getName()
 	{
-		return this.hasCustomName() ? this.getCustomNameTag() : this.getType().getDefaultName().getUnformattedText();
+		return this.hasCustomName() ? this.getCustomNameTag() : "entity.rideArmor.name";//this.getType().getDefaultName().getUnformattedText();
 	}
 
 	private boolean getRideArmorWatchableBoolean(int p_110233_1_)
@@ -259,10 +308,44 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		}
 	}*/
 
-	/*public boolean isChested()
+	public boolean isChested()
 	{
-		return this.getType().canBeChested() && this.getRideArmorWatchableBoolean(8);
-	}*/
+		return /*this.getType().canBeChested() &&*/ this.getRideArmorWatchableBoolean(8);
+	}
+
+	/**
+	 * Sets the parts of the entity.
+	 */
+	public void setPartsString()
+	{
+		String s = "";
+		if (this.rideArmorParts != null)
+		{
+			for (int i = 0; i < rideArmorParts.length; i++)
+			{
+
+				s = s + partSwitch(i).getType() + ":";
+			}
+		}
+		this.dataManager.set(PARTS_STRING, String.valueOf(s));
+	}
+
+	/**
+	 * Gets the parts of the entity.
+	 */
+	public String getPartsString()
+	{
+		String s = this.dataManager.get(PARTS_STRING);
+		if (!s.equals(""))
+		{
+			String[] sa = s.split(":");
+			for (int i = 0; i < sa.length; i++)
+			{
+				partSwitch(i).setType(sa[i]);
+			}
+		}
+		return s;
+	}
 
 	/*public RideArmorArmorType getRideArmorArmorType()
 	{
@@ -290,10 +373,10 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		}
 	}*/
 
-	/*public void setChested(boolean chested)
+	public void setChested(boolean chested)
 	{
 		this.setRideArmorWatchableBoolean(8, chested);
-	}*/
+	}
 
 	/*public void setHasReproduced(boolean hasReproducedIn)
 	{
@@ -402,16 +485,16 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	/**
 	 * Returns number of slots depending rideArmor type
 	 */
-	/*private int getChestSize()
+	private int getChestSize()
 	{
-		RideArmorType rideArmortype = this.getType();
-		return this.isChested() && rideArmortype.canBeChested() ? 17 : 2;
-	}*/
+		//RideArmorType rideArmortype = this.getType();
+		return this.isChested() /*&& rideArmortype.canBeChested()*/ ? 17 : 2;
+	}
 
-	/*private void initRideArmorChest()
+	private void initRideArmorChest()
 	{
-		AnimalChest animalchest = this.rideArmorChest;
-		this.rideArmorChest = new AnimalChest("RideArmorChest", this.getChestSize());
+		ContainerHorseChest animalchest = this.rideArmorChest;
+		this.rideArmorChest = new ContainerHorseChest("RideArmorChest", this.getChestSize());
 		this.rideArmorChest.setCustomName(this.getName());
 
 		if (animalchest != null)
@@ -431,9 +514,9 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		}
 
 		this.rideArmorChest.addInventoryChangeListener(this);
-		this.updateRideArmorSlots();
+		//this.updateRideArmorSlots();
 		this.itemHandler = new net.minecraftforge.items.wrapper.InvWrapper(this.rideArmorChest);
-	}*/
+	}
 
 	/**
 	 * Updates the items in the saddle and armor slots of the rideArmor's inventory.
@@ -514,7 +597,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	protected SoundEvent getDeathSound()
 	{
 		//this.openRideArmorMouth();
-		return this.getType().getDeathSound();
+		return super.getDeathSound();//this.getType().getDeathSound();
 	}
 
 	protected SoundEvent getHurtSound()
@@ -526,7 +609,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			//this.makeRideArmorRear();
 		}
 
-		return this.getType().getHurtSound();
+		return super.getHurtSound();//this.getType().getHurtSound();
 	}
 
 	/*public boolean isRideArmorSaddled()
@@ -543,7 +626,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			//this.makeRideArmorRear();
 		}
 
-		return this.getType().getAmbientSound();
+		return super.getAmbientSound();//this.getType().getAmbientSound();
 	}
 
 	/*@Nullable
@@ -633,21 +716,21 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	@SideOnly(Side.CLIENT)
 	public boolean hasLayeredTextures()
 	{
-		return this.getType() == RideArmorType.RIDEARMOR;// || this.getRideArmorArmorType() != RideArmorArmorType.NONE;
+		return true;//this.getType() == RideArmorType.RIDEARMOR;// || this.getRideArmorArmorType() != RideArmorArmorType.NONE;
 	}
 
-	private void resetTexturePrefix()
+	/*private void resetTexturePrefix()
 	{
 		this.texturePrefix = null;
-	}
+	}*/
 
 	@SideOnly(Side.CLIENT)
 	public boolean hasTexture()
 	{
-		return this.hasTexture;
+		return true;//this.hasTexture;
 	}
 
-	@SideOnly(Side.CLIENT)
+	/*@SideOnly(Side.CLIENT)
 	private void setRideArmorTexturePaths()
 	{
 		this.texturePrefix = "rideArmor/";
@@ -686,9 +769,9 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			this.texturePrefix = this.texturePrefix + "_" + rideArmortype + "_";
 		}
 
-		/*RideArmorArmorType rideArmorarmortype = this.getRideArmorArmorType();
+		RideArmorArmorType rideArmorarmortype = this.getRideArmorArmorType();
 		this.rideArmorTexturesArray[2] = rideArmorarmortype.getTextureName();
-		this.texturePrefix = this.texturePrefix + rideArmorarmortype.getHash();*/
+		this.texturePrefix = this.texturePrefix + rideArmorarmortype.getHash();
 		this.hasTexture = true;
 	}
 
@@ -712,7 +795,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		}
 
 		return this.rideArmorTexturesArray;
-	}
+	}*/
 
 	public void openGUI(EntityPlayer playerEntity)
 	{
@@ -936,7 +1019,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 
 	private void moveTail()
 	{
-		this.tailCounter = 1;
+		//this.tailCounter = 1;
 	}
 
 	/**
@@ -994,10 +1077,10 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		if (this.world.isRemote && this.dataManager.isDirty())
 		{
 			this.dataManager.setClean();
-			this.resetTexturePrefix();
+			//this.resetTexturePrefix();
 		}
 
-		if (this.openMouthCounter > 0 && ++this.openMouthCounter > 30)
+		/*if (this.openMouthCounter > 0 && ++this.openMouthCounter > 30)
 		{
 			this.openMouthCounter = 0;
 			this.setRideArmorWatchableBoolean(128, false);
@@ -1012,7 +1095,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		if (this.tailCounter > 0 && ++this.tailCounter > 8)
 		{
 			this.tailCounter = 0;
-		}
+		}*/
 
 		if (this.sprintCounter > 0)
 		{
@@ -1024,7 +1107,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			}
 		}
 
-		this.prevHeadLean = this.headLean;
+		//this.prevHeadLean = this.headLean;
 
 		/*if (this.isEatingHaystack())
 		{
@@ -1037,7 +1120,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		}
 		else
 		{*/
-		this.headLean += (0.0F - this.headLean) * 0.4F - 0.05F;
+		/*this.headLean += (0.0F - this.headLean) * 0.4F - 0.05F;
 
 		if (this.headLean < 0.0F)
 		{
@@ -1045,7 +1128,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		}
 		//}
 
-		this.prevRearingAmount = this.rearingAmount;
+		this.prevRearingAmount = this.rearingAmount;*/
 
 		/*if (this.isRearing())
 		{
@@ -1060,17 +1143,17 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 		else
 		{*/
 		this.allowStandSliding = false;
-		this.rearingAmount += (0.8F * this.rearingAmount * this.rearingAmount * this.rearingAmount - this.rearingAmount) * 0.6F - 0.05F;
+		//this.rearingAmount += (0.8F * this.rearingAmount * this.rearingAmount * this.rearingAmount - this.rearingAmount) * 0.6F - 0.05F;
 
-		if (this.rearingAmount < 0.0F)
+		/*if (this.rearingAmount < 0.0F)
 		{
 			this.rearingAmount = 0.0F;
-		}
+		}*/
 		//}
 
-		this.prevMouthOpenness = this.mouthOpenness;
+		//this.prevMouthOpenness = this.mouthOpenness;
 
-		if (this.getRideArmorWatchableBoolean(128))
+		/*if (this.getRideArmorWatchableBoolean(128))
 		{
 			this.mouthOpenness += (1.0F - this.mouthOpenness) * 0.7F + 0.05F;
 
@@ -1087,7 +1170,132 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			{
 				this.mouthOpenness = 0.0F;
 			}
+		}*/
+		if (getMobType() != EnumMobType.empty && getPassengers() == null)
+		{
+			updateRideArmorAITasks(null);
 		}
+		if (getMobType() == EnumMobType.empty && getPassengers() != null)
+		{
+			updateRideArmorAITasks(getPassengers().get(0));
+		}
+	}
+	private void updateRideArmorAITasks(Entity p_70108_1_)
+	{
+		if (p_70108_1_ != null && !(p_70108_1_ instanceof EntityPlayer))
+		{
+			if (p_70108_1_ instanceof EntityPig)
+			{
+				this.tasks.addTask(0, swimming);
+				this.tasks.addTask(1, panic);
+				this.tasks.addTask(6, wander);
+				this.tasks.addTask(7, watchClosest);
+				this.tasks.addTask(8, lookIdle);
+				setMobType(EnumMobType.pig);
+			}
+			else if (p_70108_1_ instanceof EntityMob)
+			{
+				if (p_70108_1_ instanceof EntityZombie)
+				{
+					//this.getNavigator().setBreakDoors(true);
+					this.tasks.addTask(0, swimming);
+					//this.tasks.addTask(2, attackOnCollide);
+					//this.tasks.addTask(5, moveTowardsRestriction);
+					//this.tasks.addTask(6, moveThroughVillage);
+					this.tasks.addTask(7, wander);
+					this.tasks.addTask(8, watchClosest);
+					this.tasks.addTask(8, lookIdle);
+					//this.targetTasks.addTask(1, hurtByTarget);
+					//this.targetTasks.addTask(2, nearestAttackableTarget);
+					setMobType(EnumMobType.zombie);
+
+				}
+				/*else if (p_70108_1_ instanceof EntitySkeleton)
+				{
+					this.tasks.addTask(1, swimming);
+					this.tasks.addTask(2, restrictSun);
+					this.tasks.addTask(3, fleeSun);
+					this.tasks.addTask(4, aiArrowAttack);
+					this.tasks.addTask(5, wander);
+					this.tasks.addTask(6, watchClosest);
+					this.tasks.addTask(6, lookIdle);
+					this.targetTasks.addTask(1, hurtByTarget);
+					this.targetTasks.addTask(2, nearestAttackableTarget);
+					setMobType(EnumMobType.skeleton);
+
+				}*/
+				/*else if (p_70108_1_ instanceof EntityCreeper)
+				{
+					this.tasks.addTask(1, swimming);
+					this.tasks.addTask(2, creeperSwell);
+					this.tasks.addTask(3, avoidEntity);
+					this.tasks.addTask(4, attackOnCollide);
+					this.tasks.addTask(5, wander);
+					this.tasks.addTask(6, watchClosest);
+					this.tasks.addTask(6, lookIdle);
+					this.targetTasks.addTask(1, nearestAttackableTarget);
+					this.targetTasks.addTask(2, hurtByTarget);
+					setMobType(EnumMobType.creeper);
+				}*/
+			}
+			/*else if (p_70108_1_ instanceof EntityVillager)
+			{
+				this.getNavigator().setAvoidsWater(true);
+				this.tasks.addTask(1, attackOnCollide);
+				this.tasks.addTask(2, moveTowardsTarget);
+				this.tasks.addTask(3, moveThroughVillage);
+				this.tasks.addTask(4, moveTowardsRestriction);
+				this.tasks.addTask(5, lookAtVillager);
+				this.tasks.addTask(6, wander);
+				this.tasks.addTask(7, watchClosest);
+				this.tasks.addTask(8, lookIdle);
+				this.targetTasks.addTask(1, defendVillage);
+				this.targetTasks.addTask(2, hurtByTarget);
+				this.targetTasks.addTask(3, nearestAttackableTarget);
+				setMobType(EnumMobType.villager);
+			}*/
+			else
+			{
+				//unknown rider, defaulting
+				
+				//this.getNavigator().setAvoidsWater(true);
+				this.tasks.addTask(0, swimming);
+				this.tasks.addTask(1, panic);
+				this.tasks.addTask(6, wander);
+				this.tasks.addTask(7, watchClosest);
+				this.tasks.addTask(8, lookIdle);
+				setMobType(EnumMobType.unknown);
+			}
+		}
+		else
+		{
+			// Player Rider
+			
+			/*this.getNavigator().setAvoidsWater(false);
+			this.getNavigator().setBreakDoors(false);*/
+
+			this.tasks.removeTask(swimming);
+			this.tasks.removeTask(panic);
+			this.tasks.removeTask(wander);
+			this.tasks.removeTask(watchClosest);
+			this.tasks.removeTask(lookIdle);
+			/*this.tasks.removeTask(attackOnCollide);
+			this.tasks.removeTask(moveTowardsTarget);
+			this.tasks.removeTask(moveThroughVillage);
+			this.tasks.removeTask(moveTowardsRestriction);
+			this.tasks.removeTask(lookAtVillager);
+			this.targetTasks.removeTask(defendVillage);
+			this.tasks.removeTask(creeperSwell);
+			this.tasks.removeTask(avoidEntity);
+			this.tasks.removeTask(restrictSun);
+			this.tasks.removeTask(fleeSun);
+			this.tasks.removeTask(aiArrowAttack);
+			this.targetTasks.removeTask(hurtByTarget);
+			this.targetTasks.removeTask(nearestAttackableTarget);*/
+
+			setMobType(p_70108_1_ instanceof EntityPlayer ? EnumMobType.player : EnumMobType.empty);
+		}
+		ReploidCraft.logger.info(getMobType());
 	}
 
 	public void dropChestItems()
@@ -1212,8 +1420,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	}
 
 	private boolean canWalk() {
-		// TODO Auto-generated method stub
-		return this.getType().canWalk();
+		return true;//this.getType().canWalk();
 	}
 
 	/**
@@ -1223,8 +1430,8 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	{
 		super.writeEntityToNBT(compound);
 		//compound.setBoolean("ChestedRideArmor", this.isChested());
-		compound.setInteger("Type", this.getType().getOrdinal());
-		compound.setInteger("Variant", this.getRideArmorVariant());
+		//compound.setInteger("Type", this.getType().getOrdinal());
+		//compound.setInteger("Variant", this.getRideArmorVariant());
 
 		if (this.getOwnerUniqueId() != null)
 		{
@@ -1269,8 +1476,8 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	{
 		super.readEntityFromNBT(compound);
 		//this.setChested(compound.getBoolean("ChestedRideArmor"));
-		this.setType(RideArmorType.getArmorType(compound.getInteger("Type")));
-		this.setRideArmorVariant(compound.getInteger("Variant"));
+		//this.setType(RideArmorType.getArmorType(compound.getInteger("Type")));
+		//this.setRideArmorVariant(compound.getInteger("Variant"));
 		String s = "";
 
 		if (compound.hasKey("OwnerUUID", 8))
@@ -1368,8 +1575,8 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 			livingdata = new EntityRideArmor.GroupData(rideArmortype, i);
 		}
 
-		this.setType(rideArmortype);
-		this.setRideArmorVariant(i);
+		//this.setType(rideArmortype);
+		//this.setRideArmorVariant(i);
 
 		if (this.rand.nextInt(5) == 0)
 		{
@@ -1669,7 +1876,7 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	@Nullable
 	protected ResourceLocation getLootTable()
 	{
-		return this.getType().getLootTable();
+		return super.getLootTable();//this.getType().getLootTable();
 	}
 
 	public static class GroupData implements IEntityLivingData
@@ -1710,5 +1917,180 @@ public class EntityRideArmor extends EntityAnimal implements IInventoryChangedLi
 	public void onInventoryChanged(IInventory invBasic) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public World getWorld() {
+		return this.world;
+	}
+
+	public void setPart(PartSlot slot, String type)
+	{
+		this.partSwitch(slot.ordinal()).setType(type);
+		this.updatePartsString();
+	}
+
+	public boolean hasPart(PartSlot part)
+	{
+		return !this.partSwitch(part.ordinal()).getType().equals("EMPTY");
+	}
+
+	@Override
+	public boolean attackEntityFromPart(EntityDragonPart dragonPart,
+			DamageSource source, float damage) {
+		EntityRideArmorPart part = (EntityRideArmorPart) dragonPart;
+		/*if (part.getHealth() <= 0.0F)
+		{
+			return false;
+		}*/
+		if ((float) part.hurtResistantTime > (float) part.maxHurtResistantTime / 2.0F)
+		{
+			if (damage <= part.lastDamage)
+			{
+				return false;
+			}
+
+			part.damageEntity(source, damage - part.lastDamage);
+			part.lastDamage = damage;
+		}
+		else
+		{
+			part.lastDamage = damage;
+			part.prevHealth = part.getHealth();
+			part.hurtResistantTime = part.maxHurtResistantTime;
+			part.damageEntity(source, damage);
+			part.hurtTime = this.maxHurtTime = 10;
+		}
+		ReploidCraft.logger.info("hit on the " + part.getName() + " Health: " + part.getHealth() + "/" + damage + FMLCommonHandler.instance().getEffectiveSide());
+		
+		//doesn't seem like this is working
+		if (part.getHealth() <= 0.0F)
+		{
+			if (part.getSlot() == ARMLEFT && hasPart(ARMLEFT))
+			{
+				this.rideArmorArmLeft.setType("EMPTY");
+				return true;
+			}
+			if (part.getSlot() == ARMRIGHT && hasPart(ARMRIGHT))
+			{
+				this.rideArmorArmRight.setType("EMPTY");
+				return true;
+			}
+			if (part.getSlot() == BACK && hasPart(BACK))
+			{
+				this.rideArmorBack.setType("EMPTY");
+				return true;
+			}
+			if (part.getSlot() == HEAD)
+			{
+				if (this.getPassengers() != null && source.getEntity() != this.getPassengers().get(0))
+				{
+					this.getPassengers().get(0).attackEntityFrom(source, damage);
+					return true;
+				}
+				else if (source.getEntity() == this.getPassengers().get(0))
+				{
+					//TODO: left attack
+					//doMechAttackLeft();
+					return true;
+				}
+			}
+
+			if (part.getSlot() == BODY)
+			{
+				if (this.getPassengers() != null && source.getEntity() == this.getPassengers().get(0))
+				{
+					//TODO: left attack
+					//doMechAttackLeft();
+					return true;
+				}
+				//TODO: exploud
+				//doMechExplode(source);
+				return this.attackEntityFrom(source, damage);
+			}
+
+			if (part.getSlot() == LEGS)
+			{
+				// effect legs
+				if (this.getRidingEntity() != null) //mech may be in a cart?
+				{
+					this.getRidingEntity().attackEntityFrom(source, damage);
+				}
+				this.rideArmorFeet.setType("EMPTY");
+				//return this.attackEntityFrom2(var2, var3);
+			}
+		}
+
+		return false;
+	}
+	
+	/*
+	 * SECTION: Logic
+	 */
+	public enum EnumMobType
+	{
+		empty(),
+		unknown(),
+		creeper(),
+		skeleton(),
+		zombie(),
+		pig(),
+		villager(),
+		player();
+
+	}
+
+	public EntityRideArmorPart partSwitch(int index)
+	{
+		if (index == HEAD.ordinal())
+		{
+			return rideArmorHead;
+		}
+		else if (index == BODY.ordinal())
+		{
+			return rideArmorBody;
+		}
+		else if (index == BACK.ordinal())
+		{
+			return rideArmorBack;
+		}
+		else if (index == LEGS.ordinal())
+		{
+			return rideArmorFeet;
+		}
+		else if (index == ARMLEFT.ordinal())
+		{
+			return rideArmorArmLeft;
+		}
+		else if (index == ARMRIGHT.ordinal())
+		{
+			return rideArmorArmRight;
+		}
+		else return null;
+
+	}
+
+	private void updatePartsString()
+	{
+		if (!this.world.isRemote)
+		{
+			this.setPartsString();
+		}
+		String s = this.getPartsString();
+
+		if (!lastPartsString.equals(s))
+		{
+			lastPartsString = s;
+		}
+	}
+
+	public EnumMobType getMobType()
+	{
+		return mobType;
+	}
+
+	private void setMobType(EnumMobType mobType)
+	{
+		this.mobType = mobType;
 	}
 }

@@ -1,5 +1,6 @@
 package org.zornco.reploidcraft.init;
 
+import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -18,6 +19,7 @@ public class RCItems {
 	public static final Item basicReploidArmorFeet = new ItemBasicReploidArmor(EntityEquipmentSlot.FEET);
 	public static final Item energyPellet = new ItemEnergyPelletBase();
 	public static final Item basicBlade = new ItemBasicBlade();
+	public static final Item rideArmorPart = new ItemRideArmorPart();
 	
 	public static void preInit() {
 		registerItem(rideArmorPlacer, "rideArmorPlacer");
@@ -30,6 +32,7 @@ public class RCItems {
 		registerItem(basicReploidArmorLegs, "basicReploidArmorLegs");
 		registerItem(basicReploidArmorFeet, "basicReploidArmorFeet");
 		registerItem(energyPellet, "energyPellet");
+		registerItem(rideArmorPart, "rideArmorPart");
 	}
 	private static void registerItem(Item item, String registryName)
     {
