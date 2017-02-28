@@ -1,4 +1,4 @@
-package org.zornco.reploidcraft.client.render.ridearmor.model;
+package org.zornco.reploidcraft.client.render.ridearmor.model.OLD;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;

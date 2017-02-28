@@ -1935,6 +1935,11 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		return !this.partSwitch(part.ordinal()).getType().equals("EMPTY");
 	}
 
+	public String getPartType(PartSlot slot) {
+		// TODO Auto-generated method stub
+		return this.partSwitch(slot.ordinal()).getType();
+	}
+
 	@Override
 	public boolean attackEntityFromPart(EntityDragonPart dragonPart,
 			DamageSource source, float damage) {

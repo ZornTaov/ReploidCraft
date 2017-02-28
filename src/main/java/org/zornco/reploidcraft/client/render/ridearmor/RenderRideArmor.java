@@ -1,23 +1,34 @@
 package org.zornco.reploidcraft.client.render.ridearmor;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.lwjgl.opengl.GL11;
 import org.zornco.reploidcraft.ReploidCraft;
 import org.zornco.reploidcraft.client.render.ridearmor.ChestA3;
-import org.zornco.reploidcraft.client.render.ridearmor.ModelRideArmor;
+import org.zornco.reploidcraft.client.render.ridearmor.ModelRideArmorLegs;
+import org.zornco.reploidcraft.client.render.ridearmor.layer.LayerRideArmorPart;
+import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorBase;
 import org.zornco.reploidcraft.entities.EntityFloatingPlatform;
 import org.zornco.reploidcraft.entities.EntityRideArmor;
+import org.zornco.reploidcraft.entities.armorparts.PartSlot;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderRideArmor extends RenderLiving<EntityRideArmor> {
 	private static final ResourceLocation platform = new ResourceLocation(ReploidCraft.MODID + ":textures/entity/ridearmor/chest.png");//FloatingPlatform.png");
-
+	
+	public static RenderRideArmor INSTANCE;
+	
 	private ModelBase modelHead;
 	private ModelBase modelChest;
 	private ModelBase modelBack;
@@ -26,8 +37,8 @@ public class RenderRideArmor extends RenderLiving<EntityRideArmor> {
 	private ModelBase modelArmRight;
 	
 	public RenderRideArmor(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelRideArmor(), 1F);
-		// TODO Auto-generated constructor stub
+		super(rendermanagerIn, new ModelRideArmorBase(), 1F);
+		INSTANCE = this;
 	}
 	/**
      * Allows the render to do state modifications necessary before the model is rendered.

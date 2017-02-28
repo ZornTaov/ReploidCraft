@@ -6,6 +6,7 @@ import org.zornco.reploidcraft.entities.EntityFloatingPlatform;
 import org.zornco.reploidcraft.entities.EntityRideArmor;
 import org.zornco.reploidcraft.entities.armorparts.PartSlot;
 import org.zornco.reploidcraft.entities.armorparts.PartsRegistry;
+import org.zornco.reploidcraft.entities.armorparts.frog.FrogHead;
 import org.zornco.reploidcraft.entities.armorparts.red.RedBody;
 import org.zornco.reploidcraft.init.RCBlocks;
 
@@ -29,6 +30,8 @@ public class CommonProxy {
 		this.partRegistry.registerPart("EMPTY", PartSlot.LEGS, 		0, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.5F, 1.0F});
 		this.partRegistry.registerPart("EMPTY", PartSlot.ARMLEFT, 	0, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.0F, 1.0F});  
 		this.partRegistry.registerPart("EMPTY", PartSlot.ARMRIGHT, 	0, new float[] {0.0F, 0.0F, 0.0F}, new float[] {1.0F, 1.0F});
+
+		this.partRegistry.registerPart("FROG", PartSlot.HEAD, 		new FrogHead());
 		
 		this.partRegistry.registerPart("RED", PartSlot.BODY, 		new RedBody());
 		//this.partRegistry.registerPart("RED", PartSlot.BACK, 		new RedBack());

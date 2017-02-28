@@ -7,12 +7,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.zornco.reploidcraft.client.render.ridearmor.layer.LayerRideArmorPart;
 import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorBase;
 
 public class PartBase {
 
 	@SideOnly(Side.CLIENT)
-	protected ModelRideArmorBase model;
+	protected LayerRideArmorPart model;
 
 	@SideOnly(Side.CLIENT)
 	protected ResourceLocation texture;
@@ -131,7 +132,7 @@ public class PartBase {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public ModelRideArmorBase getModel()
+	public LayerRideArmorPart getLayer()
 	{
 		return null;
 	}
