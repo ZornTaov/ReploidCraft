@@ -19,6 +19,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.zornco.reploidcraft.ReploidCraft;
 import org.zornco.reploidcraft.entities.armorparts.PartSlot;
@@ -51,7 +52,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 		this.applyEntityAttributes();
 		this.setHealth(this.getMaxHealth());
 
-		//System.out.println("created on " + FMLCommonHandler.instance().getEffectiveSide().toString() + " at: " + this.posX + ", " + this.posY + ", " + this.posZ);
+		//System.out.println(this.toString() + " created on " + FMLCommonHandler.instance().getEffectiveSide().toString() + " at: " + this.posX + ", " + this.posY + ", " + this.posZ);
 	}
 
 	private void applyEntityAttributes() {
@@ -102,7 +103,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	 * Deals damage to the entity. If its a EntityPlayer then will take damage from the armor first and then health
 	 * second with the reduced value. Args: damageAmount
 	 */
-	protected void damageEntity(DamageSource p_70665_1_, float p_70665_2_)
+	public void damageEntity(DamageSource p_70665_1_, float p_70665_2_)
 	{
 		if (!this.getIsInvulnerable())
 		{
@@ -179,6 +180,7 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	 */
 	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
 		this.setType(par1NBTTagCompound.getString("type"));
+		//ReploidCraft.logger.info(" " + getType());
 		this.setSize(par1NBTTagCompound.getFloat("width"), par1NBTTagCompound.getFloat("height"));
 
 	}
@@ -194,10 +196,10 @@ public class EntityRideArmorPart extends EntityDragonPart {
 	 * (abstract) Protected helper method to write subclass entity data to NBT.
 	 */
 	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
-		par1NBTTagCompound.setString("type", getType().toString());
+		par1NBTTagCompound.setString("type", getType());
+		//ReploidCraft.logger.info(" " + getType());
 		par1NBTTagCompound.setFloat("height", height);
 		par1NBTTagCompound.setFloat("width", width);
-
 	}
 
 	@Override

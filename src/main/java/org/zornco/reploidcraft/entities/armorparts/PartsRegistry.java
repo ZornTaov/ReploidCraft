@@ -89,7 +89,7 @@ public class PartsRegistry extends RegistrySimple
 		part.setString(type+"."+slot);
 
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-			part.initModel();
+			part.initModel(type, slot);
 		((PartList)this.getObject(type)).getPartList().put(slot, part);
 		ItemRideArmorPart.getPartList().add((PartBase) part);
 		if(part.getRecipe() != null)

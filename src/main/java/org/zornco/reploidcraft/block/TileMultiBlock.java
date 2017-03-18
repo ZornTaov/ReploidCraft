@@ -65,7 +65,7 @@ public abstract class TileMultiBlock extends TileEntity implements ITickable {
     /** Reset all the parts of the structure */
     public abstract void resetStructure();
 
-	public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		writeToNBT(nbttagcompound);

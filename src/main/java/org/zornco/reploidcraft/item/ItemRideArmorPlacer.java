@@ -71,6 +71,11 @@ public class ItemRideArmorPlacer extends Item {
                     {
 
                         EntityRideArmor rideArmor = new EntityRideArmor(worldIn, d0 + 0.5D, d1, d2 + 0.5D);
+                        rideArmor.setPart(PartSlot.BODY, "GREEN");
+            			rideArmor.setPart(PartSlot.BACK, "GREEN");
+            			rideArmor.setPart(PartSlot.LEGS, "GREEN");
+            			rideArmor.setPart(PartSlot.ARMLEFT, "GREEN");
+            			rideArmor.setPart(PartSlot.ARMRIGHT, "GREEN");
                         if (!worldIn.isRemote)
                         {
                             worldIn.setBlockToAir(blockpos);
@@ -81,14 +86,9 @@ public class ItemRideArmorPlacer extends Item {
                             worldIn.playSound((EntityPlayer)null, rideArmor.posX, rideArmor.posY, rideArmor.posZ, SoundEvents.ENTITY_ARMORSTAND_PLACE, SoundCategory.BLOCKS, 0.75F, 0.8F);
                         }
                         
-                        rideArmor.setPart(PartSlot.BODY, "RED");
-            			rideArmor.setPart(PartSlot.BACK, "RED");
-            			rideArmor.setPart(PartSlot.LEGS, "RED");
-            			rideArmor.setPart(PartSlot.ARMLEFT, "RED");
-            			rideArmor.setPart(PartSlot.ARMRIGHT, "RED");
                         if (!player.capabilities.isCreativeMode)
             			{
-                        	//--stack.stackSize;
+                        	//itemstack.shrink(1);
             			}
                         return EnumActionResult.SUCCESS;
                     }

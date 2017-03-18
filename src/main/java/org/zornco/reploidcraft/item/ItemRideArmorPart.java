@@ -7,6 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +22,7 @@ public class ItemRideArmorPart extends Item
 	@SideOnly(Side.CLIENT)
 	//private IIcon[] partIcon;
 	private int typeAmmount = PartSlot.values().length;// * PartType.values().length;
-	private static List<PartBase> partList = new ArrayList<PartBase>();;
+	private static List<PartBase> partList = new ArrayList<PartBase>();
 	public ItemRideArmorPart()
 	{
 		super();
@@ -35,12 +36,12 @@ public class ItemRideArmorPart extends Item
 	 * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
 	 * different names based on their damage or NBT.
 	 */
-	/*public String getUnlocalizedName(ItemStack par1ItemStack)
+	public String getUnlocalizedName(ItemStack par1ItemStack)
 	{
-		int i = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, typeAmmount);
+		int i = MathHelper.clamp(par1ItemStack.getItemDamage(), 0, typeAmmount);
 		return super.getUnlocalizedName()
-				+ "." + partList.get(par1ItemStack.getItemDamage()).toString();
-	}*/
+				+ "." + partList.get(par1ItemStack.getItemDamage()).toString().toLowerCase();
+	}
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -73,11 +74,11 @@ public class ItemRideArmorPart extends Item
 	/**
 	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
 	 */
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
+	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, NonNullList<ItemStack> subItems)
 	{
-		for (int var4 = 6; var4 < typeAmmount; ++var4)
+		for (int var4 = 0; var4 < typeAmmount; ++var4)
 		{
-			par3List.add(new ItemStack(par1, 1, var4));
+			subItems.add(new ItemStack(par1, 1, var4));
 		}
 	}
 

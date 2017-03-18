@@ -320,7 +320,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				break; //only need the one
 			}
 
-			if(inv.get(1) != null && list.isEmpty())
+			if(inv.get(1).isEmpty() && list.isEmpty())
 			{
 				//spawn a new ride armor with the new chest
 				myRide = new EntityRideArmor(getWorld(), this.getPos().up(1));
@@ -334,7 +334,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 
 				if (!this.getWorld().isRemote)
 				{
-					this.getWorld().spawnEntity(myRide);
+					//this.getWorld().spawnEntity(myRide);
 				}
 				//myRide.setPart(PartSlot.BODY, ItemRideArmorPart.getPartByMetadata(inv[1].getItemDamage()).split("\\.")[0]);
 				hasRide = true;
@@ -431,7 +431,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		Block block;
 		for (int i = 0; i < 4; i++) {
 			for (int[] air : airBlocks) {
-				if(world.isAirBlock(this.pos.add(air[0], air[1]+i+1, air[2])))
+				if(!world.isAirBlock(this.pos.add(air[0], air[1]+i+1, air[2])))
 				{
 					return false;
 				}
@@ -485,6 +485,7 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				//System.out.println((this.xCoord + sides[0]) + " " + (this.yCoord + sides[1]) + " " + (this.zCoord + sides[2]));
 			}
 		}
+		ReploidCraft.logger.info("setup completed!");
 	}
 
 	@Override

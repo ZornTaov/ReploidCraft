@@ -3,6 +3,7 @@ package org.zornco.reploidcraft.client.render.ridearmor.layer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
+import org.zornco.reploidcraft.ReploidCraft;
 import org.zornco.reploidcraft.client.render.ridearmor.RenderRideArmor;
 import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorBase;
 import org.zornco.reploidcraft.entities.EntityRideArmor;
@@ -43,11 +44,14 @@ public class LayerRideArmorPart implements LayerRenderer<EntityRideArmor> {
 			float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		// TODO Auto-generated method stub
+//		ReploidCraft.logger.info("RENDER: " + this.SLOT + " TYPE: " + TYPE + " GETTING: " + rideArmor.getPartType(SLOT));
 		if(rideArmor.hasPart(SLOT))
 		{
-			if(rideArmor.getPartType(SLOT) == this.TYPE)
+			if(rideArmor.getPartType(SLOT).equals(this.TYPE))
 			{
-				
+				RenderRideArmor.INSTANCE.bindTexture(TEXTURE);
+				//ReploidCraft.logger.info("RENDER: " + this.SLOT + " TYPE: " + TYPE);
+				this.MODEL_PART.render(rideArmor, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			}
 		}
 	}

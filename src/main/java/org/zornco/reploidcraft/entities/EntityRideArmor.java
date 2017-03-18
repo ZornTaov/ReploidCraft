@@ -61,6 +61,7 @@ import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
@@ -73,6 +74,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -131,13 +133,17 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 	private String lastPartsString = "";
 	
 	//Ride Armor AI
-	protected EntityAIBase swimming = new EntityAISwimming(this);
-	protected EntityAIBase panic = new EntityAIPanic(this, 1.2D);
-	protected EntityAIBase wander = new EntityAIWander(this, 0.7D);
-	protected EntityAIBase watchClosest = new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F);
-	protected EntityAIBase lookIdle = new EntityAILookIdle(this);
+	protected EntityAIBase swimming; //= new EntityAISwimming(this);
+	protected EntityAIBase panic; //= new EntityAIPanic(this, 1.2D);
+	protected EntityAIBase wander; //= new EntityAIWander(this, 0.7D);
+	protected EntityAIBase watchClosest;// = new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F);
+	protected EntityAIBase lookIdle; //= new EntityAILookIdle(this);
 	private EnumMobType mobType;
 
+	/*
+	 * SECTION: SETUP
+	 */
+	
 	public EntityRideArmor(World worldIn)
 	{
 		super(worldIn);
@@ -165,13 +171,135 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		this.prevPosZ = z;
 	}
 
+	public boolean prepareChunkForSpawn()
+	{
+		int i = MathHelper.floor(this.posX);
+		int j = MathHelper.floor(this.posZ);
+		this.world.getBiomeForCoordsBody(new BlockPos(i, 0, j));
+		return true;
+	}
+
+	/**
+	 * Checks if the entity's current position is a valid location to spawn this entity.
+	 */
+	public boolean getCanSpawnHere()
+	{
+		this.prepareChunkForSpawn();
+		return super.getCanSpawnHere();
+	}
+
+	/**
+	 * Will return how many at most can spawn in a chunk at once.
+	 */
+	public int getMaxSpawnedInChunk()
+	{
+		return 2;
+	}
+
+	@Override
+	public World getWorld() {
+		return this.world;
+	}
+
+	/**
+	 * Get the name of this object. For players this returns their username
+	 */
+	public String getName()
+	{
+		return this.hasCustomName() ? this.getCustomNameTag() : "entity.rideArmor.name";//this.getType().getDefaultName().getUnformattedText();
+	}
+
+	public float getRideArmorSize()
+	{
+		return 0.5F;
+	}
+
+	public boolean isRidable()
+	{
+		return true;// this.isAdultRideArmor();
+	}
+
+	/**
+	 * returns true if this entity is by a ladder, false otherwise
+	 */
+	public boolean isOnLadder()
+	{
+		return false;
+	}
+
+	/**
+	 * Returns randomized max health
+	 */
+	private float getModifiedMaxHealth()
+	{
+		return 15.0F + (float)this.rand.nextInt(8) + (float)this.rand.nextInt(9);
+	}
+
+	/**
+	 * Returns randomized jump strength
+	 */
+	private double getModifiedJumpStrength()
+	{
+		return 0.4000000059604645D + this.rand.nextDouble() * 0.2D + this.rand.nextDouble() * 0.2D + this.rand.nextDouble() * 0.2D;
+	}
+
+	/**
+	 * Returns randomized movement speed
+	 */
+	private double getModifiedMovementSpeed()
+	{
+		return (0.44999998807907104D + this.rand.nextDouble() * 0.3D + this.rand.nextDouble() * 0.3D + this.rand.nextDouble() * 0.3D) * 0.25D;
+	}
+
+	/**
+	 * Returns the Y offset from the entity's position for any entity riding this one.
+	 */
+	public double getMountedYOffset()
+	{
+		return super.getMountedYOffset(); //change per body?
+	}
+
+	public float getEyeHeight()
+	{
+		return this.height;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public boolean hasLayeredTextures()
+	{
+		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public boolean hasTexture()
+	{
+		return true;
+	}
+
+	/*
+	 * SECTION: Changeable Data
+	 */
+	
 	protected void initEntityAI()
 	{
-		this.tasks.addTask(0, swimming);
+		swimming = new EntityAISwimming(this);
+		panic = new EntityAIPanic(this, 1.2D);
+		wander = new EntityAIWander(this, 0.7D);
+		watchClosest = new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F);
+		lookIdle = new EntityAILookIdle(this);
+		/*this.tasks.addTask(0, swimming);
 		this.tasks.addTask(1, panic);
 		this.tasks.addTask(6, wander);
 		this.tasks.addTask(7, watchClosest);
-		this.tasks.addTask(8, lookIdle);
+		this.tasks.addTask(8, lookIdle);*/
+	}
+
+	protected void applyEntityAttributes()
+	{
+		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(JUMP_STRENGTH);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(53.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22499999403953552D);
 	}
 
 	protected void entityInit()
@@ -184,6 +312,11 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		this.dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
 		//this.dataManager.register(RIDEARMOR_ARMOR, Integer.valueOf(RideArmorArmorType.NONE.getOrdinal()));
 	}
+
+	/*public RideArmorArmorType getRideArmorArmorType()
+	{
+		return RideArmorArmorType.getByOrdinal(((Integer)this.dataManager.get(RIDEARMOR_ARMOR)).intValue());
+	}*/
 
 	/*public void setType(RideArmorType armorType)
 	{
@@ -207,12 +340,9 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		return ((Integer)this.dataManager.get(RIDEARMOR_VARIANT)).intValue();
 	}*/
 
-	/**
-	 * Get the name of this object. For players this returns their username
-	 */
-	public String getName()
+	public double getRideArmorJumpStrength()
 	{
-		return this.hasCustomName() ? this.getCustomNameTag() : "entity.rideArmor.name";//this.getType().getDefaultName().getUnformattedText();
+		return this.getEntityAttribute(JUMP_STRENGTH).getAttributeValue();
 	}
 
 	private boolean getRideArmorWatchableBoolean(int p_110233_1_)
@@ -234,19 +364,14 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 	}
 
-	/*public boolean isAdultRideArmor()
+	public boolean isChested()
 	{
-		return !this.isChild();
-	}*/
+		return /*this.getType().canBeChested() &&*/ this.getRideArmorWatchableBoolean(8);
+	}
 
-	/*public boolean isTame()
+	public void setChested(boolean chested)
 	{
-		return true;//this.getRideArmorWatchableBoolean(2);
-	}*/
-
-	public boolean isRidable()
-	{
-		return true;// this.isAdultRideArmor();
+		this.setRideArmorWatchableBoolean(8, chested);
 	}
 
 	@Nullable
@@ -260,57 +385,14 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uniqueId));
 	}
 
-	public float getRideArmorSize()
-	{
-		return 0.5F;
-	}
-
-	/**
-	 * "Sets the scale for an ageable entity according to the boolean parameter, which says if it's a child."
-	 */
-	/*public void setScaleForAge(boolean child)
-	{
-		if (child)
-		{
-			this.setScale(this.getRideArmorSize());
-		}
-		else
-		{
-			this.setScale(1.0F);
-		}
-	}*/
-
 	public boolean isRideArmorJumping()
 	{
 		return this.rideArmorJumping;
 	}
 
-	/*public void setRideArmorTamed(boolean tamed)
-	{
-		this.setRideArmorWatchableBoolean(2, tamed);
-	}*/
-
 	public void setRideArmorJumping(boolean jumping)
 	{
 		this.rideArmorJumping = jumping;
-	}
-
-	/*public boolean canBeLeashedTo(EntityPlayer player)
-	{
-		return !this.getType().isUndead() && super.canBeLeashedTo(player);
-	}*/
-
-	/*protected void onLeashDistance(float p_142017_1_)
-	{
-		if (p_142017_1_ > 6.0F && this.isEatingHaystack())
-		{
-			this.setEatingHaystack(false);
-		}
-	}*/
-
-	public boolean isChested()
-	{
-		return /*this.getType().canBeChested() &&*/ this.getRideArmorWatchableBoolean(8);
 	}
 
 	/**
@@ -347,89 +429,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		return s;
 	}
 
-	/*public RideArmorArmorType getRideArmorArmorType()
-	{
-		return RideArmorArmorType.getByOrdinal(((Integer)this.dataManager.get(RIDEARMOR_ARMOR)).intValue());
-	}*/
-
-	/**
-	 * Set rideArmor armor stack (for example: new ItemStack(Items.iron_rideArmor_armor))
-	 */
-	/*public void setRideArmorArmorStack(ItemStack itemStackIn)
-	{
-		RideArmorArmorType rideArmorarmortype = RideArmorArmorType.getByItemStack(itemStackIn);
-		this.dataManager.set(RIDEARMOR_ARMOR, Integer.valueOf(rideArmorarmortype.getOrdinal()));
-		this.resetTexturePrefix();
-
-		if (!this.worldObj.isRemote)
-		{
-			this.getEntityAttribute(SharedMonsterAttributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
-			int i = rideArmorarmortype.getProtection();
-
-			if (i != 0)
-			{
-				this.getEntityAttribute(SharedMonsterAttributes.ARMOR).applyModifier((new AttributeModifier(ARMOR_MODIFIER_UUID, "RideArmor armor bonus", (double)i, 0)).setSaved(false));
-			}
-		}
-	}*/
-
-	public void setChested(boolean chested)
-	{
-		this.setRideArmorWatchableBoolean(8, chested);
-	}
-
-	/*public void setHasReproduced(boolean hasReproducedIn)
-	{
-		this.hasReproduced = hasReproducedIn;
-	}*/
-
-	/*public void setRideArmorSaddled(boolean saddled)
-	{
-		this.setRideArmorWatchableBoolean(4, saddled);
-	}
-
-	public int getTemper()
-	{
-		return this.temper;
-	}
-
-	public void setTemper(int temperIn)
-	{
-		this.temper = temperIn;
-	}*/
-
-	/*public int increaseTemper(int p_110198_1_)
-	{
-		int i = MathHelper.clamp_int(this.getTemper() + p_110198_1_, 0, this.getMaxTemper());
-		this.setTemper(i);
-		return i;
-	}*/
-
-	/**
-	 * Called when the entity is attacked.
-	 */
-	public boolean attackEntityFrom(DamageSource source, float amount)
-	{
-		Entity entity = source.getEntity();
-		return this.isBeingRidden() && entity != null && this.isRidingOrBeingRiddenBy(entity) ? false : super.attackEntityFrom(source, amount);
-	}
-
-	/**
-	 * Returns true if this entity should push and be pushed by other entities when colliding.
-	 */
-	public boolean canBePushed()
-	{
-		return !this.isBeingRidden();
-	}
-
-	public boolean prepareChunkForSpawn()
-	{
-		int i = MathHelper.floor(this.posX);
-		int j = MathHelper.floor(this.posZ);
-		this.world.getBiomeForCoordsBody(new BlockPos(i, 0, j));
-		return true;
-	}
-
 	/*public void dropChests()
 	{
 		if (!this.worldObj.isRemote && this.isChested())
@@ -448,39 +447,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 			this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_RIDEARMOR_EAT, this.getSoundCategory(), 1.0F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
 		}
 	}*/
-
-	public void fall(float distance, float damageMultiplier)
-	{
-		if (distance > 1.0F)
-		{
-			this.playSound(SoundEvents.BLOCK_ANVIL_LAND, 0.4F, 0.2F);
-			ReploidCraft.logger.info(distance);
-		}
-
-		int i = MathHelper.ceil((distance * 0.5F - 3.0F) * damageMultiplier);
-
-		if (i > 0)
-		{
-			this.attackEntityFrom(DamageSource.FALL, (float)i);
-
-			if (this.isBeingRidden())
-			{
-				for (Entity entity : this.getRecursivePassengers())
-				{
-					entity.attackEntityFrom(DamageSource.FALL, (float)i);
-				}
-			}
-
-			IBlockState iblockstate = this.world.getBlockState(new BlockPos(this.posX, this.posY - 0.2D - (double)this.prevRotationYaw, this.posZ));
-			Block block = iblockstate.getBlock();
-
-			if (iblockstate.getMaterial() != Material.AIR && !this.isSilent())
-			{
-				SoundType soundtype = block.getSoundType();
-				this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, soundtype.getStepSound(), this.getSoundCategory(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
-			}
-		}
-	}
 
 	/**
 	 * Returns number of slots depending rideArmor type
@@ -534,40 +500,9 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 	}*/
 
-	/**
-	 * Called by InventoryBasic.onInventoryChanged() on a array that is never filled.
-	 */
-	public void onInventoryChanged(InventoryBasic invBasic)
-	{
-		/*RideArmorArmorType rideArmorarmortype = this.getRideArmorArmorType();
-		boolean flag = this.isRideArmorSaddled();
-		this.updateRideArmorSlots();
-
-		if (this.ticksExisted > 20)
-		{
-			if (rideArmorarmortype == RideArmorArmorType.NONE && rideArmorarmortype != this.getRideArmorArmorType())
-			{
-				this.playSound(SoundEvents.ENTITY_RIDEARMOR_ARMOR, 0.5F, 1.0F);
-			}
-			else if (rideArmorarmortype != this.getRideArmorArmorType())
-			{
-				this.playSound(SoundEvents.ENTITY_RIDEARMOR_ARMOR, 0.5F, 1.0F);
-			}
-
-			if (!flag && this.isRideArmorSaddled())
-			{
-				this.playSound(SoundEvents.ENTITY_RIDEARMOR_SADDLE, 0.5F, 1.0F);
-			}
-		}*/
-	}
-
-	/**
-	 * Checks if the entity's current position is a valid location to spawn this entity.
-	 */
-	public boolean getCanSpawnHere()
-	{
-		this.prepareChunkForSpawn();
-		return super.getCanSpawnHere();
+	@Override
+	public void onInventoryChanged(IInventory invBasic) {
+		
 	}
 
 	/*protected EntityRideArmor getClosestRideArmor(Entity entityIn, double distance)
@@ -589,11 +524,32 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		return (EntityRideArmor)entity;
 	}*/
 
-	public double getRideArmorJumpStrength()
+	public void dropChestItems()
 	{
-		return this.getEntityAttribute(JUMP_STRENGTH).getAttributeValue();
+		this.dropItemsInChest(this, this.rideArmorChest);
+		//this.dropChests();
 	}
 
+	private void dropItemsInChest(Entity entityIn, ContainerHorseChest animalChestIn)
+	{
+		if (animalChestIn != null && !this.world.isRemote)
+		{
+			for (int i = 0; i < animalChestIn.getSizeInventory(); ++i)
+			{
+				ItemStack itemstack = animalChestIn.getStackInSlot(i);
+
+				if (itemstack != null)
+				{
+					this.entityDropItem(itemstack, 0.0F);
+				}
+			}
+		}
+	}
+
+	/*
+	 * SECTION: Sound
+	 */
+	
 	protected SoundEvent getDeathSound()
 	{
 		//this.openRideArmorMouth();
@@ -681,22 +637,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		this.playSound(SoundEvents.ENTITY_IRONGOLEM_STEP, soundtype.getVolume() * 0.15F, soundtype.getPitch());
 	}
 
-	protected void applyEntityAttributes()
-	{
-		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(JUMP_STRENGTH);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(53.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22499999403953552D);
-	}
-
-	/**
-	 * Will return how many at most can spawn in a chunk at once.
-	 */
-	public int getMaxSpawnedInChunk()
-	{
-		return 6;
-	}
-
 	/**
 	 * Returns the volume for the sounds this mob makes.
 	 */
@@ -713,90 +653,10 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		return 400;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public boolean hasLayeredTextures()
-	{
-		return true;//this.getType() == RideArmorType.RIDEARMOR;// || this.getRideArmorArmorType() != RideArmorArmorType.NONE;
-	}
-
-	/*private void resetTexturePrefix()
-	{
-		this.texturePrefix = null;
-	}*/
-
-	@SideOnly(Side.CLIENT)
-	public boolean hasTexture()
-	{
-		return true;//this.hasTexture;
-	}
-
-	/*@SideOnly(Side.CLIENT)
-	private void setRideArmorTexturePaths()
-	{
-		this.texturePrefix = "rideArmor/";
-		this.rideArmorTexturesArray[0] = null;
-		this.rideArmorTexturesArray[1] = null;
-		this.rideArmorTexturesArray[2] = null;
-		RideArmorType rideArmortype = this.getType();
-		int i = this.getRideArmorVariant();
-
-		if (rideArmortype == RideArmorType.RIDEARMOR)
-		{
-			int j = i & 255;
-			int k = (i & 65280) >> 8;
-
-			if (j >= RIDEARMOR_TEXTURES.length)
-			{
-				this.hasTexture = false;
-				return;
-			}
-
-			this.rideArmorTexturesArray[0] = RIDEARMOR_TEXTURES[j];
-			this.texturePrefix = this.texturePrefix + RIDEARMOR_TEXTURES_ABBR[j];
-
-			if (k >= RIDEARMOR_MARKING_TEXTURES.length)
-			{
-				this.hasTexture = false;
-				return;
-			}
-
-			this.rideArmorTexturesArray[1] = RIDEARMOR_MARKING_TEXTURES[k];
-			this.texturePrefix = this.texturePrefix + RIDEARMOR_MARKING_TEXTURES_ABBR[k];
-		}
-		else
-		{
-			this.rideArmorTexturesArray[0] = "";
-			this.texturePrefix = this.texturePrefix + "_" + rideArmortype + "_";
-		}
-
-		RideArmorArmorType rideArmorarmortype = this.getRideArmorArmorType();
-		this.rideArmorTexturesArray[2] = rideArmorarmortype.getTextureName();
-		this.texturePrefix = this.texturePrefix + rideArmorarmortype.getHash();
-		this.hasTexture = true;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public String getRideArmorTexture()
-	{
-		if (this.texturePrefix == null)
-		{
-			this.setRideArmorTexturePaths();
-		}
-
-		return this.texturePrefix;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public String[] getVariantTexturePaths()
-	{
-		if (this.texturePrefix == null)
-		{
-			this.setRideArmorTexturePaths();
-		}
-
-		return this.rideArmorTexturesArray;
-	}*/
-
+	/*
+	 * SECTION: Interact
+	 */
+	
 	public void openGUI(EntityPlayer playerEntity)
 	{
 		if (!this.world.isRemote && (!this.isBeingRidden() || this.isPassenger(playerEntity)))// && this.isTame())
@@ -806,169 +666,64 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 	}
 
-	public boolean processInteract(EntityPlayer player, EnumHand hand)
+	public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn)
 	{
-		/*if (stack != null && stack.getItem() == Items.SPAWN_EGG)
+		/*if (inventorySlot == 499 && this.getType().canBeChested())
 		{
-			return super.processInteract(player, hand, stack);
+			if (itemStackIn == null && this.isChested())
+			{
+				this.setChested(false);
+				this.initRideArmorChest();
+				return true;
+			}
+
+			if (itemStackIn != null && itemStackIn.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.isChested())
+			{
+				this.setChested(true);
+				this.initRideArmorChest();
+				return true;
+			}
 		}
-		else if (!this.isTame())
+
+		int i = inventorySlot - 400;
+
+		if (i >= 0 && i < 2 && i < this.rideArmorChest.getSizeInventory())
 		{
-			return false;
-		}
-		else if (this.isTame() && this.isAdultRideArmor() && player.isSneaking())
-		{
-			this.openGUI(player);
-			return true;
-		}
-		else if (this.isRidable() && this.isBeingRidden())
-		{
-			return super.processInteract(player, hand, stack);
+			if (i == 0 && itemStackIn != null && itemStackIn.getItem() != Items.SADDLE)
+			{
+				return false;
+			}
+			else if (i != 1 || (itemStackIn == null || RideArmorArmorType.isRideArmorArmor(itemStackIn.getItem())) && this.getType().isRideArmor())
+			{
+				this.rideArmorChest.setInventorySlotContents(i, itemStackIn);
+				this.updateRideArmorSlots();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
-			if (stack != null)
+			int j = inventorySlot - 500 + 2;
+
+			if (j >= 2 && j < this.rideArmorChest.getSizeInventory())
 			{
-				if (this.getType().isRideArmor())
-				{
-					RideArmorArmorType rideArmorarmortype = RideArmorArmorType.getByItemStack(stack);
+				this.rideArmorChest.setInventorySlotContents(j, itemStackIn);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}*/
+		return false;
+	}
 
-					if (rideArmorarmortype != RideArmorArmorType.NONE)
-					{
-						if (!this.isTame())
-						{
-							//this.makeRideArmorRearWithSound();
-							return true;
-						}
-
-						this.openGUI(player);
-						return true;
-					}
-				}
-
-				boolean flag = false;
-
-
-					float f = 0.0F;
-					int i = 0;
-					int j = 0;
-
-					if (stack.getItem() == Items.WHEAT)
-					{
-						f = 2.0F;
-						i = 20;
-						j = 3;
-					}
-					else if (stack.getItem() == Items.SUGAR)
-					{
-						f = 1.0F;
-						i = 30;
-						j = 3;
-					}
-					else if (Block.getBlockFromItem(stack.getItem()) == Blocks.HAY_BLOCK)
-					{
-						f = 20.0F;
-						i = 180;
-					}
-					else if (stack.getItem() == Items.APPLE)
-					{
-						f = 3.0F;
-						i = 60;
-						j = 3;
-					}
-					else if (stack.getItem() == Items.GOLDEN_CARROT)
-					{
-						f = 4.0F;
-						i = 60;
-						j = 5;
-
-						if (this.isTame() && this.getGrowingAge() == 0)
-						{
-							flag = true;
-							this.setInLove(player);
-						}
-					}
-					else if (stack.getItem() == Items.GOLDEN_APPLE)
-					{
-						f = 10.0F;
-						i = 240;
-						j = 10;
-
-						if (this.isTame() && this.getGrowingAge() == 0 && !this.isInLove())
-						{
-							flag = true;
-							this.setInLove(player);
-						}
-					}
-
-					if (this.getHealth() < this.getMaxHealth() && f > 0.0F)
-					{
-						this.heal(f);
-						flag = true;
-					}
-
-					if (!this.isAdultRideArmor() && i > 0)
-					{
-						if (!this.worldObj.isRemote)
-						{
-							this.addGrowth(i);
-						}
-
-						flag = true;
-					}
-
-					if (j > 0 && (flag || !this.isTame()) && this.getTemper() < this.getMaxTemper())
-					{
-						flag = true;
-
-						if (!this.worldObj.isRemote)
-						{
-							this.increaseTemper(j);
-						}
-					}
-
-					if (flag)
-					{
-						//this.eatingRideArmor();
-					}
-
-
-				if (!this.isTame() && !flag)
-				{
-					if (stack.interactWithEntity(player, this, hand))
-					{
-						return true;
-					}
-
-					//this.makeRideArmorRearWithSound();
-					return true;
-				}
-
-				if (!flag && this.getType().canBeChested() && !this.isChested() && stack.getItem() == Item.getItemFromBlock(Blocks.CHEST))
-				{
-					this.setChested(true);
-					this.playSound(SoundEvents.ENTITY_DONKEY_CHEST, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-					flag = true;
-					this.initRideArmorChest();
-				}
-
-				if (!flag && this.isRidable() && !this.isRideArmorSaddled() && stack.getItem() == Items.SADDLE)
-				{
-					this.openGUI(player);
-					return true;
-				}
-
-				if (flag)
-				{
-					if (!player.capabilities.isCreativeMode)
-					{
-						--stack.stackSize;
-					}
-
-					return true;
-				}
-			}*/
-
+	public boolean processInteract(EntityPlayer player, EnumHand hand)
+	{
+		//setPart(BODY, "EMPTY");
         ItemStack stack = player.getHeldItem(hand);
 		if (this.isRidable() && !this.isBeingRidden())
 		{
@@ -986,7 +741,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		{
 			return super.processInteract(player, hand);
 		}
-		//}
 	}
 
 	private void mountTo(EntityPlayer player)
@@ -1000,41 +754,15 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 	}
 
-	/**
-	 * Dead and sleeping entities cannot move
-	 */
-	protected boolean isMovementBlocked()
-	{
-		return this.isBeingRidden();// && this.isRideArmorSaddled();
-	}
-
-	/**
-	 * Checks if the parameter is an item which this animal can be fed to breed it (wheat, carrots or seeds depending on
-	 * the animal type)
-	 */
-	/*public boolean isBreedingItem(@Nullable ItemStack stack)
-	{
-		return false;
-	}*/
-
 	private void moveTail()
 	{
 		//this.tailCounter = 1;
 	}
 
-	/**
-	 * Called when the mob's health reaches 0.
+	/*
+	 * SECTION: Updating
 	 */
-	public void onDeath(DamageSource cause)
-	{
-		super.onDeath(cause);
-
-		if (!this.world.isRemote)
-		{
-			this.dropChestItems();
-		}
-	}
-
+	
 	/**
 	 * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
 	 * use this to react to sunlight and start to burn.
@@ -1048,6 +776,8 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 
 		super.onLivingUpdate();
 
+		this.updatePartsString();
+        this.updateArmSwingProgress();
 		if (!this.world.isRemote)
 		{
 			if (this.rand.nextInt(900) == 0 && this.deathTime == 0)
@@ -1073,13 +803,19 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 	public void onUpdate()
 	{
 		super.onUpdate();
-
+		if (this.getPartType(BODY).equals("EMPTY")) {
+			this.setDead();
+		}
+		
+//		this.setDead();//TODO: DEAD
+		
 		if (this.world.isRemote && this.dataManager.isDirty())
 		{
 			this.dataManager.setClean();
 			//this.resetTexturePrefix();
 		}
-
+		this.updateParts();
+		//ReploidCraft.logger.info(FMLCommonHandler.instance().getEffectiveSide() + " " + this.getPartsString());
 		/*if (this.openMouthCounter > 0 && ++this.openMouthCounter > 30)
 		{
 			this.openMouthCounter = 0;
@@ -1106,6 +842,7 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 				this.sprintCounter = 0;
 			}
 		}
+		this.allowStandSliding = false;
 
 		//this.prevHeadLean = this.headLean;
 
@@ -1142,7 +879,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 		else
 		{*/
-		this.allowStandSliding = false;
 		//this.rearingAmount += (0.8F * this.rearingAmount * this.rearingAmount * this.rearingAmount - this.rearingAmount) * 0.6F - 0.05F;
 
 		/*if (this.rearingAmount < 0.0F)
@@ -1180,6 +916,7 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 			updateRideArmorAITasks(getPassengers().get(0));
 		}
 	}
+
 	private void updateRideArmorAITasks(Entity p_70108_1_)
 	{
 		if (p_70108_1_ != null && !(p_70108_1_ instanceof EntityPlayer))
@@ -1298,35 +1035,23 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		ReploidCraft.logger.info(getMobType());
 	}
 
-	public void dropChestItems()
+	/**
+	 * Called when the mob's health reaches 0.
+	 */
+	public void onDeath(DamageSource cause)
 	{
-		this.dropItemsInChest(this, this.rideArmorChest);
-		//this.dropChests();
-	}
+		super.onDeath(cause);
 
-	private void dropItemsInChest(Entity entityIn, ContainerHorseChest animalChestIn)
-	{
-		if (animalChestIn != null && !this.world.isRemote)
+		if (!this.world.isRemote)
 		{
-			for (int i = 0; i < animalChestIn.getSizeInventory(); ++i)
-			{
-				ItemStack itemstack = animalChestIn.getStackInSlot(i);
-
-				if (itemstack != null)
-				{
-					this.entityDropItem(itemstack, 0.0F);
-				}
-			}
+			this.dropChestItems();
 		}
 	}
 
-	/*public boolean setTamedBy(EntityPlayer player)
-	{
-		this.setOwnerUniqueId(player.getUniqueID());
-		this.setRideArmorTamed(true);
-		return true;
-	}*/
-
+	/*
+	 * SECTION: Movement
+	 */
+	
 	/**
 	 * Moves the entity based on the specified heading.
 	 */
@@ -1419,6 +1144,109 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 	}
 
+	/**
+	 * returns true if all the conditions for steering the entity are met. For pigs, this is true if it is being ridden
+	 * by a player and the player is holding a carrot-on-a-stick
+	 */
+	public boolean canBeSteered()
+	{
+		Entity entity = this.getControllingPassenger();
+		return entity instanceof EntityLivingBase;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void setJumpPower(int jumpPowerIn)
+	{
+		if (true)//this.isRideArmorSaddled())
+		{
+			if (jumpPowerIn < 0)
+			{
+				jumpPowerIn = 0;
+			}
+			else
+			{
+				this.allowStandSliding = true;
+				//this.makeRideArmorRear();
+			}
+
+			if (jumpPowerIn >= 90)
+			{
+				this.jumpPower = 1.0F;
+			}
+			else
+			{
+				this.jumpPower = 0.4F + 0.4F * (float)jumpPowerIn / 90.0F;
+			}
+		}
+	}
+
+	public boolean canJump()
+	{
+		return true;//this.isRideArmorSaddled();
+	}
+
+	public void handleStartJump(int p_184775_1_)
+	{
+		ReploidCraft.logger.info(p_184775_1_);
+		this.allowStandSliding = true;
+		ReploidCraft.logger.info("jump");
+		//this.makeRideArmorRear();
+	}
+
+	public void handleStopJump()
+	{
+		ReploidCraft.logger.info("land");
+	}
+
+	public void fall(float distance, float damageMultiplier)
+	{
+		if (distance > 1.0F)
+		{
+			this.playSound(SoundEvents.BLOCK_ANVIL_LAND, 0.4F, 0.2F);
+			ReploidCraft.logger.info(distance);
+		}
+
+		int i = MathHelper.ceil((distance * 0.5F - 3.0F) * damageMultiplier);
+
+		if (i > 0)
+		{
+			this.attackEntityFrom(DamageSource.FALL, (float)i);
+
+			if (this.isBeingRidden())
+			{
+				for (Entity entity : this.getRecursivePassengers())
+				{
+					entity.attackEntityFrom(DamageSource.FALL, (float)i);
+				}
+			}
+
+			IBlockState iblockstate = this.world.getBlockState(new BlockPos(this.posX, this.posY - 0.2D - (double)this.prevRotationYaw, this.posZ));
+			Block block = iblockstate.getBlock();
+
+			if (iblockstate.getMaterial() != Material.AIR && !this.isSilent())
+			{
+				SoundType soundtype = block.getSoundType();
+				this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, soundtype.getStepSound(), this.getSoundCategory(), soundtype.getVolume() * 0.5F, soundtype.getPitch() * 0.75F);
+			}
+		}
+	}
+
+	/**
+	 * Returns true if this entity should push and be pushed by other entities when colliding.
+	 */
+	public boolean canBePushed()
+	{
+		return !this.isBeingRidden();
+	}
+
+	/**
+	 * Dead and sleeping entities cannot move
+	 */
+	protected boolean isMovementBlocked()
+	{
+		return this.isBeingRidden();// && this.isRideArmorSaddled();
+	}
+
 	private boolean canWalk() {
 		return true;//this.getType().canWalk();
 	}
@@ -1429,6 +1257,7 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 	public void writeEntityToNBT(NBTTagCompound compound)
 	{
 		super.writeEntityToNBT(compound);
+
 		//compound.setBoolean("ChestedRideArmor", this.isChested());
 		//compound.setInteger("Type", this.getType().getOrdinal());
 		//compound.setInteger("Variant", this.getRideArmorVariant());
@@ -1467,6 +1296,25 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		{
 			compound.setTag("SaddleItem", this.rideArmorChest.getStackInSlot(0).writeToNBT(new NBTTagCompound()));
 		}*/
+		//ReploidCraft.logger.info(FMLCommonHandler.instance().getEffectiveSide() + " WRITING " + this.getPartsString());
+		if (this.rideArmorParts != null)
+		{
+			NBTTagList nbttaglist = new NBTTagList();
+			NBTTagCompound nbttagcompound1;
+
+			for (int i = 0; i < this.rideArmorParts.length; ++i)
+			{
+				nbttagcompound1 = new NBTTagCompound();
+
+				if (partSwitch(i) != null)
+				{
+					partSwitch(i).writeToNBT(nbttagcompound1);
+				}
+
+				nbttaglist.appendTag(nbttagcompound1);
+			}
+			compound.setTag("Parts", nbttaglist);
+		}
 	}
 
 	/**
@@ -1540,6 +1388,30 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 
 		this.updateRideArmorSlots();*/
+
+		//ReploidCraft.logger.info(FMLCommonHandler.instance().getEffectiveSide() + " READING");
+		NBTTagList nbttaglist;
+		if (compound.hasKey("Parts", 9))
+		{
+			nbttaglist = compound.getTagList("Parts", 10);
+			for (int i = 0; i < this.rideArmorParts.length; ++i)
+			{
+				partSwitch(i).readFromNBT(nbttaglist.getCompoundTagAt(i));
+				/*EntityRideArmorPart part = this.loadPartFromNBT(nbttaglist.getCompoundTagAt(i), PartSlot.values()[i]);
+		        NBTTagCompound nbttagcompound = new NBTTagCompound();
+		        
+		        .readFromNBT(part.writeToNBT(nbttagcompound));*/
+			}
+		}
+
+		this.updatePartsString();
+	}
+
+	public EntityRideArmorPart loadPartFromNBT(NBTTagCompound par0NBTTagCompound, PartSlot partName, int index)
+	{
+		EntityRideArmorPart part = new EntityRideArmorPart(this, partName);
+		
+		return part.getType().toString() != "" ? part : null;
 	}
 
 	/**
@@ -1560,17 +1432,10 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		}
 		else
 		{
-			/*if (this.rand.nextInt(10) == 0)
-			{
-				rideArmortype = RideArmorType.DONKEY;
-			}
-			else
-			{*/
 			int j = this.rand.nextInt(7);
 			int k = this.rand.nextInt(5);
 			rideArmortype = RideArmorType.RIDEARMOR;
 			i = j | k << 8;
-			//}
 
 			livingdata = new EntityRideArmor.GroupData(rideArmortype, i);
 		}
@@ -1578,18 +1443,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		//this.setType(rideArmortype);
 		//this.setRideArmorVariant(i);
 
-		if (this.rand.nextInt(5) == 0)
-		{
-			this.setGrowingAge(-24000);
-		}
-
-		/*if (rideArmortype.isUndead())
-		{
-			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(15.0D);
-			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
-		}
-		else
-		{*/
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)this.getModifiedMaxHealth());
 
 		if (rideArmortype == RideArmorType.RIDEARMOR)
@@ -1600,91 +1453,11 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 		{
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.17499999701976776D);
 		}
-		//}
 
-		/*if (rideArmortype.hasMuleEars())
-		{
-			this.getEntityAttribute(JUMP_STRENGTH).setBaseValue(0.5D);
-		}
-		else
-		{*/
 		this.getEntityAttribute(JUMP_STRENGTH).setBaseValue(this.getModifiedJumpStrength());
-		//}
 
 		this.setHealth(this.getMaxHealth());
 		return livingdata;
-	}
-
-	/**
-	 * returns true if all the conditions for steering the entity are met. For pigs, this is true if it is being ridden
-	 * by a player and the player is holding a carrot-on-a-stick
-	 */
-	public boolean canBeSteered()
-	{
-		Entity entity = this.getControllingPassenger();
-		return entity instanceof EntityLivingBase;
-	}
-
-	/*@SideOnly(Side.CLIENT)
-	public float getGrassEatingAmount(float p_110258_1_)
-	{
-		return this.prevHeadLean + (this.headLean - this.prevHeadLean) * p_110258_1_;
-	}*/
-
-	/*@SideOnly(Side.CLIENT)
-	public float getRearingAmount(float p_110223_1_)
-	{
-		return this.prevRearingAmount + (this.rearingAmount - this.prevRearingAmount) * p_110223_1_;
-	}*/
-
-	/*@SideOnly(Side.CLIENT)
-	public float getMouthOpennessAngle(float p_110201_1_)
-	{
-		return this.prevMouthOpenness + (this.mouthOpenness - this.prevMouthOpenness) * p_110201_1_;
-	}*/
-
-	@SideOnly(Side.CLIENT)
-	public void setJumpPower(int jumpPowerIn)
-	{
-		if (true)//this.isRideArmorSaddled())
-		{
-			if (jumpPowerIn < 0)
-			{
-				jumpPowerIn = 0;
-			}
-			else
-			{
-				this.allowStandSliding = true;
-				//this.makeRideArmorRear();
-			}
-
-			if (jumpPowerIn >= 90)
-			{
-				this.jumpPower = 1.0F;
-			}
-			else
-			{
-				this.jumpPower = 0.4F + 0.4F * (float)jumpPowerIn / 90.0F;
-			}
-		}
-	}
-
-	public boolean canJump()
-	{
-		return true;//this.isRideArmorSaddled();
-	}
-
-	public void handleStartJump(int p_184775_1_)
-	{
-		ReploidCraft.logger.info(p_184775_1_);
-		this.allowStandSliding = true;
-		ReploidCraft.logger.info("jump");
-		//this.makeRideArmorRear();
-	}
-
-	public void handleStopJump()
-	{
-		ReploidCraft.logger.info("land");
 	}
 
 	/**
@@ -1745,117 +1518,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 	}
 
 	/**
-	 * Returns the Y offset from the entity's position for any entity riding this one.
-	 */
-	public double getMountedYOffset()
-	{
-		double d0 = super.getMountedYOffset();
-
-		/*if (this.getType() == RideArmorType.SKELETON)
-		{
-			d0 -= 0.1875D;
-		}
-		else if (this.getType() == RideArmorType.DONKEY)
-		{
-			d0 -= 0.25D;
-		}*/
-
-		return d0;
-	}
-
-	/**
-	 * Returns randomized max health
-	 */
-	private float getModifiedMaxHealth()
-	{
-		return 15.0F + (float)this.rand.nextInt(8) + (float)this.rand.nextInt(9);
-	}
-
-	/**
-	 * Returns randomized jump strength
-	 */
-	private double getModifiedJumpStrength()
-	{
-		return 0.4000000059604645D + this.rand.nextDouble() * 0.2D + this.rand.nextDouble() * 0.2D + this.rand.nextDouble() * 0.2D;
-	}
-
-	/**
-	 * Returns randomized movement speed
-	 */
-	private double getModifiedMovementSpeed()
-	{
-		return (0.44999998807907104D + this.rand.nextDouble() * 0.3D + this.rand.nextDouble() * 0.3D + this.rand.nextDouble() * 0.3D) * 0.25D;
-	}
-
-	/**
-	 * returns true if this entity is by a ladder, false otherwise
-	 */
-	public boolean isOnLadder()
-	{
-		return false;
-	}
-
-	public float getEyeHeight()
-	{
-		return this.height;
-	}
-
-	public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn)
-	{
-		/*if (inventorySlot == 499 && this.getType().canBeChested())
-		{
-			if (itemStackIn == null && this.isChested())
-			{
-				this.setChested(false);
-				this.initRideArmorChest();
-				return true;
-			}
-
-			if (itemStackIn != null && itemStackIn.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.isChested())
-			{
-				this.setChested(true);
-				this.initRideArmorChest();
-				return true;
-			}
-		}
-
-		int i = inventorySlot - 400;
-
-		if (i >= 0 && i < 2 && i < this.rideArmorChest.getSizeInventory())
-		{
-			if (i == 0 && itemStackIn != null && itemStackIn.getItem() != Items.SADDLE)
-			{
-				return false;
-			}
-			else if (i != 1 || (itemStackIn == null || RideArmorArmorType.isRideArmorArmor(itemStackIn.getItem())) && this.getType().isRideArmor())
-			{
-				this.rideArmorChest.setInventorySlotContents(i, itemStackIn);
-				this.updateRideArmorSlots();
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			int j = inventorySlot - 500 + 2;
-
-			if (j >= 2 && j < this.rideArmorChest.getSizeInventory())
-			{
-				this.rideArmorChest.setInventorySlotContents(j, itemStackIn);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}*/
-		return false;
-	}
-
-	/**
 	 * For vehicles, the first passenger is generally considered the controller and "drives" the vehicle. For example,
 	 * Pigs, RideArmors, and Boats are generally "steered" by the controlling passenger.
 	 */
@@ -1870,7 +1532,7 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 	 */
 	public EnumCreatureAttribute getCreatureAttribute()
 	{
-		return /*this.getType().isUndead() ? EnumCreatureAttribute.UNDEAD : */EnumCreatureAttribute.UNDEFINED;
+		return EnumCreatureAttribute.UNDEFINED;
 	}
 
 	@Nullable
@@ -1910,18 +1572,90 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 
 	@Override
 	public EntityAgeable createChild(EntityAgeable ageable) {
-		return null;
+		return null; // NO CHILDEREN ALLOWED
 	}
 
-	@Override
-	public void onInventoryChanged(IInventory invBasic) {
-		// TODO Auto-generated method stub
-		
+	protected void updateParts()
+	{
+		float f3 = this.rotationYaw * (float) Math.PI / 180.0F;
+		Vec3d[] avec3d = new Vec3d[this.rideArmorParts.length];
+		if (rideArmorParts != null)
+		{
+			for (int i = 0; i < rideArmorParts.length; i++)
+			{
+				EntityRideArmorPart part = partSwitch(i);
+	            avec3d[i] = new Vec3d(part.posX, part.posY, part.posZ);
+				updatePart(part, f3);
+			}
+			for (int l = 0; l < this.rideArmorParts.length; ++l)
+            {
+                this.rideArmorParts[l].prevPosX = avec3d[l].xCoord;
+                this.rideArmorParts[l].prevPosY = avec3d[l].yCoord;
+                this.rideArmorParts[l].prevPosZ = avec3d[l].zCoord;
+            }
+
+		}
 	}
 
-	@Override
-	public World getWorld() {
-		return this.world;
+	private void updatePart(EntityRideArmorPart part, float rotation)
+	{
+		float f1 = MathHelper.sin(rotation);
+		float f2 = MathHelper.cos(rotation);
+		float[] offsets = part.getOffsetsPos();
+		if (this.hasPart(ARMRIGHT) && part.slot == ARMRIGHT && ReploidCraft.proxy.partRegistry.getPart(part.getType(), part.slot) instanceof IPartArm)
+		{
+			if (((IPartArm) ReploidCraft.proxy.partRegistry.getPart(part.getType(), part.slot)).isMirrored())
+				offsets = ((IPartArm) ReploidCraft.proxy.partRegistry.getPart(part.getType(), part.slot)).getArmPos(ARMRIGHT);
+		}
+
+		double X = this.posX + offsets[0] * f2 + offsets[2] * f1;
+		double Z = this.posZ + offsets[0] * f1 - offsets[2] * f2;
+		part.onUpdate();
+		part.setLocationAndAngles(X, this.posY + offsets[1], Z, 0.0F, 0.0F);
+	}
+
+	public EntityRideArmorPart partSwitch(int index)
+	{
+		if (index == HEAD.ordinal())
+		{
+			return rideArmorHead;
+		}
+		else if (index == BODY.ordinal())
+		{
+			return rideArmorBody;
+		}
+		else if (index == BACK.ordinal())
+		{
+			return rideArmorBack;
+		}
+		else if (index == LEGS.ordinal())
+		{
+			return rideArmorFeet;
+		}
+		else if (index == ARMLEFT.ordinal())
+		{
+			return rideArmorArmLeft;
+		}
+		else if (index == ARMRIGHT.ordinal())
+		{
+			return rideArmorArmRight;
+		}
+		else return null;
+
+	}
+
+	private void updatePartsString()
+	{
+		if (!this.world.isRemote)
+		{
+			this.setPartsString();
+		}
+		String s = this.getPartsString();
+
+		if (!lastPartsString.equals(s))
+		{
+			lastPartsString = s;
+		}
 	}
 
 	public void setPart(PartSlot slot, String type)
@@ -1938,6 +1672,16 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 	public String getPartType(PartSlot slot) {
 		// TODO Auto-generated method stub
 		return this.partSwitch(slot.ordinal()).getType();
+	}
+
+	/**
+	 * Called when the entity is attacked.
+	 */
+	public boolean attackEntityFrom(DamageSource source, float amount)
+	{
+		this.setDead();
+		Entity entity = source.getEntity();
+		return this.isBeingRidden() && entity != null && this.isRidingOrBeingRiddenBy(entity) ? false : super.attackEntityFrom(source, amount);
 	}
 
 	@Override
@@ -2045,50 +1789,6 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 
 	}
 
-	public EntityRideArmorPart partSwitch(int index)
-	{
-		if (index == HEAD.ordinal())
-		{
-			return rideArmorHead;
-		}
-		else if (index == BODY.ordinal())
-		{
-			return rideArmorBody;
-		}
-		else if (index == BACK.ordinal())
-		{
-			return rideArmorBack;
-		}
-		else if (index == LEGS.ordinal())
-		{
-			return rideArmorFeet;
-		}
-		else if (index == ARMLEFT.ordinal())
-		{
-			return rideArmorArmLeft;
-		}
-		else if (index == ARMRIGHT.ordinal())
-		{
-			return rideArmorArmRight;
-		}
-		else return null;
-
-	}
-
-	private void updatePartsString()
-	{
-		if (!this.world.isRemote)
-		{
-			this.setPartsString();
-		}
-		String s = this.getPartsString();
-
-		if (!lastPartsString.equals(s))
-		{
-			lastPartsString = s;
-		}
-	}
-
 	public EnumMobType getMobType()
 	{
 		return mobType;
@@ -2098,4 +1798,5 @@ public class EntityRideArmor extends EntityAnimal implements IEntityMultiPart, I
 	{
 		this.mobType = mobType;
 	}
+
 }

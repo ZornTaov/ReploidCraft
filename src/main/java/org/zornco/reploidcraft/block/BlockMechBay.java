@@ -3,7 +3,9 @@ package org.zornco.reploidcraft.block;
 import java.util.List;
 
 import org.zornco.reploidcraft.ReploidCraft;
+import org.zornco.reploidcraft.init.RCBlocks;
 import org.zornco.reploidcraft.item.EnumEnergyPelletStr;
+import org.zornco.reploidcraft.item.ItemBlockMechBay;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
@@ -28,13 +30,14 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockMechBay extends Block implements ITileEntityProvider {
+public class BlockMechBay extends Block implements ITileEntityProvider,IMetaBlockName {
 
 	public static String[] names = {"basic", "controller", "power"};
     public static final PropertyEnum<BlockMechBay.EnumType> VARIANT = PropertyEnum.<BlockMechBay.EnumType>create("variant", BlockMechBay.EnumType.class);
@@ -47,14 +50,24 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
 		setUnlocalizedName("mechbay");
 		setHardness(3.5F);
 		GameRegistry.register(this);
-		
-		GameRegistry.register(new ItemMultiTexture(this, this, new ItemMultiTexture.Mapper()
-        {
-            public String apply(ItemStack p_apply_1_)
-            {
-                return BlockMechBay.EnumType.byMetadata(p_apply_1_.getMetadata()).getUnlocalizedName();
-            }
-        }).setUnlocalizedName(this.getUnlocalizedName()).setRegistryName(this.getRegistryName()));
+		GameRegistry.register(new ItemBlockMechBay(this).setRegistryName(this.getRegistryName()));
+//		GameRegistry.register(new ItemMultiTexture(this, this, new ItemMultiTexture.Mapper()
+//        {
+//            public String apply(ItemStack p_apply_1_)
+//            {
+//                return BlockMechBay.EnumType.byMetadata(p_apply_1_.getMetadata()).getUnlocalizedName();
+//            }
+//        }).setUnlocalizedName(this.getUnlocalizedName()).setRegistryName(this.getRegistryName()));
+	}
+	@Override
+	public String getSpecialName(ItemStack stack) {
+		// TODO Auto-generated method stub
+		return EnumType.byMetadata(stack.getItemDamage()).toString().toLowerCase();
+	}
+	
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+	    return new ItemStack(Item.getItemFromBlock(this), 1, this.getMetaFromState(world.getBlockState(pos)));
 	}
 
 	@Override
@@ -87,9 +100,10 @@ public class BlockMechBay extends Block implements ITileEntityProvider {
     }
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	{
 		for (int ix = 0; ix <  BlockMechBay.names.length; ix++) {
-			subItems.add(new ItemStack(this, 1, ix));
+			list.add(new ItemStack(this, 1, ix));
 		}
 	}
 	@Override

@@ -7,14 +7,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.zornco.reploidcraft.ReploidCraft;
+import org.zornco.reploidcraft.client.render.ridearmor.ModelRideArmorLegs;
+import org.zornco.reploidcraft.client.render.ridearmor.RenderRideArmor;
 import org.zornco.reploidcraft.client.render.ridearmor.layer.LayerRideArmorPart;
+import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorBack;
 import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorBase;
+import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorChest;
+import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorHeadFrog;
+import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorLeftArm;
+import org.zornco.reploidcraft.client.render.ridearmor.model.ModelRideArmorRightArm;
 
 public class PartBase {
 
 	@SideOnly(Side.CLIENT)
-	protected LayerRideArmorPart model;
-
+	protected LayerRideArmorPart layer;
+	@SideOnly(Side.CLIENT)
+	protected ModelRideArmorBase model;
 	@SideOnly(Side.CLIENT)
 	protected ResourceLocation texture;
 
@@ -142,5 +151,34 @@ public class PartBase {
 		return null;
 	}
 	@SideOnly(Side.CLIENT)
-	public void initModel() {}
+	public void initModel(String type, PartSlot slot) {
+		switch (slot) {
+		case ARMLEFT:
+			model = new ModelRideArmorLeftArm();
+			break;
+		case ARMRIGHT:
+			model = new ModelRideArmorRightArm();
+			break;
+		case BACK:
+			model = new ModelRideArmorBack();
+			break;
+		case BODY:
+			model = new ModelRideArmorChest();
+			break;
+		case LEGS:
+			model = new ModelRideArmorLegs();
+			break;
+		case HEAD:
+		default:
+			model = new ModelRideArmorBase();
+			break;
+		}
+		texture = new ResourceLocation(ReploidCraft.MODID + ":textures/entity/ridearmor/"+type.toLowerCase()+"/"+slot.name().toLowerCase()+".png");
+		setLayer(type, slot);
+	}
+
+	public void setLayer(String type, PartSlot slot) {
+		layer = new LayerRideArmorPart(model, texture, slot, type);
+		RenderRideArmor.INSTANCE.addLayer(layer);
+	}
 }
