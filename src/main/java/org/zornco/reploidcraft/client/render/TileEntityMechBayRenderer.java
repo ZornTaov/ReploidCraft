@@ -10,11 +10,14 @@ import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import org.lwjgl.opengl.GL12;
+import org.zornco.reploidcraft.block.BlockMechBay;
 import org.zornco.reploidcraft.block.TileEntityMechBay;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 
 public class TileEntityMechBayRenderer extends TileEntitySpecialRenderer {
 
@@ -28,6 +31,9 @@ public class TileEntityMechBayRenderer extends TileEntitySpecialRenderer {
 		if (tile == null) {
 			return;
 		}
+		IBlockState state = tile.getWorld().getBlockState(tile.getPos()); 
+		if (!(state.getBlock() instanceof BlockMechBay))return;
+		if (!state.getValue(BlockMechBay.INVIS).booleanValue()) return;
 		if (!tile.isMaster()) return;
 		int facing = 3;
 		if (tile != null && tile.getWorld() != null) {
@@ -39,7 +45,7 @@ public class TileEntityMechBayRenderer extends TileEntitySpecialRenderer {
 		glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		glTranslatef((float) x, (float) y + 3.0F, (float) z + 1.0F);
 		glScalef(1.0F, -1F, -1F);
-		glTranslatef(0.5F, 0.5F, 0.5F);
+		glTranslatef(0.5F, 0.5F, 0.5F);	
 		int k = 0;
 		if (facing == 0) {
 			k = 0;

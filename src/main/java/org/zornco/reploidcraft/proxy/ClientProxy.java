@@ -45,6 +45,7 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -114,6 +115,8 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechBay.class, new TileEntityMechBayRenderer());
 	}
 	public void registerRenderersInit() {
+		OBJLoader.INSTANCE.addDomain(ReploidCraft.MODID);
+		//ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(RCBlocks.mechBay), 0, new ModelResourceLocation(ReploidCraft.MODID+":mechBay", "inventory"));
 		MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(
 				new IItemColor()

@@ -13,6 +13,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -33,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,10 +43,11 @@ public class BlockMechBay extends Block implements ITileEntityProvider,IMetaBloc
 
 	public static String[] names = {"basic", "controller", "power"};
     public static final PropertyEnum<BlockMechBay.EnumType> VARIANT = PropertyEnum.<BlockMechBay.EnumType>create("variant", BlockMechBay.EnumType.class);
+    public static final PropertyBool INVIS = PropertyBool.create("invis");
     protected static final AxisAlignedBB MECH_BAY_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
 	public BlockMechBay() {
 		super(Material.IRON);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockMechBay.EnumType.BASIC));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockMechBay.EnumType.BASIC).withProperty(INVIS, false));
 		setCreativeTab(ReploidCraft.reploidCraftTab);
 		setRegistryName("mechbay");
 		setUnlocalizedName("mechbay");
@@ -90,7 +93,7 @@ public class BlockMechBay extends Block implements ITileEntityProvider,IMetaBloc
         return ((EnumType) state.getValue(VARIANT)).getMetadata();
     }
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{VARIANT});
+        return new BlockStateContainer(this, new IProperty[]{VARIANT,INVIS});
     }
     /**
      * Get the MapColor for this Block and the given BlockState
@@ -142,7 +145,7 @@ public class BlockMechBay extends Block implements ITileEntityProvider,IMetaBloc
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity te = worldIn.getTileEntity(pos);
-
+		ReploidCraft.logger.info(FMLCommonHandler.instance().getEffectiveSide() + " " + ((TileEntityMechBay)te).isMaster());
 		if (te == null || !(te instanceof TileEntityMechBayController))
 		{
 			return false;

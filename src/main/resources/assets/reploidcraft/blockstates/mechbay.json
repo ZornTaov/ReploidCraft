@@ -25,6 +25,12 @@
 					"all": "reploidcraft:blocks/mechbaypower"
 				}
 			}
+		},
+		"invis": {
+			"true": {
+				"model": "reploidcraft:mechbay_invis"
+			},
+			"false": {}
 		}
 	}
 }

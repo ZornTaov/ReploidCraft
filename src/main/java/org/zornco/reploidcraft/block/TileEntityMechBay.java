@@ -6,8 +6,10 @@ import java.util.Random;
 
 import org.zornco.reploidcraft.ReploidCraft;
 import org.zornco.reploidcraft.entities.EntityRideArmor;
+import org.zornco.reploidcraft.init.RCBlocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TileEntityMechBay extends TileMultiBlock implements IInventory {
     private NonNullList<ItemStack> inv = NonNullList.<ItemStack>withSize(6, ItemStack.EMPTY);
@@ -385,6 +388,10 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 				}
 
 			}
+        if (++this.ticksSinceSync % 20 * 4 == 0)
+        {
+            this.world.addBlockEvent(this.pos, RCBlocks.mechBay, 1, this.numPlayersUsing);
+        }
 		super.update();
 	
 	}
@@ -445,16 +452,22 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 	public void setupStructure() {
 
 		TileEntity tile;
+		IBlockState state;
+		BlockPos offsetPos;
 		int i = 0;
 		for (int[] base : baseBlocks) {
-			tile = world.getTileEntity(this.pos.add(base[0], base[1], base[2]));
+			offsetPos = this.pos.add(base[0], base[1], base[2]);
+			tile = world.getTileEntity(offsetPos);
+			state = world.getBlockState(offsetPos);
 			i++;
 			//boolean master = (this.xCoord + base[0] == xCoord && this.yCoord + base[1] == yCoord && this.zCoord + base[2] == zCoord);
-			if(tile != null && (tile instanceof TileEntityMechBay) )
+			if(tile != null && (tile instanceof TileEntityMechBay) && state.getBlock() instanceof BlockMechBay)
 			{
 				((TileEntityMechBay) tile).setMasterCoords(pos);
 				((TileEntityMechBay) tile).setHasMaster(true);
 				((TileEntityMechBay) tile).setIsMaster(i == 1);
+				world.setBlockState(offsetPos, state.withProperty(BlockMechBay.INVIS, true));
+				tile.markDirty();
 			}
 			else
 			{
@@ -463,10 +476,14 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		}
 		for (int[] back : backRotations[getDirection()])
 		{
-			tile = world.getTileEntity(this.pos.add(back[0], back[1]+1, back[2]));
-			if(tile != null && (tile instanceof TileEntityMechBay) ){
+			offsetPos = this.pos.add(back[0], back[1]+1, back[2]);
+			tile = world.getTileEntity(offsetPos);
+			state = world.getBlockState(offsetPos);
+			if(tile != null && (tile instanceof TileEntityMechBay) && state.getBlock() instanceof BlockMechBay){
 				((TileEntityMechBay) tile).setMasterCoords(pos);
 				((TileEntityMechBay) tile).setHasMaster(true);
+				world.setBlockState(offsetPos, state.withProperty(BlockMechBay.INVIS, true));
+				tile.markDirty();
 			}
 			else
 			{
@@ -475,45 +492,67 @@ public class TileEntityMechBay extends TileMultiBlock implements IInventory {
 		}
 		for (int[] sides : sideRotations[getDirection() / 2])
 		{
-			tile = world.getTileEntity(this.pos.add(sides[0], sides[1]+1, sides[2]));
-			if(tile != null && (tile instanceof TileEntityMechBay) ){
+			offsetPos = this.pos.add(sides[0], sides[1]+1, sides[2]);
+			tile = world.getTileEntity(offsetPos);
+			state = world.getBlockState(offsetPos);
+			if(tile != null && (tile instanceof TileEntityMechBay) && state.getBlock() instanceof BlockMechBay){
 				((TileEntityMechBay) tile).setMasterCoords(pos);
 				((TileEntityMechBay) tile).setHasMaster(true);
+				world.setBlockState(offsetPos, state.withProperty(BlockMechBay.INVIS, true));
+				tile.markDirty();
 			}
 			else
 			{
 				//System.out.println((this.xCoord + sides[0]) + " " + (this.yCoord + sides[1]) + " " + (this.zCoord + sides[2]));
 			}
 		}
-		ReploidCraft.logger.info("setup completed!");
+		ReploidCraft.logger.info(FMLCommonHandler.instance().getEffectiveSide() + " setup completed!");
 	}
 
 	@Override
 	public void resetStructure() {
 
 		TileEntity tile;
+		IBlockState state;
+		BlockPos offsetPos;
 
 		for (int[] base : baseBlocks) {
-			tile = world.getTileEntity(this.pos.add(base[0], base[1], base[2]));
+			offsetPos = this.pos.add(base[0], base[1], base[2]);
+			tile = world.getTileEntity(offsetPos);
+			state = world.getBlockState(offsetPos);
 
-			if(tile != null && (tile instanceof TileEntityMechBay) )
+			if(tile != null && (tile instanceof TileEntityMechBay) && state.getBlock() instanceof BlockMechBay)
 			{
 				((TileEntityMechBay) tile).reset();
 				((TileEntityMechBay) tile).hasRide = false;
+				world.setBlockState(offsetPos, state.withProperty(BlockMechBay.INVIS, false));
+				tile.markDirty();
 			}
 		}
 		for (int[] back : backRotations[getDirection()])
 		{
-			tile = world.getTileEntity(this.pos.add(back[0], back[1]+1, back[2]));
-			if(tile != null && (tile instanceof TileEntityMechBay) ){
+			offsetPos = this.pos.add(back[0], back[1]+1, back[2]);
+			tile = world.getTileEntity(offsetPos);
+			state = world.getBlockState(offsetPos);
+			
+			if(tile != null && (tile instanceof TileEntityMechBay) && state.getBlock() instanceof BlockMechBay)
+			{
 				((TileEntityMechBay) tile).reset();
+				world.setBlockState(offsetPos, state.withProperty(BlockMechBay.INVIS, false));
+				tile.markDirty();
 			}
 		}
 		for (int[] sides : sideRotations[getDirection() / 2])
 		{
-			tile = world.getTileEntity(this.pos.add(sides[0], sides[1]+1, sides[2]));
-			if(tile != null && (tile instanceof TileEntityMechBay) ){
+			offsetPos = this.pos.add(sides[0], sides[1]+1, sides[2]);
+			tile = world.getTileEntity(offsetPos);
+			state = world.getBlockState(offsetPos);
+			
+			if(tile != null && (tile instanceof TileEntityMechBay) && state.getBlock() instanceof BlockMechBay)
+			{
 				((TileEntityMechBay) tile).reset();
+				world.setBlockState(offsetPos, state.withProperty(BlockMechBay.INVIS, false));
+				tile.markDirty();
 			}
 		}
 	}
